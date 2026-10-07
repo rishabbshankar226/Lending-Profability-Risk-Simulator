@@ -148,7 +148,7 @@ elif any(result.dataset_hash != dataset.dataset_hash for result in st.session_st
     apply_scenario(st.session_state.applied_assumptions, st.session_state.applied_policy, dataset)
     st.session_state.pop("stress_points", None)
 
-st.subheader("Try a guided example")
+st.header("Try a guided example")
 st.caption("Examples replace all inputs and run immediately. Compare policies below or use the sidebar to build a custom scenario.")
 examples = (
     ("base", "Base case", {}),
@@ -160,7 +160,7 @@ for column, (name, label, overrides) in zip(st.columns(3), examples):
                   width="stretch")
 
 with st.sidebar:
-    st.subheader("Scenario")
+    st.header("Scenario")
     st.button("Reset to base", key="reset", on_click=reset_scenario, width="stretch")
     with st.form("scenario_form"):
         st.selectbox("Approval policy", list(POLICIES), format_func=str.title, key="policy")
@@ -210,7 +210,7 @@ st.caption(f"Eligibility: net principal loss ≤ {percent(a.loss_cap)} and month
 tabs = st.tabs(["Overview", "Strategy comparison", "Portfolio cohorts", "Funding & stress", "Methodology"])
 
 with tabs[0]:
-    st.subheader(f"{selected.policy.title()} economics")
+    st.header(f"{selected.policy.title()} economics")
     left, middle, right = st.columns(3)
     left.metric("Operating result · full runoff", money(s.operating_result),
                 help="Interest + merchant fees − funding, servicing, acquisition, net principal loss and all platform costs.")
@@ -224,12 +224,12 @@ with tabs[0]:
     c2.metric("Approval rate", percent(s.approval_rate), help="Expected funded loans / expected applications, using the same demand weights.")
     c3.metric("Contribution / funded loan", money(s.unit_contribution), help="Full-runoff contribution before platform operating expense / expected funded loans.")
     st.caption(f"First 24 months operating result: {money(s.operating_result_24m)}. Full-runoff contribution: {money(s.contribution)}. Expected funded loans: {s.funded_loans:,.1f}.".replace("$", r"\$"))
-    st.subheader("Profit and liquidity over time")
+    st.header("Profit and liquidity over time")
     chart(line_plot(frame, [("cumulative_operating_result", "Cumulative operating result"), ("ending_cash", "Month-end cash")]))
     st.caption("Profit includes noncash charge-offs. Cash reflects the original loan advance, actual expected collections and debt draws/repayments.")
 
 with tabs[1]:
-    st.subheader("Profit, credit losses and cash by policy")
+    st.header("Profit, credit losses and cash by policy")
     st.caption("Eligibility tests the credit-loss cap and cash floor. The recommendation also requires positive operating profit.")
     for result, column in zip(results, st.columns(3)):
         with column, st.container(border=True):
@@ -243,7 +243,7 @@ with tabs[1]:
             else:
                 st.warning("; ".join(limits.reasons))
             st.caption(f"Additional equity for cash floor: {money(summary.additional_equity_required)}.")
-    st.subheader("Full-runoff profit on shared inputs")
+    st.header("Full-runoff profit on shared inputs")
     fig = px.bar(comparison, x="Policy", y="Operating result (full runoff)", color="Policy", color_discrete_map=COLORS,
                  custom_data=["Minimum cash", "Net principal loss ratio", "Reason"])
     fig.update_traces(hovertemplate="%{x}<br>Operating result: $%{y:,.0f}<br>Minimum cash: $%{customdata[0]:,.0f}<br>Net loss: %{customdata[1]:.2%}<br>%{customdata[2]}<extra></extra>")
@@ -260,7 +260,7 @@ with tabs[1]:
     st.caption("Conservative approves low risk; balanced approves low + medium; aggressive approves all bands. Additional equity changes cash eligibility, not modeled profit.")
 
 with tabs[2]:
-    st.subheader("Projected cohort loss by loan age")
+    st.header("Projected cohort loss by loan age")
     view = st.radio("Cohort cutoff", ["First 24 months", "Complete runoff"], horizontal=True, key="cohort_cutoff")
     heatmap = cohort_heatmap(selected, 23 if view == "First 24 months" else None)
     fig = go.Figure(go.Heatmap(z=heatmap.values * 100, x=list(heatmap.columns),
@@ -275,7 +275,7 @@ with tabs[2]:
     if curves.empty:
         st.info("No funded cohorts under this policy; risk-band ratios are unavailable.")
     else:
-        st.subheader("Risk-band repayment and net loss")
+        st.header("Risk-band repayment and net loss")
         c1, c2 = st.columns(2)
         with c1:
             fig = px.line(curves, x="age", y="principal_repaid_ratio", color="risk_band", markers=True,
@@ -289,7 +289,7 @@ with tabs[2]:
             chart(fig, 300)
 
 with tabs[3]:
-    st.subheader("Cash and debt facility")
+    st.header("Cash and debt facility")
     fig = line_plot(frame, [("ending_cash", "Month-end cash"), ("ending_debt", "Drawn debt")])
     fig.add_hline(y=float(a.cash_floor), line_dash="dot", line_color="#b24a3a", annotation_text="Cash floor")
     chart(fig)
@@ -298,7 +298,7 @@ with tabs[3]:
     c2.metric("Peak drawn debt", money(s.peak_debt))
     c3.metric("Minimum facility headroom", money(s.minimum_facility_headroom))
     st.caption("Negative cash is an unfunded diagnostic path. No extra equity appears automatically. Debt is capped at the lesser of the facility limit and collateral advance; defaults can require repayments.")
-    st.subheader("Default and funding stress")
+    st.header("Default and funding stress")
     st.caption("Absolute lifetime-PD multipliers (0.5× to 3×) and annual funding rates (4% to 16%). Other applied inputs stay fixed.")
     if st.button("Run stress grid", key="run_stress"):
         with st.spinner("Calculating stress cases…"):
@@ -326,16 +326,16 @@ with tabs[3]:
         st.dataframe(frame[["period", "ending_principal", "ending_debt", "net_debt_draw", "funding_expense", "ending_cash"]], hide_index=True, width="stretch")
 
 with tabs[4]:
-    st.subheader("Financial timing and checks")
+    st.header("Financial timing and checks")
     st.markdown("Loans originate at month-end. From the following month, defaults occur before scheduled payments. Survivors pay interest and principal; recoveries arrive after the chosen lag. Debt adjusts to ending collateral, and interest uses opening debt.")
     st.markdown("Principal collections reduce the loan asset. A charge-off removes principal and future collections; it creates no second cash outflow. Net credit expense equals gross charge-offs minus received recoveries. Platform costs continue throughout the common runoff horizon.")
     st.caption("Simplified management accounting. No GAAP allowance/provision, taxes, prepayment, delinquency stages, price response, intramonth liquidity, or rejected-applicant outcome model.")
     check_values = {k.replace("_", " ").title(): str(v) for k, v in asdict(selected.checks).items()}
     st.dataframe(pd.DataFrame(check_values.items(), columns=["Check", "Result"]), hide_index=True, width="stretch")
-    st.subheader("Assumptions register")
+    st.header("Assumptions register")
     st.dataframe(pd.DataFrame(assumption_register(a)), hide_index=True, width="stretch")
     st.caption(f"Effective lifetime PD after stress: low {percent(a.lifetime_pd('low'))}, medium {percent(a.lifetime_pd('medium'))}, high {percent(a.lifetime_pd('high'))}. Values above 100% are capped.")
-    st.subheader("Historical evidence and data fitness")
+    st.header("Historical evidence and data fitness")
     evidence = evidence_register()
     st.warning(evidence["decision"])
     for source in evidence["sources"]:
@@ -351,7 +351,7 @@ with tabs[4]:
         st.json(selected.manifest())
 
 st.divider()
-st.subheader("Download applied scenario")
+st.header("Download applied scenario")
 st.caption("Downloads match the displayed applied scenario. Portfolio workbook cells are saved outputs; its two independent benchmark sheets recalculate from their blue inputs.")
 csv_bytes, workbook_bytes, brief_text = cached_downloads(selected.run_id, MODEL_VERSION, selected, results, dataset)
 c1, c2, c3 = st.columns(3)
@@ -362,4 +362,6 @@ with c2:
 with c3:
     st.download_button("Decision brief", brief_text, f"lending-decision-{selected.run_id}.md", "text/markdown", key="brief_download", width="stretch")
 with st.expander("Preview decision brief"):
-    st.markdown(brief_text)
+    # Nest the preview below the download section; keep the standalone file unchanged.
+    preview_text = brief_text.replace("# Lending decision brief\n", "### Lending decision brief\n", 1)
+    st.markdown(preview_text.replace("\n## ", "\n#### "))
