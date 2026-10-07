@@ -1,23 +1,32 @@
-# Public demo preparation
+# Hosted review deployment
 
-The source branch and pull request are the review destination. **A public dashboard has not been deployed.** Merge/release and hosting remain a later review step under the project plan.
+**Live URL:** https://rishabb-lending-simulator.streamlit.app/
 
-## Prepared Streamlit Community Cloud route
+The Streamlit Community Cloud review build was deployed and inspected on **October 7, 2026**. The assigned URL rendered the application, and the hosting Share dialog showed **Make this app public** checked. An isolated anonymous browser session has not been tested.
 
-Use the [official deployment workflow](https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app/deploy), checked October 7, 2026. After release approval:
+| Setting | Observed deployment |
+| --- | --- |
+| Repository | `rishabbshankar226/Lending-Profability-Risk-Simulator` |
+| Branch | `feature/lending-simulator` |
+| Entrypoint | `app.py` |
+| Python | 3.12 selected; host log reported 3.12.15 |
+| Dependencies | Committed `requirements.txt` |
+| Data | Preloaded synthetic CSV and matching manifest |
+| Secrets | None required |
+| Application code tested | `01a89be7693a3154627318e6e95f0bb253c43694` |
 
-1. Connect the authorized GitHub repository `rishabbshankar226/Lending-Profability-Risk-Simulator`.
-2. Select the approved release branch and `app.py` as the entrypoint. The implementation is currently on `feature/lending-simulator`; choose `main` only after the pull request has been merged. If a review deployment is authorized before merging, explicitly select the review branch.
-3. Set Python 3.12 in the deployment's advanced settings. Use the committed `requirements.txt`.
-4. Deploy with the preloaded `data/applications.csv` and matching manifest; no secrets are required.
-5. Verify the app is available to intended public viewers without invitations/login. Save the actual returned URL.
+[Draft PR #1](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/pull/1) is open and unmerged. The app runs from the review branch; `main` is not the implementation branch. A future approved merge must be followed by a deliberate hosting branch update.
 
-No hosting URL is guessed in this repository. No account was created, paid hosting selected, or deployment initiated during this implementation.
+## Verified behavior
 
-## Release verification still required
+Desktop Chrome rendered all five views. Capital, default and funding scenarios, apply/reset, cohort cutoffs, stress-grid invalidation, validation errors and both downloads were exercised. A second Streamlit session started at base while the first retained Balanced/$1.25m. See [browser evidence](browser-validation.md) for values, run IDs and screenshots.
 
-Check the default view and all five tabs in a real browser at desktop and narrow widths. Inspect actual chart marks, labels, wrapping, horizontal tables, keyboard navigation, console and network behavior. Exercise apply/reset, both cohort cutoffs, the stress grid, validation errors and both downloads; compare their run IDs and values with the displayed scenario.
+The first hosted review exposed three presentation issues: dollar captions rendered as inline mathematics, stress-grid percentages used a numeric axis, and a validation message showed an input identifier with duplicate punctuation. Commit `01a89be` corrects those displays. After the hosting reboot, the actual app showed dollar amounts, the four percentage categories and the corrected error. The financial engine and model version were unchanged.
 
-The local environment was restored in `.venv`; the server returned HTTP 200/`ok` and the real HTTP integration check passed. The current cloud browser still returned `ERR_CONNECTION_REFUSED` for the workspace localhost server. AppTest and HTTP checks cannot replace browser inspection. Do not label the dashboard visually verified until it has occurred. Use [the release checklist](release-checklist.md) to record observations against expected financial outcomes.
+## Operating and release notes
 
-Capture screenshots and a 60–90 second walkthrough recording after these checks. Keep the script in `walkthrough.md`. Confirm the hosting service's current hibernation/resource behavior; measure cold starts separately from local calculations. A local server health response is not evidence of public availability.
+Use the [official deployment workflow](https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app/deploy) to manage the app. Keep Python 3.12, the selected source branch and `app.py` consistent with this repository. After changing code, verify the resulting behavior in the live app; a GitHub commit alone does not establish that the hosting process refreshed.
+
+The first startup log recorded approximately 11 seconds from repository preparation to the listening server. This is a host log interval, **not** a measured viewer cold start. Viewer load timing, hibernation/wake behavior and multi-user capacity have not been measured.
+
+Mobile layout, isolated anonymous access, comprehensive accessibility/network checks and the walkthrough recording remain open in the [release checklist](release-checklist.md).

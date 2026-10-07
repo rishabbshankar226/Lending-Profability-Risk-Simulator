@@ -24,11 +24,20 @@ The app's runtime downloads use the approved Python/XlsxWriter stack. They inclu
 
 The planning targets were a ≤3-second warm view, ≤2-second ordinary scenario and <250 MB peak runtime. Treat recorded local measurements as scoped evidence, not a deployed service-level claim.
 
-## Pending
+## Hosted browser validation
 
-- Live desktop/narrow-screen browser inspection, actual chart readability, keyboard/accessibility and console/network checks. After restoring the pinned local environment and verifying server health, the available cloud browser still could not reach the workspace's localhost server (`ERR_CONNECTION_REFUSED`). See `release-checklist.md` for exact acceptance cases.
-- Public hosting and verification of anonymous access; no live URL is claimed.
-- Dashboard screenshots and demo recording; the walkthrough script is prepared.
-- Borrower-level or cohort-level historical calibration/backtesting. The source-fitness gate concluded contextual comparison only; risk inputs remain illustrative.
+The [live review dashboard](https://rishabb-lending-simulator.streamlit.app/) was exercised in cloud Chrome at 1363 × 936 on October 7, 2026. All five tabs, capital and stress cases, scenario apply/reset, validation errors, cohort cutoffs and stress-grid invalidation were inspected. Both actual downloads opened and matched the selected Balanced run, dataset hash, assumptions and displayed values. A second Streamlit session retained separate scenario state. See [browser evidence and screenshots](browser-validation.md) for the tested commits, exact run IDs and file inspection.
 
-No predictive accuracy, real loan approvals, investment return, actual business improvement or deployment completion is claimed. The pull request is a reviewable implementation package with these explicit remaining release checks.
+Real browser inspection identified three presentation defects. Commit `01a89be7693a3154627318e6e95f0bb253c43694` preserves dollar signs in captions, uses percentage categories on the stress grid and cleans the validation message. The 13 existing AppTest checks passed after those edits; [CI on that application commit](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/actions/runs/37657326747) passed the full workflow. All three corrected displays were verified in the hosted app after its reboot. No financial-engine change was needed.
+
+Basic keyboard tab, slider and policy-selector checks passed. The latest 35 console warning/error entries on the final verification tab were extension messages, with no application-origin error in that window. This is bounded evidence, not a comprehensive accessibility or network audit.
+
+## Remaining limits
+
+- Narrow/mobile layout, full screen-reader/focus/contrast testing and WebSocket/download network inspection.
+- Isolated anonymous viewing. Hosting showed the public setting checked, but the test browser retained owner authentication.
+- Measured viewer cold/warm loads, hibernation/wake behavior and sustained multi-user capacity.
+- Actual demo recording; real dashboard screenshots and the 90-second script are available.
+- Historical calibration/backtesting. Sources remain contextual, and the synthetic risk inputs are illustrative.
+
+The review deployment runs from `feature/lending-simulator`; PR #1 remains unmerged. No predictive accuracy, real loan approvals, investment return or actual business improvement is claimed.

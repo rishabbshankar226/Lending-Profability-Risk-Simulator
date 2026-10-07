@@ -12,7 +12,7 @@
 
 **75–90 seconds.** Show Methodology and download a workbook. “The engine reconciles loans, debt, cash, cohorts and simplified equity. The workbook has independent amortization/default examples. Historical data did not fit the product, so I make no prediction-accuracy claim.”
 
-This is a recording script. A video and live dashboard screenshots remain pending browser/deployment access.
+This is a recording script. The [live review dashboard](https://rishabb-lending-simulator.streamlit.app/) and [browser screenshots](browser-validation.md#screenshots) are available. An actual walkthrough video has not been recorded.
 
 ## Financial questions to practice
 

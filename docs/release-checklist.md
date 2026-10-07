@@ -1,36 +1,44 @@
 # Browser and release acceptance
 
-**October 7, 2026.** The implementation is reviewable in draft PR #1 on `feature/lending-simulator`. All 57 local automated checks pass, including real HTTP startup. Browser inspection and public deployment remain pending: the cloud browser cannot reach the healthy workspace localhost server.
+**October 7, 2026.** [Live review dashboard](https://rishabb-lending-simulator.streamlit.app/) on `feature/lending-simulator`; [draft PR #1](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/pull/1) remains unmerged.
 
-## Expected user flows
+All 57 automated checks pass. Desktop cases below were exercised against the hosted app, with final display fixes checked at `01a89be7693a3154627318e6e95f0bb253c43694`. Detailed run identities, file inspection and screenshots are in [browser-validation.md](browser-validation.md).
 
-Run these on the actual hosted or locally accessible app. Record the tested URL, commit, browser, viewport, date and observed run IDs. Every browser case below is currently **pending**, even where AppTest or financial-model checks provide supporting evidence.
+## Financial and interaction cases
 
-| Case | Action | Expected result |
+| Case | Observed result | Status |
 | --- | --- | --- |
-| First visit | Open without signing in, uploading files or entering keys | Preloaded synthetic base case, five usable views, conservative recommended |
-| Base case | Reset to base; compare all policies | Conservative profit $48,133 and minimum cash $147,450; balanced/aggressive fail the cash floor |
-| Capital | Set starting equity to $1.25m and run | Balanced becomes eligible and recommended; its full-runoff profit remains $294,468 and minimum cash is $53,857 |
-| Broader policy | Set starting equity to $2.1m and run | Aggressive becomes eligible and recommended; its profit is $396,446 and minimum cash is $114,145 |
-| Credit stress | Reset; set default stress to 2× and run | No profitable eligible policy; conservative profit is about −$11,563 |
-| Funding stress | Reset; set funding cost to 12% and run | No profitable eligible policy; conservative profit is about −$70,421 |
-| Draft edits | Change controls without clicking Run scenario | Applied metrics, policy, run ID and downloads keep the previous successful scenario |
-| Invalid inputs | Enter a negative cash floor and run | Clear validation error; previous successful scenario remains visible |
-| Complete reset | Change assumptions, policy, cutoff and run stress; reset | Base assumptions/policy/cutoff restored; old stress grid removed |
-| Cohorts | Switch First 24 months to Complete runoff | Future ages blank at the first cutoff; complete projected repayment/recovery tail at runoff |
-| Stress grid | Generate for a selected applied policy | 20 cases, legible values/eligibility; displayed inputs and failure reasons agree |
-| Downloads | Download CSV ZIP and workbook after applying a scenario | Files open; run ID, dataset hash, inputs and selected policy match the visible applied scenario |
+| First visit | Preloaded base case and five usable tabs; no upload or API key | Passed in owner session; anonymous access pending |
+| Base case | Conservative profit $48,133, minimum cash $147,450; other policies fail cash floor | Passed |
+| Capital | $1.25m equity makes Balanced eligible and recommended; profit $294,468, minimum cash $53,857 | Passed |
+| Broader policy | $2.1m equity makes Aggressive eligible and recommended; profit $396,446, minimum cash $114,145 | Passed |
+| Credit stress | 2× defaults: no profitable eligible policy; Conservative profit −$11,563 | Passed |
+| Funding stress | 12% funding: no profitable eligible policy; Conservative profit −$70,421 | Passed |
+| Draft edits | Edits before Run left applied metrics and run identity unchanged | Passed |
+| Invalid inputs | Negative cash floor showed clear error and retained previous successful result | Passed |
+| Complete reset | Base assumptions, policy and First 24 months restored; old stress grid removed | Passed |
+| Cohorts | Future ages blank at First 24 months; complete projected tail at runoff | Passed |
+| Stress grid | 20 cases; 4%, 8%, 12%, 16% categories; stale grid removed on new applied run | Passed |
+| Downloads | ZIP and nine-sheet workbook opened; run, inputs, dataset hash and values matched | Passed |
+| Visitor sessions | Second session started at base while first retained Balanced/$1.25m | Passed in tabs sharing owner authentication |
 
-Rounded values are expected display amounts, not separate recalculations. Exact base outputs and identities are in `base-case.json`; conditional capital/stress results are explained in `business-memo.md`. All are illustrative projections.
+Amounts are rounded display values and conditional illustrative projections. Exact base outputs and identities remain in `base-case.json` and the exports.
 
 ## Layout, access and runtime
 
-- Inspect desktop and narrow/mobile widths. Confirm all five tabs, charts, labels, sidebar controls and downloads are reachable; tables may scroll horizontally.
-- Inspect chart marks and tooltips, legend positions, long warning messages, and negative amounts. Record screenshots only from the real rendered dashboard.
-- Use keyboard navigation, inspect accessible control names/focus, and check text contrast. Record limitations without calling the dashboard fully accessible from automated checks alone.
-- Inspect browser console and network requests, including the Streamlit WebSocket and download requests. Save actual errors or success observations.
-- Open the final URL in a separate anonymous session. Verify intended viewers do not need an invitation or login.
-- Measure actual cold and warm loads separately from `performance.json`; local calculation/AppTest timings do not measure hosting behavior.
-- Capture the walkthrough in `walkthrough.md` only after browser checks. Store the actual screenshots/recording and returned public URL; do not construct a hosting URL.
+| Check | Evidence / scope | Status |
+| --- | --- | --- |
+| Desktop layout | Chrome, 1363 × 936; charts, sidebar, tabs, warnings and downloads inspected | Passed at tested size |
+| Chart labels | Dollar caption and percentage categories verified after reboot | Passed |
+| Keyboard controls | Arrow keys changed sliders; ArrowRight moved Overview to Strategy comparison; keyboard policy selection worked | Basic checks passed |
+| Console | Latest 35 warning/error entries were extension messages; none from app origin in that window | Scoped check passed |
+| Public setting | Make this app public checked in hosting Share dialog | Observed |
+| Anonymous access | Available browser retained owner authentication | Pending |
+| Narrow/mobile layout | No viewport/device-emulation control; zoom attempt left measured CSS width unchanged | Pending |
+| Full accessibility | Screen reader, contrast measurement and full focus order not tested | Pending |
+| Network requests | WebSocket/download request diagnostics unavailable through current browser control | Pending |
+| Hosting load behavior | Cold/warm viewer loads, hibernation and sustained multi-user behavior not measured | Pending |
+| Screenshots | Real overview, capital, comparison, cohort, stress and methodology captures saved | Complete |
+| Walkthrough video | 90-second script prepared; actual interactive recording not captured | Pending |
 
-If any case fails, reproduce and fix it before treating the public demo as released. Passing HTTP readiness means the server is reachable from its test process; it does not establish browser or public access.
+The public review build is available with these scoped limitations. Server health and simulated AppTest do not establish the pending access, mobile, performance or accessibility checks.

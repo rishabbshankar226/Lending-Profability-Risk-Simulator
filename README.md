@@ -4,6 +4,10 @@ Compare how expanding loan approvals changes credit losses, profit, debt use, an
 
 The app models a hypothetical lender retaining 12-month merchant-financed installment loans. Its 10,000 applications and risk assumptions are **synthetic and illustrative**. Historical sources provide context only; this is an **uncalibrated expected-value simulator**.
 
+**Live review demo:** [Open the dashboard](https://rishabb-lending-simulator.streamlit.app/) · **Code review:** [Draft PR #1](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/pull/1)
+
+![Live base-case dashboard](docs/screenshots/overview.jpg)
+
 ## The decision
 
 Choose the highest full-runoff management operating profit among three policies that meet a net principal loss cap and minimum month-end cash floor. Defaults: 5% net loss and $50,000 cash. No eligible or profitable policy means no profitable recommendation.
@@ -77,7 +81,10 @@ Finance uses 34-digit Decimal arithmetic with a $1e−16 internal reconciliation
 - [Validation and measured limitations](docs/validation.md)
 - [Base-case audit workbook](docs/audit-workbook.xlsx)
 - [Interview and 90-second demo walkthrough](docs/walkthrough.md)
-- [Deployment preparation](docs/deployment.md)
+- [Hosted review deployment](docs/deployment.md)
+- [Live browser results and screenshots](docs/browser-validation.md)
 - [Browser and release checklist](docs/release-checklist.md)
 
-The 57 local model, application-state, export, and HTTP startup checks pass. Missing or invalid base data stops the dashboard with a clear error. Data and manifest changes invalidate the dataset cache; a valid replacement refreshes the applied scenario and downloads. Live browser visual/accessibility/network checks and public hosting are pending. No public dashboard URL is claimed. The walkthrough is a script; no demo recording has been produced.
+All 57 automated model, application-state, export, and HTTP startup checks pass. The hosted desktop build was exercised across all five tabs, scenario apply/reset, capital and stress cases, validation errors, cohort cutoffs, and both downloads. See the browser evidence for tested commits and run IDs. Missing or invalid base data stops the dashboard with a clear error; validated replacements refresh the applied scenario and exports.
+
+The demo runs from the review branch; PR #1 remains unmerged. Anonymous-session and mobile testing, a full accessibility/network audit, hosting load measurements, and the walkthrough video remain pending. The hosting public setting was observed, but an isolated anonymous browser was unavailable.
