@@ -176,7 +176,7 @@ with st.sidebar:
             with st.spinner("Comparing three policies…"):
                 apply_scenario(inputs_from_controls(), st.session_state.policy, dataset)
         except (ValueError, ArithmeticError) as error:
-            st.error(f"Scenario could not run: {error}. Showing the last successful result.")
+            st.error(f"Scenario could not run: {str(error).replace('_', ' ').rstrip('.')}. Showing the last successful result.")
 
 results = st.session_state.results
 a = st.session_state.applied_assumptions
@@ -207,7 +207,7 @@ with tabs[0]:
     c1.metric("Funded principal", money(s.funded_principal))
     c2.metric("Approval rate", percent(s.approval_rate), help="Expected funded loans / expected applications, using the same demand weights.")
     c3.metric("Contribution / funded loan", money(s.unit_contribution), help="Full-runoff contribution before platform operating expense / expected funded loans.")
-    st.caption(f"First 24 months operating result: {money(s.operating_result_24m)}. Full-runoff contribution: {money(s.contribution)}. Expected funded loans: {s.funded_loans:,.1f}.")
+    st.caption(f"First 24 months operating result: {money(s.operating_result_24m)}. Full-runoff contribution: {money(s.contribution)}. Expected funded loans: {s.funded_loans:,.1f}.".replace("$", r"\$"))
     st.subheader("Profit and liquidity over time")
     chart(line_plot(frame, [("cumulative_operating_result", "Cumulative operating result"), ("ending_cash", "Month-end cash")]))
     st.caption("Profit includes noncash charge-offs. Cash reflects the original loan advance, actual expected collections and debt draws/repayments.")
@@ -285,8 +285,8 @@ with tabs[3]:
         fig = go.Figure(go.Heatmap(z=grid.values, x=[f"{x:.0%}" for x in grid.columns], y=[f"{x:g}×" for x in grid.index],
                                   text=text, texttemplate="%{text}", colorscale="RdBu", zmid=0,
                                   colorbar=dict(title="Profit ($)"), hovertemplate="Funding: %{x}<br>Default stress: %{y}<br>%{text}<extra></extra>"))
-        fig.update_xaxes(title="Annual funding rate")
-        fig.update_yaxes(title="Lifetime default multiplier")
+        fig.update_xaxes(title="Annual funding rate", type="category")
+        fig.update_yaxes(title="Lifetime default multiplier", type="category")
         chart(fig, 380)
         with st.expander("Stress contribution, cash gaps, and failure reasons"):
             st.dataframe(stress_frame.drop(columns="run_id"), hide_index=True, width="stretch")
