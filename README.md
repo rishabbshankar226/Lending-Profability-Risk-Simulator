@@ -6,7 +6,7 @@ The app models a hypothetical lender retaining 12-month merchant-financed instal
 
 **Live review demo:** [Open the dashboard](https://rishabb-lending-simulator.streamlit.app/) · **Code review:** [Draft PR #1](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/pull/1)
 
-![Live base-case dashboard](docs/screenshots/overview.jpg)
+![Live guided capital example](docs/screenshots/guided-capital.jpg)
 
 ## The decision
 
@@ -53,13 +53,23 @@ python -m lending_simulator.cli --assumptions path/to/manifest.json --output art
 
 ## Explore the dashboard
 
+Start with the one-click examples above the tabs:
+
+| Example | Selected policy | Change from base |
+| --- | --- | --- |
+| Base case | Conservative | Restore $500,000 equity and all base assumptions |
+| More capital · $1.25m | Balanced | Set starting equity to $1.25m |
+| Higher defaults · 2× | Conservative | Double lifetime default assumptions |
+
+Each example replaces all inputs, runs immediately, restores the First 24 months cohort view and clears the old stress grid. Recommendations still compare all three policies using the model's rules.
+
 1. **Overview:** selected-policy profit, approvals, loss ratio, and cash.
 2. **Strategy comparison:** policy summaries show profit, minimum cash, net principal loss, eligibility and equity gaps together; charts and the detailed table use the same applied inputs.
 3. **Portfolio cohorts:** projected loss by origination month and loan age; future ages remain blank at a cutoff.
 4. **Funding & stress:** cash/debt, additional equity, and a default × funding-rate sensitivity grid.
 5. **Methodology:** timing, assumptions, sources, financial checks, SQL, and run manifest.
 
-Use **Run scenario** to apply control edits. **Reset to base** restores all assumptions and the cohort cutoff. Downloads always use the applied scenario. Workbook portfolio sheets are saved snapshots; its independent loan and recovery benchmarks contain editable formulas.
+Use **Run scenario** to apply custom sidebar edits. **Reset to base** restores all assumptions and the cohort cutoff. Downloads always use the applied scenario. Workbook portfolio sheets are saved snapshots; its independent loan and recovery benchmarks contain editable formulas.
 
 ## How it works
 
@@ -85,6 +95,6 @@ Finance uses 34-digit Decimal arithmetic with a $1e−16 internal reconciliation
 - [Live browser results and screenshots](docs/browser-validation.md)
 - [Browser and release checklist](docs/release-checklist.md)
 
-All 59 automated model, application-state, export, and HTTP startup checks pass. The hosted desktop build was exercised across all five tabs, scenario apply/reset, capital and stress cases, validation errors, cohort cutoffs, and both downloads. The comparison summaries were verified at base and $1.25m starting equity, including unchanged applied values during draft edits. See the browser evidence for tested commits and run IDs. Missing or invalid base data stops the dashboard with a clear error; validated replacements refresh the applied scenario and exports.
+All 63 automated model, application-state, export, and HTTP startup checks pass. The hosted desktop build was exercised across all five tabs, scenario apply/reset, capital and stress cases, validation errors, cohort cutoffs, and both downloads. Guided examples were checked for the correct applied runs, replacement of draft/advanced inputs, stress-grid clearing and keyboard activation; the capital download matched its displayed run. The comparison summaries were verified at base and $1.25m starting equity, including unchanged applied values during draft edits. See the browser evidence for tested commits and run IDs. Missing or invalid base data stops the dashboard with a clear error; validated replacements refresh the applied scenario and exports.
 
 The demo runs from the review branch; PR #1 remains unmerged. Anonymous-session and mobile testing, a full accessibility/network audit, hosting load measurements, and the walkthrough video remain pending. The hosting public setting was observed, but an isolated anonymous browser was unavailable.

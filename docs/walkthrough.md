@@ -6,13 +6,15 @@
 
 **20–40 seconds.** Open Strategy comparison and point to the three profit/cash summaries. “Broadening approvals increases modeled operating profit from about $48k to $396k, but the aggressive policy reaches a $1.49m cash deficit. With the selected cash floor, conservative is the only eligible policy. The recommendation is calculated, not hard-coded.”
 
-**40–60 seconds.** Change starting cash to $1.25m and run. “Additional equity makes balanced feasible and changes the recommendation. Profit stays unchanged because I have not modeled an equity financing cost. Capital and operating economics are different questions.”
+**40–60 seconds.** Click **More capital · $1.25m**. “Additional equity makes balanced feasible and changes the recommendation. Balanced's operating profit stays unchanged because I have not modeled an equity financing cost. Capital and operating economics are different questions.” The example also selects Balanced so its $294k profit and $54k minimum cash appear in Overview.
 
-**60–75 seconds.** Reset; set default stress to 2× and run. “There is no profitable eligible policy here. The tool reports the limitation instead of forcing a growth recommendation.”
+**60–75 seconds.** Click **Higher defaults · 2×**. “This starts from base capital and doubles defaults. There is no profitable eligible policy here. The tool reports the limitation instead of forcing a growth recommendation.”
 
 **75–90 seconds.** Show Methodology and download a workbook. “The engine reconciles loans, debt, cash, cohorts and simplified equity. The workbook has independent amortization/default examples. Historical data did not fit the product, so I make no prediction-accuracy claim.”
 
 This is a recording script. The [live review dashboard](https://rishabb-lending-simulator.streamlit.app/) and [browser screenshots](browser-validation.md#screenshots) are available. An actual walkthrough video has not been recorded.
+
+The example buttons run immediately and replace custom or draft assumptions. **Base case** returns to the original scenario; use the sidebar and **Run scenario** for your own inputs.
 
 ## Financial questions to practice
 

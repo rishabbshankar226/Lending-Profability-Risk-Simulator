@@ -2,7 +2,7 @@
 
 **October 7, 2026.** [Live review dashboard](https://rishabb-lending-simulator.streamlit.app/) on `feature/lending-simulator`; [draft PR #1](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/pull/1) remains unmerged.
 
-All 59 automated checks pass. Desktop cases below were exercised against the hosted app, with the latest policy summaries checked at `8572cec4cd1bf093a1a2a2cecd4d4276a1190f82`. Detailed run identities, file inspection and screenshots are in [browser-validation.md](browser-validation.md).
+All 63 automated checks pass. Desktop cases below were exercised against the hosted app, with the guided examples last checked at `8959dae4da566c286ff67325acae12efc4c4a8f9`. Detailed run identities, file inspection and screenshots are in [browser-validation.md](browser-validation.md).
 
 ## Financial and interaction cases
 
@@ -20,6 +20,7 @@ All 59 automated checks pass. Desktop cases below were exercised against the hos
 | Cohorts | Future ages blank at First 24 months; complete projected tail at runoff | Passed |
 | Stress grid | 20 cases; 4%, 8%, 12%, 16% categories; stale grid removed on new applied run | Passed |
 | Policy summaries | Profit, minimum cash, loss, limits and equity gaps visible together; base/$1.25m, draft edits and reset checked | Passed |
+| Guided examples | Base, $1.25m capital and 2× defaults applied immediately; custom/draft inputs replaced, cohort cutoff restored and old grid cleared | Passed |
 | Downloads | ZIP and nine-sheet workbook opened; run, inputs, dataset hash and values matched | Passed |
 | Visitor sessions | Second session started at base while first retained Balanced/$1.25m | Passed in tabs sharing owner authentication |
 
@@ -31,7 +32,7 @@ Amounts are rounded display values and conditional illustrative projections. Exa
 | --- | --- | --- |
 | Desktop layout | Chrome, 1363 × 936; charts, sidebar, tabs, warnings and downloads inspected | Passed at tested size |
 | Chart labels | Dollar caption and percentage categories verified after reboot | Passed |
-| Keyboard controls | Arrow keys changed sliders; ArrowRight moved Overview to Strategy comparison; keyboard policy selection worked | Basic checks passed |
+| Keyboard controls | Arrow keys changed sliders; ArrowRight moved Overview to Strategy comparison; keyboard policy selection and Enter on the capital example worked | Basic checks passed |
 | Console | Latest 35 warning/error entries were extension messages; none from app origin in that window | Scoped check passed |
 | Public setting | Make this app public checked in hosting Share dialog | Observed |
 | Anonymous access | Available browser retained owner authentication | Pending |
@@ -39,7 +40,7 @@ Amounts are rounded display values and conditional illustrative projections. Exa
 | Full accessibility | Screen reader, contrast measurement and full focus order not tested | Pending |
 | Network requests | WebSocket/download request diagnostics unavailable through current browser control | Pending |
 | Hosting load behavior | Cold/warm viewer loads, hibernation and sustained multi-user behavior not measured | Pending |
-| Screenshots | Nine real captures, including base and $1.25m policy summaries | Complete |
+| Screenshots | Eleven real captures, including policy summaries and capital/default guided examples | Complete |
 | Walkthrough video | 90-second script prepared; actual interactive recording not captured | Pending |
 
 The public review build is available with these scoped limitations. Server health and simulated AppTest do not establish the pending access, mobile, performance or accessibility checks.

@@ -13,7 +13,7 @@ The Streamlit Community Cloud review build was deployed and inspected on **Octob
 | Dependencies | Committed `requirements.txt` |
 | Data | Preloaded synthetic CSV and matching manifest |
 | Secrets | None required |
-| Latest application code tested | `8572cec4cd1bf093a1a2a2cecd4d4276a1190f82` |
+| Latest application code tested | `8959dae4da566c286ff67325acae12efc4c4a8f9` |
 
 [Draft PR #1](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/pull/1) is open and unmerged. The app runs from the review branch; `main` is not the implementation branch. A future approved merge must be followed by a deliberate hosting branch update.
 
@@ -24,6 +24,8 @@ Desktop Chrome rendered all five views. Capital, default and funding scenarios, 
 The first hosted review exposed three presentation issues: dollar captions rendered as inline mathematics, stress-grid percentages used a numeric axis, and a validation message showed an input identifier with duplicate punctuation. Commit `01a89be` corrects those displays. After the hosting reboot, the actual app showed dollar amounts, the four percentage categories and the corrected error. The financial engine and model version were unchanged.
 
 Commit `8572cec` adds policy summaries above the profit chart and detailed table. After refreshing the host, base and $1.25m capital cases showed the corresponding cash limits and equity gaps alongside each policy's profit. Draft edits retained the applied values until Run. Reset returned the summaries to base.
+
+Guided examples added at `6b5fedd` and simplified at `8959dae` let a reviewer load base, capital and default stress cases immediately. All three applied the expected runs in the hosted app. Custom runs still used the edited inputs; examples replaced old assumptions, restored the cohort cutoff and cleared the generated stress grid. The final buttons and their instructions were captured after the hosting refresh.
 
 ## Operating and release notes
 

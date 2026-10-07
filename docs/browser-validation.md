@@ -12,6 +12,8 @@ The app uses Python 3.12 and `app.py` from `feature/lending-simulator`. [CI for 
 
 The later policy summaries were checked at `8572cec4cd1bf093a1a2a2cecd4d4276a1190f82` at the same desktop size. Two comparison cases increased the suite to 59 checks; the full local suite and [application CI](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/actions/runs/37688578471) passed. Financial calculations, model version and run identity rules remained unchanged.
 
+Guided examples were checked at `6b5fedd516a604e21a963d778351b4b01635f44e`; the final button presentation was checked at `8959dae4da566c286ff67325acae12efc4c4a8f9`. Four additional AppTest cases raised the suite to 63 checks. The full local suite and [CI for the final application code](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/actions/runs/37694153765) passed. The financial engine and model version did not change.
+
 ## Observed scenarios
 
 These are applied scenarios. Selected policy controls the displayed portfolio; recommendations compare all three policies on shared assumptions.
@@ -56,6 +58,22 @@ Editing equity to $1.25m without Run retained those base summaries and run ID. A
 
 Reset returned the base run and Balanced's −$696,143 minimum cash. Both base and capital summaries were captured from the actual hosted app with all three cards visible together at 1363 × 936.
 
+## Guided example follow-up
+
+The three buttons above the tabs run immediately, starting from base controls and applying only the named change. The selected policy changes the displayed portfolio; the model still calculates the recommendation across all three policies.
+
+| Button | Selected run | Observed result |
+| --- | --- | --- |
+| Base case | Conservative / `5a88f7bef3fa93d4` | $48,133 profit, $147,450 minimum cash; Conservative recommended |
+| More capital · $1.25m | Balanced / `690e9fa563e2d475` | $294,468 profit, $53,857 minimum cash; Balanced recommended |
+| Higher defaults · 2× | Conservative / `a2d0056e84a3ceb8` | −$11,563 profit, $129,605 minimum cash; no profitable eligible policy |
+
+After the capital example, custom edits to 12% funding and $10,000 monthly platform expense applied as Balanced run `0fd49b61946d3595`. Before Run, the original capital result stayed applied. A Complete runoff cohort view and a stress grid were then generated for the custom scenario.
+
+Draft edits to 5% monthly growth and a negative cash floor left that custom result unchanged. Clicking Higher defaults replaced both draft edits and the applied custom assumptions: growth returned to 0%, funding to 8%, equity to $500,000, platform expense to $7,500 and cash floor to $50,000. Stress became 2×. The old grid was removed and its Run instruction returned; First 24 months was checked again in the cohort view.
+
+Base case returned the original run. Enter on the capital button applied the expected Balanced run. A redundant button help tooltip stayed over the instructions after keyboard use on the first build; `8959dae` removes those tooltips. After refreshing the host, all three example runs were confirmed again and capital/default views showed clear instructions. The final browser was left at base Overview.
+
 ## Download inspection
 
 Both download controls were used after applying **Balanced with $1.25m equity**. The returned ZIP and workbook were opened and inspected directly.
@@ -79,6 +97,8 @@ SHA-256 identifiers for the specific downloads inspected (regenerated XLSX packa
 - ZIP: `6bdd5fd4be97f1810302f4c61f15af43f0dcb8ac7cec1e418dffe446fcee4c10`
 - XLSX: `371ff97426ea1abef6ecf55e4de5a6ac7e536fd3ff2c89c5e066f035126c4816`
 
+A later ZIP downloaded from the guided capital example at `6b5fedd` was also inspected. Its five files, Balanced run `690e9fa563e2d475`, complete base-plus-capital assumptions, dataset hash, exact profit and minimum cash matched the applied example. That 93,411-byte package had SHA-256 `e2cf21ee3ecfd6fb9643d9a98dd40ad6f83393c27490ab78f57555f1165cd647`; ZIP packaging timestamps can change the file hash without changing the scenario identity.
+
 ## Screenshots
 
 Real hosted dashboard captures, without compositing or generated chart marks:
@@ -94,6 +114,8 @@ Real hosted dashboard captures, without compositing or generated chart marks:
 | [Methodology](screenshots/methodology.jpg) | Base checks; `6375064` |
 | [Policy summaries at base](screenshots/policy-summaries-base.jpg) | Base, all three profit/cash/eligibility cards; `8572cec` |
 | [Policy summaries with capital](screenshots/policy-summaries-capital.jpg) | $1.25m equity, Conservative selected / Balanced recommended; `8572cec` |
+| [Guided capital example](screenshots/guided-capital.jpg) | Balanced/$1.25m, clear example controls and recommendation; `8959dae` |
+| [Guided default example](screenshots/guided-defaults.jpg) | Conservative/2× defaults, no profitable eligible policy; `8959dae` |
 
 ## Scope and remaining checks
 
