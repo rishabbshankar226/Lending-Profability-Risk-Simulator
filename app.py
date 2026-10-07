@@ -96,11 +96,14 @@ def apply_scenario(a, policy, dataset):
     st.session_state.update(applied_assumptions=a, applied_policy=policy, results=results)
 
 
-def reset_scenario():
-    for key, value in DEFAULTS.items():
-        st.session_state[key] = value
-    st.session_state["reset_requested"] = True
+def load_example(overrides):
+    st.session_state.update(DEFAULTS | overrides)
+    st.session_state["apply_requested"] = True
     st.session_state.pop("stress_points", None)
+
+
+def reset_scenario():
+    load_example({})
 
 
 def chart(fig, height=330):
@@ -137,11 +140,25 @@ except (ValueError, OSError) as error:
     st.stop()
 for key, value in DEFAULTS.items():
     st.session_state.setdefault(key, value)
-if "results" not in st.session_state or st.session_state.pop("reset_requested", False):
-    apply_scenario(Assumptions(), "conservative", dataset)
+apply_requested = st.session_state.pop("apply_requested", False)
+if "results" not in st.session_state or apply_requested:
+    apply_scenario(inputs_from_controls(), st.session_state.policy, dataset)
 elif any(result.dataset_hash != dataset.dataset_hash for result in st.session_state.results):
     apply_scenario(st.session_state.applied_assumptions, st.session_state.applied_policy, dataset)
     st.session_state.pop("stress_points", None)
+
+st.subheader("Try a guided example")
+st.caption("Examples replace all inputs and run immediately. Compare policies below or use the sidebar to build a custom scenario.")
+examples = (
+    ("base", "Base case", {}, "Start with conservative approvals and $500,000 equity."),
+    ("capital", "More capital · $1.25m", {"initial_cash": 1250000.0, "policy": "balanced"},
+     "Increase starting equity; keep operating assumptions unchanged and view Balanced."),
+    ("defaults", "Higher defaults · 2×", {"stress": 2.0},
+     "Double lifetime default assumptions and view Conservative; compare all three policies."),
+)
+for column, (name, label, overrides, help_text) in zip(st.columns(3), examples):
+    column.button(label, key=f"example_{name}", on_click=load_example, args=(overrides,),
+                  help=help_text, width="stretch")
 
 with st.sidebar:
     st.subheader("Scenario")

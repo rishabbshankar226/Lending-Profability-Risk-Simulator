@@ -1,6 +1,7 @@
 from streamlit.testing.v1 import AppTest
 from pathlib import Path
 from dataclasses import replace
+from decimal import Decimal
 import json
 import shutil
 
@@ -9,6 +10,7 @@ import streamlit as st
 
 from lending_simulator.types import Assumptions
 from lending_simulator.data import Dataset, load_dataset, save_dataset
+from lending_simulator.decisions import select_strategy
 
 
 def app():
@@ -109,6 +111,66 @@ def test_bad_input_is_reported_and_last_successful_results_remain_visible():
     assert not page.exception
     assert any("cannot be negative" in e.value for e in page.error)
     assert page.session_state["applied_assumptions"] == Assumptions()
+
+
+@pytest.mark.parametrize("example, assumptions, policy, run_id, profit, recommendation", [
+    ("base", Assumptions(), "conservative", "5a88f7bef3fa93d4", "$48,133", "conservative"),
+    ("capital", replace(Assumptions(), initial_cash=1250000), "balanced",
+     "690e9fa563e2d475", "$294,468", "balanced"),
+    ("defaults", replace(Assumptions(), default_stress=2), "conservative",
+     "a2d0056e84a3ceb8", "($11,563)", None),
+])
+def test_guided_example_replaces_custom_and_draft_inputs_and_clears_stress(
+        example, assumptions, policy, run_id, profit, recommendation):
+    page = app()
+    page.slider(key="funding_percent").set_value(12.0)
+    page.number_input(key="opex").set_value(10000.0)
+    page.selectbox(key="policy").set_value("aggressive")
+    page.radio(key="cohort_cutoff").set_value("Complete runoff")
+    page.button(key="run_scenario").click().run()
+    page.button(key="run_stress").click().run()
+    assert "stress_points" in page.session_state
+    page.number_input(key="cash_floor").set_value(-1.0)
+    page.slider(key="growth_percent").set_value(5.0)
+    page.button(key=f"example_{example}").click().run()
+    assert not page.exception
+    assert not page.error
+    assert page.session_state["applied_assumptions"] == assumptions
+    assert page.session_state["applied_policy"] == policy
+    selected = next(r for r in page.session_state["results"] if r.policy == policy)
+    assert selected.run_id == run_id
+    assert page.metric[0].value == profit
+    assert select_strategy(page.session_state["results"]).recommended_policy == recommendation
+    assert all(r.checks.passed for r in page.session_state["results"])
+    assert page.selectbox(key="policy").value == policy
+    assert page.slider(key="funding_percent").value == 8.0
+    assert page.slider(key="growth_percent").value == 0.0
+    assert page.number_input(key="opex").value == 7500.0
+    assert page.number_input(key="cash_floor").value == 50000.0
+    assert page.radio(key="cohort_cutoff").value == "First 24 months"
+    assert "stress_points" not in page.session_state
+
+
+def test_custom_run_after_example_keeps_edits_and_other_visitors_independent():
+    page, other = app(), app()
+    page.button(key="example_capital").click().run()
+    applied = page.session_state["results"][1].run_id
+    page.slider(key="funding_percent").set_value(12.0)
+    assert page.session_state["results"][1].run_id == applied
+    page.button(key="run_scenario").click().run()
+    assert not page.exception
+    assert page.session_state["applied_assumptions"] == replace(
+        Assumptions(), initial_cash=1250000, funding_rate=Decimal("0.12"))
+    assert page.session_state["applied_policy"] == "balanced"
+    assert page.session_state["results"][1].run_id != applied
+    custom_run = page.session_state["results"][1].run_id
+    page.radio(key="cohort_cutoff").set_value("Complete runoff").run()
+    assert page.session_state["results"][1].run_id == custom_run
+    assert other.session_state["applied_assumptions"] == Assumptions()
+    assert other.session_state["applied_policy"] == "conservative"
+    page.button(key="reset").click().run()
+    assert page.session_state["applied_assumptions"] == Assumptions()
+    assert page.session_state["results"][0].run_id == "5a88f7bef3fa93d4"
 
 
 def test_stress_grid_matches_current_applied_policy_and_resets_with_scenario():
