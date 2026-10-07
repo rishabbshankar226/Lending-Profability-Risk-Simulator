@@ -10,7 +10,7 @@
 
 **60–75 seconds.** Click **Higher defaults · 2×**. “This starts from base capital and doubles defaults. There is no profitable eligible policy here. The tool reports the limitation instead of forcing a growth recommendation.”
 
-**75–90 seconds.** Show Methodology and download a workbook. “The engine reconciles loans, debt, cash, cohorts and simplified equity. The workbook has independent amortization/default examples. Historical data did not fit the product, so I make no prediction-accuracy claim.”
+**75–90 seconds.** Show Methodology and the download controls. “The engine reconciles loans, debt, cash, cohorts and simplified equity. The workbook has independent amortization/default examples. The decision brief records the current recommendation, policy tradeoffs and exact inputs. Historical data did not fit the product, so I make no prediction-accuracy claim.” Download the brief as the takeaway; keep the workbook available for a deeper financial review.
 
 This is a recording script. The [live review dashboard](https://rishabb-lending-simulator.streamlit.app/) and [browser screenshots](browser-validation.md#screenshots) are available. An actual walkthrough video has not been recorded.
 

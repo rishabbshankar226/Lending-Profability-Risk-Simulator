@@ -13,7 +13,7 @@ The Streamlit Community Cloud review build was deployed and inspected on **Octob
 | Dependencies | Committed `requirements.txt` |
 | Data | Preloaded synthetic CSV and matching manifest |
 | Secrets | None required |
-| Latest application code tested | `8959dae4da566c286ff67325acae12efc4c4a8f9` |
+| Latest application code tested | `e87a74d65c59a24103e67b4dafd2e75d6abf2413` |
 
 [Draft PR #1](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/pull/1) is open and unmerged. The app runs from the review branch; `main` is not the implementation branch. A future approved merge must be followed by a deliberate hosting branch update.
 
@@ -26,6 +26,8 @@ The first hosted review exposed three presentation issues: dollar captions rende
 Commit `8572cec` adds policy summaries above the profit chart and detailed table. After refreshing the host, base and $1.25m capital cases showed the corresponding cash limits and equity gaps alongside each policy's profit. Draft edits retained the applied values until Run. Reset returned the summaries to base.
 
 Guided examples added at `6b5fedd` and simplified at `8959dae` let a reviewer load base, capital and default stress cases immediately. All three applied the expected runs in the hosted app. Custom runs still used the edited inputs; examples replaced old assumptions, restored the cohort cutoff and cleared the generated stress grid. The final buttons and their instructions were captured after the hosting refresh.
+
+Commit `e87a74d` adds the applied-scenario decision brief and preview. The hosted base, capital and default-stress Markdown downloads matched locally regenerated reports exactly; the capital brief used applied inputs during a draft equity edit. Its embedded manifest reproduced the same decision and run through the CLI. The model and its version were unchanged. See the browser evidence for report hashes and captures.
 
 ## Operating and release notes
 

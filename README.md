@@ -71,6 +71,8 @@ Each example replaces all inputs, runs immediately, restores the First 24 months
 
 Use **Run scenario** to apply custom sidebar edits. **Reset to base** restores all assumptions and the cohort cutoff. Downloads always use the applied scenario. Workbook portfolio sheets are saved snapshots; its independent loan and recovery benchmarks contain editable formulas.
 
+Download **Decision brief** for a Markdown report with the calculated recommendation, selected portfolio, shared assumptions, policy tradeoffs and reproducible run manifest. **Preview decision brief** shows the same report in the app. Draft or invalid edits retain the last successful applied brief.
+
 ## How it works
 
 | Layer | Files | Responsibility |
@@ -90,11 +92,12 @@ Finance uses 34-digit Decimal arithmetic with a $1e−16 internal reconciliation
 - [Historical source-fitness decision](docs/source-fitness.md)
 - [Validation and measured limitations](docs/validation.md)
 - [Base-case audit workbook](docs/audit-workbook.xlsx)
+- Decision brief examples: [base](docs/base-decision-brief.md), [capital](docs/capital-decision-brief.md), [default stress](docs/default-stress-decision-brief.md)
 - [Interview and 90-second demo walkthrough](docs/walkthrough.md)
 - [Hosted review deployment](docs/deployment.md)
 - [Live browser results and screenshots](docs/browser-validation.md)
 - [Browser and release checklist](docs/release-checklist.md)
 
-All 63 automated model, application-state, export, and HTTP startup checks pass. The hosted desktop build was exercised across all five tabs, scenario apply/reset, capital and stress cases, validation errors, cohort cutoffs, and both downloads. Guided examples were checked for the correct applied runs, replacement of draft/advanced inputs, stress-grid clearing and keyboard activation; the capital download matched its displayed run. The comparison summaries were verified at base and $1.25m starting equity, including unchanged applied values during draft edits. See the browser evidence for tested commits and run IDs. Missing or invalid base data stops the dashboard with a clear error; validated replacements refresh the applied scenario and exports.
+All 70 automated model, application-state, export, and HTTP startup checks pass. The hosted desktop build was exercised across all five tabs, scenario apply/reset, capital and stress cases, validation errors, cohort cutoffs, and downloads. Guided examples were checked for the correct applied runs, replacement of draft/advanced inputs, stress-grid clearing and keyboard activation. The three actual decision-brief downloads matched local regeneration exactly; the capital brief retained applied inputs during a draft edit, and its saved manifest reproduced the same CLI decision and run. The comparison summaries were verified at base and $1.25m starting equity. See the browser evidence for tested commits and run IDs. Missing or invalid base data stops the dashboard with a clear error; validated replacements refresh the applied scenario and exports.
 
 The demo runs from the review branch; PR #1 remains unmerged. Anonymous-session and mobile testing, a full accessibility/network audit, hosting load measurements, and the walkthrough video remain pending. The hosting public setting was observed, but an isolated anonymous browser was unavailable.

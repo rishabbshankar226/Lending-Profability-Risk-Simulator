@@ -2,7 +2,7 @@
 
 ## Performed locally
 
-The financial model, data, SQL, decision rules, exports, CLI, simulated dashboard and HTTP server have 63 passing automated checks in `tests/` (full local suite passed October 7, 2026). Run `python -m pytest`. The suite has no disabled or skipped checks. Python compilation and the reproducible base-case CLI also passed.
+The financial model, data, SQL, decision rules, exports, CLI, simulated dashboard and HTTP server have 70 passing automated checks in `tests/` (full local suite passed October 7, 2026). Run `python -m pytest`. The suite has no disabled or skipped checks. Python compilation and the reproducible base-case CLI also passed.
 
 Independent financial cases include 12 zero-interest $100 principal payments on a $1,200 loan; a $900 default with a $225 delayed recovery and $675 net loss; $10 monthly interest on $1,000 opening debt at 12%; and a positive-interest amortization benchmark. Other checks cover PD/recovery endpoints, late-loan runoff, equal policy overhead horizon, collateral repayments, funding-rate differences, invalid inputs and monthly financial identities.
 
@@ -30,13 +30,17 @@ The [live review dashboard](https://rishabb-lending-simulator.streamlit.app/) wa
 
 Real browser inspection identified three presentation defects. Commit `01a89be7693a3154627318e6e95f0bb253c43694` preserves dollar signs in captions, uses percentage categories on the stress grid and cleans the validation message. The 13 existing AppTest checks passed after those edits; [CI on that application commit](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/actions/runs/37657326747) passed the full workflow. All three corrected displays were verified in the hosted app after its reboot. No financial-engine change was needed.
 
-Basic keyboard tab, slider and policy-selector checks passed. The latest 35 console warning/error entries on the final verification tab were extension messages, with no application-origin error in that window. This is bounded evidence, not a comprehensive accessibility or network audit.
+Basic keyboard tab, slider and policy-selector checks passed. In the earlier verification tab, the latest 35 console warning/error entries were extension messages, with no application-origin error in that window. This is bounded evidence, not a comprehensive accessibility or network audit.
 
 The later policy summaries expose each policy's profit, minimum cash, principal loss, eligibility and additional equity above the detailed table. Two added AppTest cases check base and $1.25m capital inputs, including the unchanged profits and policy cash/equity values. [Application CI](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/actions/runs/37688578471) passed all 59 checks. The actual hosted cards were checked at both capital levels, during unsaved edits and after reset; their values and eligibility matched the applied runs.
 
 Four added AppTest cases cover one-click base, capital and default examples, plus custom editing after an example and independent visitor state. They verify expected run identities, financial values, recommendations, restoration of advanced/draft controls and clearing of old stress results. The full local suite and [CI on the final application code](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/actions/runs/37694153765) passed all 63 checks.
 
 Live checks exercised those examples, custom funding/cost changes, replacement of an invalid cash-floor draft, restored cohort cutoff, grid clearing and Enter activation of the capital button. The capital ZIP matched its applied run, inputs and exact financial values. A help tooltip remained over the instructions after keyboard use; the redundant example tooltips were removed, and the clear final capital/default views were captured. Financial calculations and model version did not change.
+
+Seven additional checks cover generated decision briefs: selected portfolio versus recommendation, base/capital/unprofitable/unfunded cases, complete manifest identity, stale selected or mixed comparison inputs, and applied-preview state through edits/errors/reset. The full local suite and [application CI](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/actions/runs/37698159872) passed all 70 checks. The case-study funded-principal typo was corrected, and all three table rows were compared with the saved exact base outputs.
+
+Actual base, capital and default-stress Markdown downloads matched local regeneration byte for byte. The capital download retained $1.25m applied equity while the sidebar draft showed $2.1m. Extracting the capital brief's JSON and passing it to the CLI reproduced the Balanced decision and selected run. The live preview and reset were checked, and decision/table captures were saved. The latest console window contained 34 extension metadata errors and one app-origin WebSocket close warning across the refresh session; subsequent scenario/preview/download interactions succeeded.
 
 ## Remaining limits
 
