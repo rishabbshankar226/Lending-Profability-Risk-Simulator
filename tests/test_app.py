@@ -1,7 +1,14 @@
 from streamlit.testing.v1 import AppTest
 from pathlib import Path
+from dataclasses import replace
+import json
+import shutil
+
+import pytest
+import streamlit as st
 
 from lending_simulator.types import Assumptions
+from lending_simulator.data import Dataset, load_dataset, save_dataset
 
 
 def app():
@@ -88,3 +95,68 @@ def test_stress_grid_matches_current_applied_policy_and_resets_with_scenario():
     assert any(float(p["operating_result"]) < 0 for p in grid["points"])
     page.button(key="reset").click().run()
     assert "stress_points" not in page.session_state
+
+
+@pytest.fixture
+def isolated_project(tmp_path):
+    root = Path(__file__).resolve().parents[1]
+    shutil.copyfile(root / "app.py", tmp_path / "app.py")
+    shutil.copytree(root / "data", tmp_path / "data")
+    st.cache_data.clear()
+    yield tmp_path / "app.py"
+    st.cache_data.clear()
+
+
+def test_missing_dataset_reports_startup_error_without_an_exception(isolated_project):
+    (isolated_project.parent / "data" / "applications.csv").unlink()
+    page = AppTest.from_file(isolated_project, default_timeout=20).run()
+    assert not page.exception
+    assert any("Base dataset could not be loaded" in e.value for e in page.error)
+    assert not page.metric
+
+
+@pytest.mark.parametrize("content", ["{}", "[]"])
+def test_invalid_manifest_reports_startup_error_without_an_exception(isolated_project, content):
+    (isolated_project.parent / "data" / "manifest.json").write_text(content)
+    page = AppTest.from_file(isolated_project, default_timeout=20).run()
+    assert not page.exception
+    assert any("versioned manifest" in e.value for e in page.error)
+    assert not page.metric
+
+
+@pytest.mark.parametrize("field, value", [
+    ("dataset_hash", "0" * 64),
+    ("dataset_version", "wrong-version"),
+])
+def test_manifest_changes_are_revalidated_after_a_warm_run(isolated_project, field, value):
+    page = AppTest.from_file(isolated_project, default_timeout=20).run()
+    assert not page.exception
+    path = isolated_project.parent / "data" / "manifest.json"
+    manifest = json.loads(path.read_text())
+    manifest[field] = value
+    path.write_text(json.dumps(manifest))
+    page.run()
+    assert not page.exception
+    assert any("versioned manifest" in e.value for e in page.error)
+    assert not page.metric
+
+
+def test_valid_dataset_replacement_refreshes_results_with_applied_inputs(isolated_project):
+    page = AppTest.from_file(isolated_project, default_timeout=20).run()
+    page.selectbox(key="policy").set_value("balanced")
+    page.number_input(key="initial_cash").set_value(1250000.0)
+    page.button(key="run_scenario").click().run()
+    old_run = page.session_state["results"][1].run_id
+    path = isolated_project.parent / "data" / "applications.csv"
+    original = load_dataset(path)
+    rows = list(original.applications)
+    rows[0] = replace(rows[0], principal_cents=rows[0].principal_cents + 10000)
+    changed = Dataset(tuple(rows), original.seed)
+    save_dataset(changed, path)
+    (path.parent / "manifest.json").write_text(json.dumps(changed.manifest()))
+    page.run()
+    assert not page.exception
+    assert page.session_state["applied_policy"] == "balanced"
+    assert page.session_state["applied_assumptions"].initial_cash == 1250000
+    assert all(r.dataset_hash == changed.dataset_hash for r in page.session_state["results"])
+    assert page.session_state["results"][1].run_id != old_run

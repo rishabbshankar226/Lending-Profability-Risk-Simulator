@@ -39,6 +39,8 @@ python -m scripts.generate_dataset
 
 The CLI produces three scenario workbooks, exact-value CSV packages, comparison metadata, and a workbook specification. Regeneration reproduces the committed application CSV and content hash.
 
+The server test starts Streamlit on a temporary local port, checks HTTP health and the frontend document, then stops it. This verifies startup; it does not inspect browser rendering or interactions.
+
 To reproduce downloaded inputs, unzip `manifest.json` and use:
 
 ```bash
@@ -76,5 +78,6 @@ Finance uses 34-digit Decimal arithmetic with a $1e−16 internal reconciliation
 - [Base-case audit workbook](docs/audit-workbook.xlsx)
 - [Interview and 90-second demo walkthrough](docs/walkthrough.md)
 - [Deployment preparation](docs/deployment.md)
+- [Browser and release checklist](docs/release-checklist.md)
 
-The 50 local model, application-state, and export checks pass. Live browser visual/accessibility/network checks and public hosting are pending. No public dashboard URL is claimed. The walkthrough is a script; no demo recording has been produced.
+The 57 local model, application-state, export, and HTTP startup checks pass. Missing or invalid base data stops the dashboard with a clear error. Data and manifest changes invalidate the dataset cache; a valid replacement refreshes the applied scenario and downloads. Live browser visual/accessibility/network checks and public hosting are pending. No public dashboard URL is claimed. The walkthrough is a script; no demo recording has been produced.

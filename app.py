@@ -44,10 +44,11 @@ def percent(value):
 
 
 @st.cache_data(max_entries=2, show_spinner=False)
-def get_dataset(csv_hash, dataset_version):
+def get_dataset(csv_hash, manifest_hash, dataset_version):
     dataset = load_dataset(ROOT / "data" / "applications.csv", DEFAULT_SEED)
     manifest = json.loads((ROOT / "data" / "manifest.json").read_text())
-    if dataset.dataset_hash != manifest["dataset_hash"] or dataset.version != dataset_version:
+    if (dataset.version != dataset_version or not isinstance(manifest, dict)
+            or any(manifest.get(key) != value for key, value in dataset.manifest().items())):
         raise ValueError("The base dataset does not match its versioned manifest.")
     return dataset
 
@@ -127,9 +128,10 @@ def line_plot(frame, fields, ytitle="USD"):
 st.set_page_config(page_title="Lending Profitability & Risk Simulator", page_icon="📊", layout="wide")
 st.title("Lending Profitability & Risk Simulator")
 st.caption("Synthetic expected-value projections · 12-month retained loans · USD · historical calibration unavailable")
-csv_digest = sha256((ROOT / "data" / "applications.csv").read_bytes()).hexdigest()
 try:
-    dataset = get_dataset(csv_digest, "synthetic-applications-v1")
+    csv_digest = sha256((ROOT / "data" / "applications.csv").read_bytes()).hexdigest()
+    manifest_digest = sha256((ROOT / "data" / "manifest.json").read_bytes()).hexdigest()
+    dataset = get_dataset(csv_digest, manifest_digest, "synthetic-applications-v1")
 except (ValueError, OSError) as error:
     st.error(f"Base dataset could not be loaded: {error}")
     st.stop()
@@ -137,6 +139,9 @@ for key, value in DEFAULTS.items():
     st.session_state.setdefault(key, value)
 if "results" not in st.session_state or st.session_state.pop("reset_requested", False):
     apply_scenario(Assumptions(), "conservative", dataset)
+elif any(result.dataset_hash != dataset.dataset_hash for result in st.session_state.results):
+    apply_scenario(st.session_state.applied_assumptions, st.session_state.applied_policy, dataset)
+    st.session_state.pop("stress_points", None)
 
 with st.sidebar:
     st.subheader("Scenario")

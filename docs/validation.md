@@ -2,13 +2,17 @@
 
 ## Performed locally
 
-The financial model, data, SQL, decision rules, exports, CLI and simulated dashboard have 50 passing automated checks in `tests/` (final local run: 8.04 seconds, October 7, 2026). Run `python -m pytest`. The suite has no disabled or skipped checks. Python compilation and the reproducible base-case CLI also passed.
+The financial model, data, SQL, decision rules, exports, CLI, simulated dashboard and HTTP server have 57 passing automated checks in `tests/` (latest local run: 18.95 seconds, October 7, 2026). Run `python -m pytest`. The suite has no disabled or skipped checks. Python compilation and the reproducible base-case CLI also passed.
 
 Independent financial cases include 12 zero-interest $100 principal payments on a $1,200 loan; a $900 default with a $225 delayed recovery and $675 net loss; $10 monthly interest on $1,000 opening debt at 12%; and a positive-interest amortization benchmark. Other checks cover PD/recovery endpoints, late-loan runoff, equal policy overhead horizon, collateral repayments, funding-rate differences, invalid inputs and monthly financial identities.
 
 Data/SQL checks verify the seeded 10,000-row population and exact band counts, CSV roundtrip/content hash, duplicates and invalid fields, policy denominators, nested approval sets, expected demand weights, empty rates and bound policy inputs.
 
 Decision checks cover exact loss/cash boundaries, an ineligible high-profit policy, no eligible policy, all losses, breakeven, tie rules and identical comparison inputs. AppTest checks preloaded views, scenario apply, complete reset, unchanged numeric input identity, invalid inputs, independent visitor sessions, stress-grid state and matching downloads.
+
+Six startup/state regressions were reproduced before their fixes: a missing CSV, incomplete/non-object manifests, hash/version changes after a warm run, and a valid dataset replacement retaining old results. They now pass. Manifest validation checks the required provenance fields against the loaded dataset; both file digests participate in the cache identity. Valid replacements refresh results using the visitor's applied policy and assumptions.
+
+The HTTP integration check in `tests/test_server.py` starts a real Streamlit process on a temporary loopback port, verifies `/_stcore/health` returns HTTP 200/`ok`, verifies `/` serves an HTML document, and terminates the process. The local preview server also returned HTTP 200/`ok`. These are server checks: they do not render the frontend, establish a browser WebSocket session, or verify user interactions.
 
 Workbook checks inspect formula cells and saved values. The independent workbook was authored/recalculated with Artifact Tool from the inspectable workbook specification. Its 12% nominal amortization benchmark produced a $106.618546414 monthly payment and zero final principal. Changing interest to zero produced $100/month; changing recovery to 100% produced zero net loss. The original inputs were restored, formula errors scanned, and every sheet rendered for review. This is calculation/render verification, not a claim to have tested native Excel on the user's computer.
 
@@ -22,7 +26,7 @@ The planning targets were a ≤3-second warm view, ≤2-second ordinary scenario
 
 ## Pending
 
-- Live desktop/narrow-screen browser inspection, actual chart readability, keyboard/accessibility and console/network checks. The available cloud browser could not reach the workspace's localhost server (`ERR_CONNECTION_REFUSED`).
+- Live desktop/narrow-screen browser inspection, actual chart readability, keyboard/accessibility and console/network checks. After restoring the pinned local environment and verifying server health, the available cloud browser still could not reach the workspace's localhost server (`ERR_CONNECTION_REFUSED`). See `release-checklist.md` for exact acceptance cases.
 - Public hosting and verification of anonymous access; no live URL is claimed.
 - Dashboard screenshots and demo recording; the walkthrough script is prepared.
 - Borrower-level or cohort-level historical calibration/backtesting. The source-fitness gate concluded contextual comparison only; risk inputs remain illustrative.
