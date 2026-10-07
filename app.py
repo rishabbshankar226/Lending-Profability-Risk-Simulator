@@ -18,7 +18,7 @@ from lending_simulator.decisions import compare_policies, evaluate_policy, selec
 from lending_simulator.exports import scenario_workbook
 from lending_simulator.presentation import (
     assumption_register, band_curves, cohort_heatmap, comparison_frame,
-    csv_package, evidence_register, month_label, monthly_frame,
+    csv_package, decision_brief, evidence_register, month_label, monthly_frame,
 )
 from lending_simulator.types import Assumptions, POLICIES
 
@@ -64,7 +64,8 @@ def cached_results(assumption_json, dataset_hash, dataset_version, model_version
 def cached_downloads(run_id, model_version, _result, _results, _dataset):
     if run_id != _result.run_id or model_version != MODEL_VERSION:
         raise ValueError("Download identity does not match the selected result.")
-    return csv_package(_result, _dataset), scenario_workbook(_result, _results, _dataset)
+    return (csv_package(_result, _dataset), scenario_workbook(_result, _results, _dataset),
+            decision_brief(_result, _results))
 
 
 @st.cache_data(max_entries=3, show_spinner=False)
@@ -352,9 +353,13 @@ with tabs[4]:
 st.divider()
 st.subheader("Download applied scenario")
 st.caption("Downloads match the displayed applied scenario. Portfolio workbook cells are saved outputs; its two independent benchmark sheets recalculate from their blue inputs.")
-csv_bytes, workbook_bytes = cached_downloads(selected.run_id, MODEL_VERSION, selected, results, dataset)
-c1, c2 = st.columns(2)
+csv_bytes, workbook_bytes, brief_text = cached_downloads(selected.run_id, MODEL_VERSION, selected, results, dataset)
+c1, c2, c3 = st.columns(3)
 with c1:
     st.download_button("CSV results + manifest", csv_bytes, f"lending-{selected.run_id}.zip", "application/zip", key="csv_download", width="stretch")
 with c2:
     st.download_button("Audit workbook", workbook_bytes, f"lending-{selected.run_id}.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", key="workbook_download", width="stretch")
+with c3:
+    st.download_button("Decision brief", brief_text, f"lending-decision-{selected.run_id}.md", "text/markdown", key="brief_download", width="stretch")
+with st.expander("Preview decision brief"):
+    st.markdown(brief_text)

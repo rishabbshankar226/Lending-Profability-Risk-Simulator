@@ -8,7 +8,7 @@ Under the illustrative inputs, conservative lending is the only policy meeting t
 | --- | ---: | ---: | ---: | ---: | ---: |
 | Conservative | $6,699,873 | $48,133 | 0.84% | $147,450 | $0 |
 | Balanced | $11,996,972 | $294,468 | 1.58% | −$696,143 | $746,143 |
-| Aggressive | $14,998,287 | $396,446 | 2.29% | −$1,485,855 | $1,535,855 |
+| Aggressive | $14,989,287 | $396,446 | 2.29% | −$1,485,855 | $1,535,855 |
 
 All three meet the selected loss cap in this base case. Balanced and aggressive fail the cash floor because their larger retained loan books outgrow the assumed $2m debt facility and $500,000 equity cash. Negative cash is a financing gap, not borrowing automatically supplied by the model.
 

@@ -57,6 +57,35 @@ def test_running_unchanged_base_controls_preserves_the_run_identity():
     assert page.session_state["results"][0].run_id == base
 
 
+def test_decision_brief_follows_applied_examples_and_retains_last_valid_run():
+    page = app()
+
+    def preview():
+        return next(e for e in page.expander if e.label == "Preview decision brief").markdown[0].value
+
+    base = preview()
+    assert "Recommended policy: Conservative" in base
+    assert '"run_id": "5a88f7bef3fa93d4"' in base
+    page.button(key="example_capital").click().run()
+    capital = preview()
+    assert "Recommended policy: Balanced" in capital
+    assert '"run_id": "690e9fa563e2d475"' in capital
+    page.number_input(key="cash_floor").set_value(-1.0)
+    assert preview() == capital
+    page.button(key="run_scenario").click().run()
+    assert not page.exception
+    assert page.error
+    assert preview() == capital
+    page.button(key="example_defaults").click().run()
+    assert "Recommended policy: None" in preview()
+    assert '"default_stress": "2"' in preview()
+    page.button(key="reset").click().run()
+    assert not page.exception
+    assert preview() == base
+    downloads = page.get("download_button")
+    assert any(d.proto.label == "Decision brief" for d in downloads)
+
+
 def test_unsaved_controls_do_not_replace_results_until_run_and_visitors_are_isolated():
     one = app()
     two = app()

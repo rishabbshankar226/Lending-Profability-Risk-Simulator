@@ -12,7 +12,7 @@ import zipfile
 import pandas as pd
 
 from lending_simulator.data import Dataset
-from lending_simulator.decisions import evaluate_policy
+from lending_simulator.decisions import evaluate_policy, select_strategy
 from lending_simulator.types import Assumptions, ModelResult, MonthlyResult, CohortMonth, Summary
 
 COUNT_FIELDS = {"expected_active", "expected_defaults", "funded_loans", "expected_applications"}
@@ -51,6 +51,57 @@ def comparison_frame(results: tuple[ModelResult, ...]) -> pd.DataFrame:
             "Run ID": r.run_id,
         })
     return pd.DataFrame(rows)
+
+
+def decision_brief(result: ModelResult, results: tuple[ModelResult, ...]) -> str:
+    """A shareable decision and its reproducible inputs from one applied bundle."""
+    if result not in results:
+        raise ValueError("Decision brief must contain the selected scenario's results.")
+    decision = select_strategy(results)
+    a, manifest = result.assumptions, result.manifest()
+
+    def amount(value):
+        return f"({abs(value):,.0f})" if value < 0 else f"{value:,.0f}"
+
+    recommendation = decision.recommended_policy.title() if decision.recommended_policy else "None"
+    lines = [
+        "# Lending decision brief", "",
+        "Illustrative synthetic expected-value projections; uncalibrated. Historical sources provide context only.", "",
+        "## Decision", "",
+        f"**Recommended policy: {recommendation}.** {decision.message}", "",
+        f"Selected portfolio: **{result.policy.title()}**. This is the displayed portfolio; the recommendation compares all policies below.", "",
+        f"Horizon: **{len(result.monthly)} months**, {month_label(0)} through {month_label(len(result.monthly) - 1)}, "
+        f"including {manifest['operating_horizon_months']} months of originations and complete repayment/recovery runoff.", "",
+        "## Applied assumptions", "",
+        f"Starting equity: **USD {amount(a.initial_cash)}**. Facility limit: **USD {amount(a.facility_limit)}**. "
+        f"Funding rate: **{a.funding_rate:.2%}** annually. Lifetime default stress: **{a.default_stress.normalize():f}×**.", "",
+        f"Net principal loss cap: **{a.loss_cap:.2%}**. Month-end cash floor: **USD {amount(a.cash_floor)}**.", "",
+        "## Policy tradeoffs", "",
+        "Amounts are USD, rounded to whole dollars; parentheses denote negative values. Operating profit and net loss cover complete runoff.", "",
+        "| Policy | Funded principal | Operating profit | Net principal loss | Minimum cash | Extra equity for cash floor | Limits |",
+        "| --- | ---: | ---: | ---: | ---: | ---: | --- |",
+    ]
+    for r in results:
+        s, limits = r.summary, evaluate_policy(r)
+        loss = "n.a." if s.loss_ratio is None else f"{s.loss_ratio:.2%}"
+        reason = "; ".join(limits.reasons) or "Both limits met"
+        lines.append(f"| {r.policy.title()} | {amount(s.funded_principal)} | {amount(s.operating_result)} | "
+                     f"{loss} | {amount(s.minimum_cash)} | {amount(s.additional_equity_required)} | {reason} |")
+    lines.extend([
+        "", "Eligibility tests the credit-loss cap, cash floor and financial reconciliations. A recommendation also requires positive operating profit.", "",
+        "Negative cash is an unfunded diagnostic path. Extra equity is the additional starting cash needed to meet the floor, "
+        "not committed funding; the model does not charge a cost of equity.", "",
+        "## Scope and reproducibility", "",
+        "This simplified management forecast excludes taxes, prepayment, delinquency stages, price response and intramonth liquidity. "
+        "It does not establish actual lender performance or borrower prediction accuracy.", "",
+        f"Selected run: `{result.run_id}`. Model version: `{manifest['model_version']}`.", "",
+        "All applied inputs, checks, dataset identity and policy run IDs are recorded below. Exact financial schedules are in the CSV package. "
+        "Save this JSON as `manifest.json` and run `python -m lending_simulator.cli --assumptions manifest.json` with the matching dataset to reproduce the calculations.", "",
+        "```json", json.dumps(manifest | {"decision": asdict(decision),
+                                         "comparison_run_ids": {r.policy: r.run_id for r in results}}, indent=2),
+        "```", "",
+    ])
+    return "\n".join(lines)
 
 
 def cohort_heatmap(result: ModelResult, as_of_month: int | None = None) -> pd.DataFrame:

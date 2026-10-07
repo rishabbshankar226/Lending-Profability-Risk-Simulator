@@ -4,14 +4,60 @@ from decimal import Decimal as D
 from io import BytesIO, StringIO
 import json
 import zipfile
+from pathlib import Path
 
 from openpyxl import load_workbook
+import pytest
 
-from lending_simulator.data import generate_dataset
+from lending_simulator.data import generate_dataset, load_dataset
 from lending_simulator.decisions import compare_policies
 from lending_simulator.presentation import cohort_heatmap, csv_package, workbook_payload, monthly_frame, assumption_register
 from lending_simulator.exports import scenario_workbook
 from lending_simulator.types import Assumptions
+from lending_simulator.presentation import decision_brief
+
+
+@pytest.fixture(scope="module")
+def brief_dataset():
+    return load_dataset(Path(__file__).resolve().parents[1] / "data" / "applications.csv")
+
+
+@pytest.mark.parametrize("assumptions, policy, recommendation, explanation", [
+    (Assumptions(), "balanced", "Conservative", "highest expected full-runoff"),
+    (replace(Assumptions(), initial_cash=D("1250000")), "balanced", "Balanced", "highest expected full-runoff"),
+    (replace(Assumptions(), default_stress=D(2)), "conservative", "None", "No eligible strategy is profitable"),
+    (replace(Assumptions(), initial_cash=D(0)), "conservative", "None", "No policy meets"),
+])
+def test_brief_reports_the_calculated_decision_and_exact_applied_inputs(
+        brief_dataset, assumptions, policy, recommendation, explanation):
+    results = compare_policies(brief_dataset, assumptions)
+    selected = next(r for r in results if r.policy == policy)
+    text = decision_brief(selected, results)
+    assert f"**Recommended policy: {recommendation}.**" in text
+    assert f"Selected portfolio: **{policy.title()}**" in text
+    assert explanation in text
+    assert "39 months" in text and "Dec 2029" in text
+    assert "synthetic" in text and "uncalibrated" in text
+    assert "positive operating profit" in text
+    manifest = json.loads(text.split("```json\n", 1)[1].split("```", 1)[0])
+    assert manifest["assumptions"] == assumptions.to_dict()
+    assert manifest["run_id"] == selected.run_id
+    assert manifest["dataset_hash"] == brief_dataset.dataset_hash
+    assert manifest["comparison_run_ids"] == {r.policy: r.run_id for r in results}
+    assert manifest["checks"]["passed"] is True
+    if assumptions == Assumptions():
+        assert ("| Aggressive | 14,989,287 | 396,446 | 2.29% | (1,485,855) | "
+                "1,535,855 | Minimum-cash floor breached |") in text
+        assert "Selected portfolio: **Balanced**" in text
+
+
+@pytest.mark.parametrize("mismatch", ["selected", "comparison"])
+def test_brief_rejects_stale_selected_results_and_mixed_comparison(brief_dataset, mismatch):
+    base = compare_policies(brief_dataset, Assumptions())
+    capital = compare_policies(brief_dataset, replace(Assumptions(), initial_cash=D("1250000")))
+    selected, results = (base[1], capital) if mismatch == "selected" else (base[0], (base[0], capital[1], base[2]))
+    with pytest.raises(ValueError):
+        decision_brief(selected, results)
 
 
 def test_csv_package_has_manifest_units_exact_values_and_matching_run():
