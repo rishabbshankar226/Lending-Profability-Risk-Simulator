@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lending-profitability-risk-simulator"
+version = "0.1.0"
+description = "A transparent expected-value lending, funding, and cash decision model."
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "streamlit==1.65.0", "pandas==2.2.3", "plotly==7.1.0", "XlsxWriter==3.2.9"
+]
+
+[project.optional-dependencies]
+dev = ["pytest==9.1.1", "openpyxl==3.1.5"]
+
+[tool.setuptools.packages.find]
+include = ["lending_simulator*"]
+
+[tool.setuptools.package-data]
+lending_simulator = ["queries/*.sql", "evidence/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-q"

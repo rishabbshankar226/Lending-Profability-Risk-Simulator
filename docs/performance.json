@@ -1,0 +1,16 @@
+{
+  "environment": "Linux-6.18.44-x86_64-with-glibc2.39",
+  "python": "3.12.14",
+  "base_policy_comparison_seconds": 0.07231383499993171,
+  "scenario_comparison_seconds": 0.0785984140002256,
+  "20_cell_stress_grid_seconds": 0.11628452099967035,
+  "apptest_first_run_seconds": 1.045744657999876,
+  "apptest_warm_run_seconds": 0.14786744599996382,
+  "peak_process_rss_mb": 184.99609375,
+  "measurements_are": "One Linux local-process pass; engine and AppTest, not browser/network/hosting latency or multi-user cache load.",
+  "base_run_ids": [
+    "5a88f7bef3fa93d4",
+    "a2feec5a72facbc3",
+    "5d28e1ac49bb98b2"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "run_id": "5a88f7bef3fa93d4",
+  "payment": 106.61854641400993,
+  "lastBalance": 0,
+  "netLoss": 675,
+  "received": 225,
+  "recalculation_cases": [
+    "zero nominal interest: $100/month",
+    "100% recovery: $0 net loss"
+  ],
+  "engine": "Artifact Tool"
+}
