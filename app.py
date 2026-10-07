@@ -213,7 +213,21 @@ with tabs[0]:
     st.caption("Profit includes noncash charge-offs. Cash reflects the original loan advance, actual expected collections and debt draws/repayments.")
 
 with tabs[1]:
-    st.subheader("Shared demand, pricing, and comparison horizon")
+    st.subheader("Profit, credit losses and cash by policy")
+    st.caption("Eligibility tests the credit-loss cap and cash floor. The recommendation also requires positive operating profit.")
+    for result, column in zip(results, st.columns(3)):
+        with column, st.container(border=True):
+            summary = result.summary
+            limits = evaluate_policy(result)
+            st.markdown(f"**{result.policy.title()}**")
+            st.metric("Full-runoff operating profit", money(summary.operating_result))
+            st.caption(f"Minimum cash: {money(summary.minimum_cash)} · Net principal loss: {percent(summary.loss_ratio)}.")
+            if limits.eligible:
+                st.success("Meets credit and cash limits")
+            else:
+                st.warning("; ".join(limits.reasons))
+            st.caption(f"Additional equity for cash floor: {money(summary.additional_equity_required)}.")
+    st.subheader("Full-runoff profit on shared inputs")
     fig = px.bar(comparison, x="Policy", y="Operating result (full runoff)", color="Policy", color_discrete_map=COLORS,
                  custom_data=["Minimum cash", "Net principal loss ratio", "Reason"])
     fig.update_traces(hovertemplate="%{x}<br>Operating result: $%{y:,.0f}<br>Minimum cash: $%{customdata[0]:,.0f}<br>Net loss: %{customdata[1]:.2%}<br>%{customdata[2]}<extra></extra>")

@@ -76,6 +76,30 @@ def test_cash_floor_breach_is_explained_without_fabricating_a_winner():
     assert any("No policy meets" in w.value for w in page.warning)
 
 
+@pytest.mark.parametrize("equity, minimum_cash, equity_gaps, eligible_count", [
+    (500000.0, ["$147,450", "($696,143)", "($1,485,855)"],
+     ["$0", "$746,143", "$1,535,855"], 1),
+    (1250000.0, ["$897,450", "$53,857", "($735,855)"],
+     ["$0", "$0", "$785,855"], 2),
+])
+def test_comparison_exposes_each_policy_cash_limit_and_equity_gap(equity, minimum_cash, equity_gaps, eligible_count):
+    page = app()
+    if equity != 500000.0:
+        page.number_input(key="initial_cash").set_value(equity)
+        page.button(key="run_scenario").click().run()
+    assert not page.exception
+    comparison = page.tabs[1]
+    assert [metric.value for metric in comparison.metric] == ["$48,133", "$294,468", "$396,446"]
+    captions = [caption.value for caption in comparison.caption]
+    for amount in minimum_cash:
+        assert any(f"Minimum cash: {amount}" in value for value in captions)
+    for amount in equity_gaps:
+        assert any(value == f"Additional equity for cash floor: {amount}." for value in captions)
+    assert len(comparison.success) == eligible_count
+    assert len(comparison.warning) == 3 - eligible_count
+    assert all("Minimum-cash floor breached" in message.value for message in comparison.warning)
+
+
 def test_bad_input_is_reported_and_last_successful_results_remain_visible():
     page = app()
     page.number_input(key="cash_floor").set_value(-1.0)
