@@ -38,10 +38,11 @@ Amounts are rounded display values and conditional illustrative projections. Exa
 | Public setting | Make this app public checked in hosting Share dialog | Observed |
 | Anonymous access | Available browser retained owner authentication | Pending |
 | Narrow/mobile layout | No viewport/device-emulation control; zoom attempt left measured CSS width unchanged | Pending |
-| Full accessibility | Screen reader, contrast measurement and full focus order not tested | Pending |
+| Heading structure | All five views have one main title and level-two sections; preview nests at levels three/four; see heading-outline.json | Passed at tested size |
+| Full accessibility | Heading outline and example/preview/download keyboard actions checked; screen reader, contrast measurement and full focus order not tested | Pending |
 | Network requests | WebSocket/download request diagnostics unavailable through current browser control | Pending |
 | Hosting load behavior | Cold/warm viewer loads, hibernation and sustained multi-user behavior not measured | Pending |
-| Screenshots | Thirteen real captures, including decision-brief controls and policy tradeoffs | Complete |
+| Screenshots | Fourteen real captures, including decision-brief controls and policy tradeoffs | Complete |
 | Walkthrough video | 90-second script prepared; actual interactive recording not captured | Pending |
 
 The public review build is available with these scoped limitations. Server health and simulated AppTest do not establish the pending access, mobile, performance or accessibility checks.

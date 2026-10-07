@@ -51,3 +51,7 @@ Actual base, capital and default-stress Markdown downloads matched local regener
 - Historical calibration/backtesting. Sources remain contextual, and the synthetic risk inputs are illustrative.
 
 The review deployment runs from `feature/lending-simulator`; PR #1 remains unmerged. No predictive accuracy, real loan approvals, investment return or actual business improvement is claimed.
+
+### Heading structure follow-up
+
+The presentation-only change at `10afcbacd0cda17ba0d3631f1a7dc64f44c024a5` passed all 70 existing checks, compilation and [CI](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/actions/runs/37703275592). Hosted DOM inspection confirmed one main title and level-two sections across five views, with the decision preview nested at levels three/four. Keyboard navigation activated the capital example, expanded its preview and downloaded the unchanged brief. See [browser-validation.md](browser-validation.md#heading-and-keyboard-follow-up) and [heading-outline.json](heading-outline.json). This is a scoped accessibility repair; full accessibility, mobile and anonymous checks remain pending.

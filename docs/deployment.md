@@ -36,3 +36,5 @@ Use the [official deployment workflow](https://docs.streamlit.io/deploy/streamli
 The first startup log recorded approximately 11 seconds from repository preparation to the listening server. This is a host log interval, **not** a measured viewer cold start. Viewer load timing, hibernation/wake behavior and multi-user capacity have not been measured.
 
 Mobile layout, isolated anonymous access, comprehensive accessibility/network checks and the walkthrough recording remain open in the [release checklist](release-checklist.md).
+
+The heading presentation was checked live at `10afcbacd0cda17ba0d3631f1a7dc64f44c024a5` after a hosting reboot. All five tab outlines and the nested decision preview were inspected; capital activation, preview expansion and brief download also worked with the keyboard. See the heading follow-up in [browser-validation.md](browser-validation.md).

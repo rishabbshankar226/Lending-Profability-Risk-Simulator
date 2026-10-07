@@ -156,3 +156,13 @@ No viewport/device-emulation API was available. A zoom attempt left app-frame CS
 External performance/accessibility audit requests were unavailable during the follow-up pass. No audit score, mobile result or additional accessibility finding was returned.
 
 The data and risk assumptions remain synthetic and uncalibrated. These checks do not establish historical prediction accuracy, real underwriting suitability or actual lender performance.
+
+## Heading and keyboard follow-up
+
+At application commit `10afcbacd0cda17ba0d3631f1a7dc64f44c024a5`, the hosted app was rebooted and all five views were inspected in cloud Chrome at 1363 × 936. Sections previously jumped from the page title at level one to level three. They now use level two; the sidebar Scenario heading is also level two. The expanded decision brief previously introduced another level-one title. It is now nested at level three beneath Download applied scenario, with its sections at level four. Each inspected view, including the expanded brief, has one level-one page title. The observed outlines are saved in [heading-outline.json](heading-outline.json).
+
+Tab from Base case focused More capital · $1.25m. Enter applied Balanced run `690e9fa563e2d475`. Enter on the preview summary expanded it, and Enter on Decision brief triggered a completed download. That actual 4,329-byte file exactly matched the saved capital brief: SHA-256 `a07859eff8a48cf26b058d39f1b2216bab1f4a419bac2c799cdfa181f1760e1b`. The downloaded document retains its standalone level-one title. Financial outputs, engine version and exported brief content did not change.
+
+The full 70-check local suite, compilation and [application CI](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/actions/runs/37703275592) passed. A screenshot of the download section, keyboard focus ring and nested preview is saved as [heading-review.jpg](screenshots/heading-review.jpg), bringing the capture set to fourteen.
+
+This verifies heading semantics and those keyboard actions. It does not establish screen-reader announcements, full focus order, measured contrast, mobile layout or isolated anonymous access; those release checks remain pending.
