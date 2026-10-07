@@ -2,7 +2,7 @@
 
 **October 7, 2026.** [Live review dashboard](https://rishabb-lending-simulator.streamlit.app/) on `feature/lending-simulator`; [draft PR #1](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/pull/1) remains unmerged.
 
-All 57 automated checks pass. Desktop cases below were exercised against the hosted app, with final display fixes checked at `01a89be7693a3154627318e6e95f0bb253c43694`. Detailed run identities, file inspection and screenshots are in [browser-validation.md](browser-validation.md).
+All 59 automated checks pass. Desktop cases below were exercised against the hosted app, with the latest policy summaries checked at `8572cec4cd1bf093a1a2a2cecd4d4276a1190f82`. Detailed run identities, file inspection and screenshots are in [browser-validation.md](browser-validation.md).
 
 ## Financial and interaction cases
 
@@ -19,6 +19,7 @@ All 57 automated checks pass. Desktop cases below were exercised against the hos
 | Complete reset | Base assumptions, policy and First 24 months restored; old stress grid removed | Passed |
 | Cohorts | Future ages blank at First 24 months; complete projected tail at runoff | Passed |
 | Stress grid | 20 cases; 4%, 8%, 12%, 16% categories; stale grid removed on new applied run | Passed |
+| Policy summaries | Profit, minimum cash, loss, limits and equity gaps visible together; base/$1.25m, draft edits and reset checked | Passed |
 | Downloads | ZIP and nine-sheet workbook opened; run, inputs, dataset hash and values matched | Passed |
 | Visitor sessions | Second session started at base while first retained Balanced/$1.25m | Passed in tabs sharing owner authentication |
 
@@ -38,7 +39,9 @@ Amounts are rounded display values and conditional illustrative projections. Exa
 | Full accessibility | Screen reader, contrast measurement and full focus order not tested | Pending |
 | Network requests | WebSocket/download request diagnostics unavailable through current browser control | Pending |
 | Hosting load behavior | Cold/warm viewer loads, hibernation and sustained multi-user behavior not measured | Pending |
-| Screenshots | Real overview, capital, comparison, cohort, stress and methodology captures saved | Complete |
+| Screenshots | Nine real captures, including base and $1.25m policy summaries | Complete |
 | Walkthrough video | 90-second script prepared; actual interactive recording not captured | Pending |
 
 The public review build is available with these scoped limitations. Server health and simulated AppTest do not establish the pending access, mobile, performance or accessibility checks.
+
+External performance/accessibility audits were unavailable during the follow-up pass; no audit score or mobile result was produced.

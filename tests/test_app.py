@@ -91,10 +91,12 @@ def test_comparison_exposes_each_policy_cash_limit_and_equity_gap(equity, minimu
     comparison = page.tabs[1]
     assert [metric.value for metric in comparison.metric] == ["$48,133", "$294,468", "$396,446"]
     captions = [caption.value for caption in comparison.caption]
-    for amount in minimum_cash:
-        assert any(f"Minimum cash: {amount}" in value for value in captions)
-    for amount in equity_gaps:
-        assert any(value == f"Additional equity for cash floor: {amount}." for value in captions)
+    assert [value.split(" · ")[0] for value in captions if value.startswith("Minimum cash:")] == [
+        f"Minimum cash: {amount}" for amount in minimum_cash
+    ]
+    assert [value for value in captions if value.startswith("Additional equity for cash floor:")] == [
+        f"Additional equity for cash floor: {amount}." for amount in equity_gaps
+    ]
     assert len(comparison.success) == eligible_count
     assert len(comparison.warning) == 3 - eligible_count
     assert all("Minimum-cash floor breached" in message.value for message in comparison.warning)

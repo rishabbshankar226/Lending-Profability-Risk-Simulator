@@ -10,6 +10,8 @@ Initial end-to-end cases ran at `6375064b54c824d0f1710aa06d98b6f74910343f`. Disp
 
 The app uses Python 3.12 and `app.py` from `feature/lending-simulator`. [CI for the tested application commit](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/actions/runs/37657326747) completed successfully: the workflow runs 57 tests, compilation and reproducible CLI exports. The 13 existing AppTest checks also passed locally after the display edits.
 
+The later policy summaries were checked at `8572cec4cd1bf093a1a2a2cecd4d4276a1190f82` at the same desktop size. Two comparison cases increased the suite to 59 checks; the full local suite and [application CI](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/actions/runs/37688578471) passed. Financial calculations, model version and run identity rules remained unchanged.
+
 ## Observed scenarios
 
 These are applied scenarios. Selected policy controls the displayed portfolio; recommendations compare all three policies on shared assumptions.
@@ -43,6 +45,16 @@ The Conservative grid displayed all 20 cases: default multipliers 0.5×, 1×, 1.
 Methodology rendered timing, assumptions, sources, SQL and the selected manifest. Base checks showed Passed = True, tolerance $1e−16, maximum residual $1.45e−27, zero debt/cash residual and exposure limits satisfied.
 
 Keyboard arrow changes were used for stress/funding sliders. On the final build, ArrowRight moved Overview to Strategy comparison and keyboard policy selection worked. Control names were present in the accessibility tree; this is a basic check, not a full accessibility audit.
+
+## Policy summary follow-up
+
+The initial comparison view placed cash and eligibility farther across the detailed table. Summaries now show each policy's full-runoff profit, minimum cash, net principal loss, credit/cash eligibility and equity gap together above the chart.
+
+At base run `5a88f7bef3fa93d4`, Conservative showed $48,133 profit, $147,450 minimum cash and both limits met. Balanced and Aggressive showed cash-floor breaches with equity gaps of $746,143 and $1,535,855 respectively. Actual dollar signs, parentheses and percentage labels rendered correctly.
+
+Editing equity to $1.25m without Run retained those base summaries and run ID. After Run, selected Conservative had run `0f6c65f5141988cc`; the recommendation changed to Balanced. The three policy profits stayed $48,133/$294,468/$396,446. Minimum cash became $897,450/$53,857/−$735,855, and equity gaps became $0/$0/$785,855. The Conservative and Balanced cards showed both limits met; Aggressive showed the cash breach. The policy displayed in Overview remains a separate selection from the calculated recommendation.
+
+Reset returned the base run and Balanced's −$696,143 minimum cash. Both base and capital summaries were captured from the actual hosted app with all three cards visible together at 1363 × 936.
 
 ## Download inspection
 
@@ -80,6 +92,8 @@ Real hosted dashboard captures, without compositing or generated chart marks:
 | [First 24-month cohorts](screenshots/cohorts-first24.jpg) | Base; `6375064` |
 | [Complete runoff cohorts](screenshots/cohorts-runoff.jpg) | Base; `6375064` |
 | [Methodology](screenshots/methodology.jpg) | Base checks; `6375064` |
+| [Policy summaries at base](screenshots/policy-summaries-base.jpg) | Base, all three profit/cash/eligibility cards; `8572cec` |
+| [Policy summaries with capital](screenshots/policy-summaries-capital.jpg) | $1.25m equity, Conservative selected / Balanced recommended; `8572cec` |
 
 ## Scope and remaining checks
 
@@ -88,5 +102,7 @@ The Share dialog showed **Make this app public** checked, and the actual URL ren
 The final console inspection returned 35 warning/error entries, all from a browser extension. No application-origin message appeared in that bounded window. This is not a full console history or network trace.
 
 No viewport/device-emulation API was available. A zoom attempt left app-frame CSS width at 1363 pixels and was not counted as mobile verification. Full screen-reader/contrast testing, WebSocket inspection, cold/warm viewer load measurements, hibernation, sustained multi-user testing and actual interactive video recording remain unperformed.
+
+External performance/accessibility audit requests were unavailable during the follow-up pass. No audit score, mobile result or additional accessibility finding was returned.
 
 The data and risk assumptions remain synthetic and uncalibrated. These checks do not establish historical prediction accuracy, real underwriting suitability or actual lender performance.

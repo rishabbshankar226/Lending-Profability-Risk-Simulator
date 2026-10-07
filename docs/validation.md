@@ -2,7 +2,7 @@
 
 ## Performed locally
 
-The financial model, data, SQL, decision rules, exports, CLI, simulated dashboard and HTTP server have 57 passing automated checks in `tests/` (latest local run: 18.95 seconds, October 7, 2026). Run `python -m pytest`. The suite has no disabled or skipped checks. Python compilation and the reproducible base-case CLI also passed.
+The financial model, data, SQL, decision rules, exports, CLI, simulated dashboard and HTTP server have 59 passing automated checks in `tests/` (full local suite passed October 7, 2026). Run `python -m pytest`. The suite has no disabled or skipped checks. Python compilation and the reproducible base-case CLI also passed.
 
 Independent financial cases include 12 zero-interest $100 principal payments on a $1,200 loan; a $900 default with a $225 delayed recovery and $675 net loss; $10 monthly interest on $1,000 opening debt at 12%; and a positive-interest amortization benchmark. Other checks cover PD/recovery endpoints, late-loan runoff, equal policy overhead horizon, collateral repayments, funding-rate differences, invalid inputs and monthly financial identities.
 
@@ -31,6 +31,8 @@ The [live review dashboard](https://rishabb-lending-simulator.streamlit.app/) wa
 Real browser inspection identified three presentation defects. Commit `01a89be7693a3154627318e6e95f0bb253c43694` preserves dollar signs in captions, uses percentage categories on the stress grid and cleans the validation message. The 13 existing AppTest checks passed after those edits; [CI on that application commit](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/actions/runs/37657326747) passed the full workflow. All three corrected displays were verified in the hosted app after its reboot. No financial-engine change was needed.
 
 Basic keyboard tab, slider and policy-selector checks passed. The latest 35 console warning/error entries on the final verification tab were extension messages, with no application-origin error in that window. This is bounded evidence, not a comprehensive accessibility or network audit.
+
+The later policy summaries expose each policy's profit, minimum cash, principal loss, eligibility and additional equity above the detailed table. Two added AppTest cases check base and $1.25m capital inputs, including the unchanged profits and policy cash/equity values. [Application CI](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/actions/runs/37688578471) passed all 59 checks. The actual hosted cards were checked at both capital levels, during unsaved edits and after reset; their values and eligibility matched the applied runs.
 
 ## Remaining limits
 

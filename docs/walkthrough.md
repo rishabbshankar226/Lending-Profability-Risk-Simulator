@@ -4,7 +4,7 @@
 
 **0–20 seconds.** “I built a lending profitability and risk simulator to connect approvals, loan losses, funding and cash. The applicant population is synthetic, and all risk inputs are illustrative. It compares a 24-month origination plan through complete repayment and recovery runoff.” Show Overview.
 
-**20–40 seconds.** Open Strategy comparison. “Broadening approvals increases modeled operating profit from about $48k to $396k, but the aggressive policy reaches a $1.49m cash deficit. With the selected cash floor, conservative is the only eligible policy. The recommendation is calculated, not hard-coded.”
+**20–40 seconds.** Open Strategy comparison and point to the three profit/cash summaries. “Broadening approvals increases modeled operating profit from about $48k to $396k, but the aggressive policy reaches a $1.49m cash deficit. With the selected cash floor, conservative is the only eligible policy. The recommendation is calculated, not hard-coded.”
 
 **40–60 seconds.** Change starting cash to $1.25m and run. “Additional equity makes balanced feasible and changes the recommendation. Profit stays unchanged because I have not modeled an equity financing cost. Capital and operating economics are different questions.”
 
