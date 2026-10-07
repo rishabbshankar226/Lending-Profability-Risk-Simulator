@@ -150,15 +150,13 @@ elif any(result.dataset_hash != dataset.dataset_hash for result in st.session_st
 st.subheader("Try a guided example")
 st.caption("Examples replace all inputs and run immediately. Compare policies below or use the sidebar to build a custom scenario.")
 examples = (
-    ("base", "Base case", {}, "Start with conservative approvals and $500,000 equity."),
-    ("capital", "More capital · $1.25m", {"initial_cash": 1250000.0, "policy": "balanced"},
-     "Increase starting equity; keep operating assumptions unchanged and view Balanced."),
-    ("defaults", "Higher defaults · 2×", {"stress": 2.0},
-     "Double lifetime default assumptions and view Conservative; compare all three policies."),
+    ("base", "Base case", {}),
+    ("capital", "More capital · $1.25m", {"initial_cash": 1250000.0, "policy": "balanced"}),
+    ("defaults", "Higher defaults · 2×", {"stress": 2.0}),
 )
-for column, (name, label, overrides, help_text) in zip(st.columns(3), examples):
+for column, (name, label, overrides) in zip(st.columns(3), examples):
     column.button(label, key=f"example_{name}", on_click=load_example, args=(overrides,),
-                  help=help_text, width="stretch")
+                  width="stretch")
 
 with st.sidebar:
     st.subheader("Scenario")
