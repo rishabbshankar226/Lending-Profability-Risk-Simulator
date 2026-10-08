@@ -43,6 +43,8 @@ Explain why a longer-term loss curve or short credit-card default target cannot 
 
 ## Portfolio wording
 
+The [application and interview notes](interview-notes.md) provide role-specific resume drafts and answer checkpoints. Use the [two-minute reviewer guide](reviewer-guide.md) as the short introduction for someone evaluating the project.
+
 Use this only after you can explain the financial and SQL/Python checkpoints:
 
 “Built a Python/SQL lending decision simulator comparing approval policies across profitability, credit losses and liquidity, with a Streamlit dashboard, reconciled financial schedules, and reproducible scenario exports.”

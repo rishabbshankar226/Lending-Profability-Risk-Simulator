@@ -6,6 +6,8 @@ The app models a hypothetical lender retaining 12-month merchant-financed instal
 
 **Live review demo:** [Open the dashboard](https://rishabb-lending-simulator.streamlit.app/) · **Code review:** [Draft PR #1](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/pull/1)
 
+**Start here:** [Two-minute reviewer guide](docs/reviewer-guide.md) · [Application and interview notes](docs/interview-notes.md)
+
 ![Live guided capital example](docs/screenshots/guided-capital.jpg)
 
 ## The decision
@@ -87,6 +89,8 @@ Finance uses 34-digit Decimal arithmetic with a $1e−16 internal reconciliation
 
 ## Review and learn
 
+- [Two-minute reviewer guide for finance and credit/risk roles](docs/reviewer-guide.md)
+- [Project pitch, resume drafts and interview answer checkpoints](docs/interview-notes.md)
 - [Model specification and assumptions](docs/model-spec.md)
 - [Dataset dictionary and SQL walkthrough](docs/data-and-sql.md)
 - [Historical source-fitness decision](docs/source-fitness.md)
