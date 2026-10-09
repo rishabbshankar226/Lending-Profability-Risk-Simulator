@@ -1,5 +1,5 @@
 {
-  "run_id": "5a88f7bef3fa93d4",
+  "run_id": "438a13c9e03c52a9",
   "payment": 106.61854641400993,
   "lastBalance": 0,
   "netLoss": 675,
@@ -8,5 +8,7 @@
     "zero nominal interest: $100/month",
     "100% recovery: $0 net loss"
   ],
-  "engine": "Artifact Tool"
+  "engine": "Artifact Tool",
+  "snapshot_version": "0.1.1",
+  "preserved": "Existing sheets, formulas, inputs, validation and formatting"
 }

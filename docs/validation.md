@@ -2,7 +2,7 @@
 
 ## Performed locally
 
-The financial model, data, SQL, decision rules, exports, CLI, simulated dashboard and HTTP server have 83 passing automated checks in `tests/`. Run `python -m pytest`. The suite has no disabled or skipped checks. Python compilation and the reproducible base-case CLI also passed. Earlier hosted checks below identify their tested commits; they do not cover the new decision-panel layout.
+The financial model, data, SQL, decision rules, exports, CLI, simulated dashboard and HTTP server have 136 passing automated checks in `tests/` (86.29 seconds in the October 9 audit environment). Run `python -m pytest`. The suite has no disabled or skipped checks. Python compilation and reproducible base-case CLI exports also passed. The new local browser evidence below covers the decision panel; earlier hosted checks retain their tested commits and do not establish deployment of the audit branch.
 
 Independent financial cases include 12 zero-interest $100 principal payments on a $1,200 loan; a $900 default with a $225 delayed recovery and $675 net loss; $10 monthly interest on $1,000 opening debt at 12%; and a positive-interest amortization benchmark. Other checks cover PD/recovery endpoints, late-loan runoff, equal policy overhead horizon, collateral repayments, funding-rate differences, invalid inputs and monthly financial identities.
 
@@ -24,6 +24,14 @@ The app's runtime downloads use the approved Python/XlsxWriter stack. They inclu
 
 The planning targets were a ≤3-second warm view, ≤2-second ordinary scenario and <250 MB peak runtime. Treat recorded local measurements as scoped evidence, not a deployed service-level claim.
 
+## October 9 repository-wide audit
+
+The [plan, self-audit and defect inventory](bug-hunt.md) document 11 patched defect groups. The untouched baseline passed 83 tests; 53 added cases bring the final suite to 136. Regressions cover tiny positive interest/PD, exact zero loss with full recovery, unavailable workbook ratios, empty stress grids, mixed workbook inputs, malformed JSON and CSV, manifest/provenance replay, and oversized USD inputs retaining successful dashboard state. A deterministic test covers 160 input combinations across three policies (480 runs), checking principal, final cash/profit, loss and approval identities independently.
+
+Version 0.1.1 intentionally changes canonical run identities. Dataset bytes, base recommendations and all base displayed values are unchanged; the largest exact base-summary difference is $3e−27. The saved base manifest and three decision briefs were regenerated. The existing nine-sheet audit workbook was imported and refreshed, its independent zero-interest/full-recovery inputs tested and restored, and formula errors scanned. Saved-file checks compare formulas, styles, validation, dimensions and panes with the previous workbook. Native Excel execution remains untested.
+
+Real isolated headless Chromium 153 ran local Streamlit subprocesses at 1440 × 1000 and 390 × 844. Desktop checks exercised all five tabs, the decision panel, capital inputs, actual ZIP/XLSX/Markdown downloads, draft/invalid retention, reset, and empty/high-only startup, workbooks and stress grids. A separate mobile-width visitor started at base, activated capital with Enter and had no document overflow. The tested sessions recorded no console errors, warnings or failed requests; [the report](bug-hunt-browser.json) names the bounded coverage. These checks do not establish hosted anonymous access, physical-device behavior, complete focus/screen-reader support or hosting performance.
+
 ## Hosted browser validation
 
 The [live review dashboard](https://rishabb-lending-simulator.streamlit.app/) was exercised in cloud Chrome at 1363 × 936 on October 7, 2026. All five tabs, capital and stress cases, scenario apply/reset, validation errors, cohort cutoffs and stress-grid invalidation were inspected. Both actual downloads opened and matched the selected Balanced run, dataset hash, assumptions and displayed values. A second Streamlit session retained separate scenario state. See [browser evidence and screenshots](browser-validation.md) for the tested commits, exact run IDs and file inspection.
@@ -44,8 +52,8 @@ Actual base, capital and default-stress Markdown downloads matched local regener
 
 ## Remaining limits
 
-- Narrow/mobile layout, full screen-reader/focus/contrast testing and WebSocket/download network inspection.
-- Isolated anonymous viewing. Hosting showed the public setting checked, but the test browser retained owner authentication.
+- Hosted narrow/mobile layout and full screen-reader/focus/contrast testing. Local mobile-width and request checks have the scoped coverage above.
+- Isolated anonymous viewing on the hosted service. Hosting showed the public setting checked, but its test browser retained owner authentication.
 - Measured viewer cold/warm loads, hibernation/wake behavior and sustained multi-user capacity.
 - Actual demo recording; real dashboard screenshots and the 90-second script are available.
 - Historical calibration/backtesting. Sources remain contextual, and the synthetic risk inputs are illustrative.
@@ -56,10 +64,10 @@ PR #1 was merged into `main` at `5602a062d3dd0e6f747cb89463252603154376e1`. Its 
 
 The presentation-only change at `10afcbacd0cda17ba0d3631f1a7dc64f44c024a5` passed all 70 existing checks, compilation and [CI](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/actions/runs/37703275592). Hosted DOM inspection confirmed one main title and level-two sections across five views, with the decision preview nested at levels three/four. Keyboard navigation activated the capital example, expanded its preview and downloaded the unchanged brief. See [browser-validation.md](browser-validation.md#heading-and-keyboard-follow-up) and [heading-outline.json](heading-outline.json). This is a scoped accessibility repair; full accessibility, mobile and anonymous checks remain pending.
 
-### Decision-panel follow-up
+### Decision-panel follow-up (before this audit)
 
 The dashboard now presents the calculated recommendation, viewed policy, full-runoff operating result and cash/credit margins before the guided examples. Limit margins use 34-digit Decimal arithmetic; credit-loss differences are percentage points. Breaches smaller than display precision are labeled with a less-than amount rather than rounded to zero. Undefined loss ratios remain n.a., and an empty portfolio retains full-horizon operating expenses.
 
 Thirteen additional automated cases bring the suite to 83. They cover the base panel, a viewed Balanced policy with a Conservative recommendation, no profitable or eligible recommendation, a credit-cap breach, applied-input continuity through draft/invalid edits, an empty portfolio, five exact margin cases and level-two decision/exploration headings. Existing capital/default/reset, stress-cache and export tests still pass with the same run identities. No financial-engine or model-version changes were made, and no dependency was added.
 
-A local Streamlit preview was started, but the cloud browser could not connect to its loopback URL. The HTTP integration check passed within its controlled subprocess. No screenshots, mobile/desktop visual result, browser keyboard result, screen-reader result or measured interaction-performance claim is made for this layout. Browser validation and hosting-branch rollout remain pending.
+A local Streamlit preview was started, but that pass's cloud browser could not connect to its loopback URL. The October 9 audit subsequently verified the panel in a local headless browser, as described above. Hosting-branch rollout, full accessibility and measured interaction performance remain pending.

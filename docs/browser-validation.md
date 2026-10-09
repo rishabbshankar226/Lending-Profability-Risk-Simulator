@@ -1,5 +1,7 @@
 # Live browser validation
 
+This page preserves historical hosted evidence for model 0.1.0. Saved briefs linked below have since been refreshed to 0.1.1; the recorded run IDs, byte counts and hashes refer to the earlier downloads. The October 9 local audit has separate [browser evidence](bug-hunt-browser.json) and [coverage notes](validation.md#october-9-repository-wide-audit). No hosting rollout was performed during that audit.
+
 ## Test context
 
 - **URL:** https://rishabb-lending-simulator.streamlit.app/

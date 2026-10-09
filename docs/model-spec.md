@@ -23,6 +23,8 @@ Implementation follows the reviewed v1.2 plan, authorized on October 7, 2026 whe
 
 All inputs above are illustrative project settings. The loss cap and cash floor are demonstration management limits, not measured industry targets. Model start: October 2026 (month 0).
 
+USD assumption fields (starting cash, facility limit, acquisition cost, servicing cost, monthly operating expense and cash floor) must be finite, nonnegative and at most $1 trillion each. This practical bound keeps modeled results, charts and workbook exports within usable numerical ranges. Invalid dashboard inputs do not replace the last successful applied scenario.
+
 ## Monthly event order
 
 1. Carry opening cash, performing principal, surviving expected counts, and debt.
@@ -41,11 +43,15 @@ For principal P, monthly rate r, and N=12:
 
 `payment = P*r / (1 - (1+r)^(-N))`, or `P/N` when r=0.
 
+Version 0.1.1 evaluates the equivalent `P / sum((1+r)^(-age), age=1..N)` to avoid cancellation near zero interest. The hazard calculation temporarily adds precision for the magnitude and significant digits of small PDs before returning to 34-digit arithmetic.
+
 The conditional monthly hazard is `h = 1 - (1 - lifetime_PD)^(1/N)`. Let S be the surviving share and B the no-default contractual balance. Defaulted principal is `B*S*h`; defaults are `original_count*S*h`. Update S by multiplying by `(1-h)`, then collect the contractual interest/principal split times S. This keeps borrower survival separate from amortizing exposure. Stress multiplies lifetime PD and caps it at 100%.
 
 The final contractual installment clears any tiny arithmetic residual. Expected counts and application weights can be fractional. No fresh random outcomes are sampled when controls change.
 
 Net credit expense equals gross charged-off principal less received recoveries. A default removes outstanding principal and future collections. The original loan advance was already a cash outflow; a charge-off creates no second cash payment. Recovery claims are scheduled future flows, not booked assets before receipt.
+
+At complete runoff, summary net loss uses `total_gross_chargeoffs * (1 - recovery_rate)`. This is equivalent after all recoveries arrive and gives exact zero at 100% recovery, so signed rounding residue cannot falsely breach a zero loss cap. Monthly loss/recovery timing and cash flows stay intact and reconcile to the summary within the internal tolerance.
 
 ## Funding, profit, and cash
 
@@ -84,3 +90,5 @@ Use 34-digit Decimal arithmetic and a $1e−16 internal absolute tolerance. Inpu
 At runoff, performing loans and debt reach zero, and received recoveries equal the recovery fraction of gross charge-offs. Exposure limits prevent repayment/default exceeding outstanding principal and debt exceeding collateral or the facility cap.
 
 The immutable result bundle carries inputs, summary, monthly/cohort rows, checks, dataset hash and run ID. Canonical Decimal text gives numerically equal inputs the same identity. Dataset, model version, and all assumptions participate in cache/run identity. Session selections are isolated; there is no shared mutable SQLite connection.
+
+The numerical fixes advance the model to 0.1.1 and change run IDs. Across the committed base-policy summaries, the largest exact numerical change from 0.1.0 is $3e−27; rounded results and recommendations are unchanged. CLI replay checks supplied model, dataset, policy, run identity and invariant reporting metadata. Old-version manifests are rejected rather than labeled as reproductions of the new model; their assumptions can be evaluated as new runs.

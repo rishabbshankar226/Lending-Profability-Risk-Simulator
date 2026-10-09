@@ -2,7 +2,7 @@
 
 **Live URL:** https://rishabb-lending-simulator.streamlit.app/
 
-The Streamlit Community Cloud review build was deployed and inspected on **October 7, 2026**. The assigned URL rendered the application, and the hosting Share dialog showed **Make this app public** checked. An isolated anonymous browser session has not been tested.
+The Streamlit Community Cloud review build was deployed and inspected on **October 7, 2026**. The assigned URL rendered the application, and the hosting Share dialog showed **Make this app public** checked. An isolated anonymous browser session has not been tested. This record describes the earlier hosted model 0.1.0 build; the decision-panel upgrade and model 0.1.1 bug-hunt patches have not been rolled out to its hosting branch.
 
 | Setting | Observed deployment |
 | --- | --- |
@@ -17,7 +17,7 @@ The Streamlit Community Cloud review build was deployed and inspected on **Octob
 | Latest application code tested | `10afcbacd0cda17ba0d3631f1a7dc64f44c024a5` |
 | Verified merge commit | `5602a062d3dd0e6f747cb89463252603154376e1` |
 
-[PR #1](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/pull/1) was merged into `main` on October 9, 2026 (UTC), and [merge CI](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/actions/runs/37868969995) passed. The merged tree exactly matches the reviewed implementation. The hosting logs still identify `feature/lending-simulator`; its application code matches `main`. General settings expose the app URL and Python version, but no source-branch editor. The existing hosting branch is retained to keep this deployment available. Future application changes on `main` must also reach the hosting branch until hosting is migrated.
+[PR #1](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/pull/1) was merged into `main` on October 9, 2026 (UTC), and [merge CI](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/actions/runs/37868969995) passed. That merged tree exactly matched the reviewed implementation. The hosting logs still identify `feature/lending-simulator`; its application code matches that merge, rather than later changes on `main` or the audit branch. General settings expose the app URL and Python version, but no source-branch editor. The existing hosting branch is retained to keep this deployment available. Future application changes must also reach the hosting branch until hosting is migrated.
 
 The app was asleep during the post-merge check. After waking it, Overview rendered the expected Conservative run `5a88f7bef3fa93d4`: $48,133 full-runoff operating result, 0.84% net principal loss and $147,450 minimum month-end cash.
 

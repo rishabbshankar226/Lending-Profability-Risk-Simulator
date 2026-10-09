@@ -34,14 +34,14 @@ Negative cash is an unfunded diagnostic path. Extra equity is the additional sta
 
 This simplified management forecast excludes taxes, prepayment, delinquency stages, price response and intramonth liquidity. It does not establish actual lender performance or borrower prediction accuracy.
 
-Selected run: `a2d0056e84a3ceb8`. Model version: `0.1.0`.
+Selected run: `153c7d2b57999d98`. Model version: `0.1.1`.
 
 All applied inputs, checks, dataset identity and policy run IDs are recorded below. Exact financial schedules are in the CSV package. Save this JSON as `manifest.json` and run `python -m lending_simulator.cli --assumptions manifest.json` with the matching dataset to reproduce the calculations.
 
 ```json
 {
-  "run_id": "a2d0056e84a3ceb8",
-  "model_version": "0.1.0",
+  "run_id": "153c7d2b57999d98",
+  "model_version": "0.1.1",
   "dataset_hash": "ae93b99dafe7655cc435e73a892a3a34e0a24378de890580f06dfb57fc60a67f",
   "policy": "conservative",
   "assumptions": {
@@ -76,13 +76,13 @@ All applied inputs, checks, dataset identity and policy run IDs are recorded bel
   "checks": {
     "passed": true,
     "tolerance": "1E-16",
-    "maximum_residual": "1.24E-27",
+    "maximum_residual": "1.35E-27",
     "loan_residual": "1E-27",
     "debt_residual": "0",
     "cash_residual": "0",
-    "equity_residual": "1.24E-27",
-    "cohort_residual": "1E-28",
-    "runoff_residual": "2E-29",
+    "equity_residual": "1.35E-27",
+    "cohort_residual": "2E-28",
+    "runoff_residual": "3E-29",
     "exposure_limits_ok": true
   },
   "decision": {
@@ -113,9 +113,9 @@ All applied inputs, checks, dataset identity and policy run IDs are recorded bel
     ]
   },
   "comparison_run_ids": {
-    "conservative": "a2d0056e84a3ceb8",
-    "balanced": "304e8799c74b1df3",
-    "aggressive": "bd58e038ab78ceb0"
+    "conservative": "153c7d2b57999d98",
+    "balanced": "e16b5d7157b72a14",
+    "aggressive": "de2a75f45c1d1b01"
   }
 }
 ```

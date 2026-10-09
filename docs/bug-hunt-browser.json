@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-09",
+  "model_version": "0.1.1",
+  "environment": "Local isolated Streamlit subprocesses; no hosted deployment",
+  "viewports": [
+    {
+      "width": 1440,
+      "height": 1000
+    },
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "browser": "isolated headless Chromium 153",
+  "checks": [
+    "Desktop base panel, metrics, downloads, one main title",
+    "All five desktop tabs",
+    "Capital example and three actual downloads match version/run/applied inputs",
+    "Independent 390px visitor starts at base; keyboard capital activation; no page overflow",
+    "Draft/invalid edits retain applied downloads; reset restores base",
+    "empty browser startup, actual workbook download and stress grid",
+    "high-only browser startup, actual workbook download and stress grid"
+  ],
+  "errors": [],
+  "warnings": [],
+  "network_failures": [],
+  "limits": [
+    "Headless browser, not physical mobile hardware",
+    "No screen-reader/native Excel/load test",
+    "Does not establish hosted anonymous access"
+  ]
+}

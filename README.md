@@ -55,6 +55,8 @@ To reproduce downloaded inputs, unzip `manifest.json` and use:
 python -m lending_simulator.cli --assumptions path/to/manifest.json --output artifacts/reproduced
 ```
 
+Replay requires the manifest's model version and dataset to match. Version 0.1.0 manifests remain historical records; to evaluate their inputs with 0.1.1, supply the contained `assumptions` object as a new assumptions file. The resulting run has a new identity. USD assumption inputs are limited to $1 trillion each; invalid inputs retain the last successful dashboard result.
+
 ## Explore the dashboard
 
 Start with the decision panel above the tabs. **Recommended policy** compares all three policies; **Viewing policy** identifies the portfolio used by the metrics, charts and downloads. The panel shows full-runoff operating profit, the cash cushion or shortfall relative to the floor, and credit-loss headroom or excess in percentage points. Actual minimum cash, loss ratio and both limits remain visible. Applied inputs and the run identity stay tied to the last successful run while you edit the sidebar.
@@ -99,6 +101,7 @@ Finance uses 34-digit Decimal arithmetic with a $1e−16 internal reconciliation
 - [Dataset dictionary and SQL walkthrough](docs/data-and-sql.md)
 - [Historical source-fitness decision](docs/source-fitness.md)
 - [Validation and measured limitations](docs/validation.md)
+- [Repository-wide bug hunt, planning review and patch evidence](docs/bug-hunt.md)
 - [Base-case audit workbook](docs/audit-workbook.xlsx)
 - Decision brief examples: [base](docs/base-decision-brief.md), [capital](docs/capital-decision-brief.md), [default stress](docs/default-stress-decision-brief.md)
 - [Interview and 90-second demo walkthrough](docs/walkthrough.md)
@@ -106,8 +109,10 @@ Finance uses 34-digit Decimal arithmetic with a $1e−16 internal reconciliation
 - [Live browser results and screenshots](docs/browser-validation.md)
 - [Browser and release checklist](docs/release-checklist.md)
 
-All 83 automated model, application-state, export, and HTTP startup checks pass. The decision panel adds coverage for recommendation versus viewed policy, cash/credit margins and exact boundaries, applied inputs through draft/invalid edits, empty portfolios and heading levels. The financial engine, model version and existing example run identities are unchanged. The local preview could not be reached by the cloud browser, so the new layout has not been visually or keyboard tested in a browser; desktop/mobile rendering remains to be verified.
+All 136 automated model, application-state, export, and HTTP startup checks pass. The October 9 bug hunt fixed 11 defect groups and added 53 regression cases, including 480 seeded policy simulations with independent financial identities. Model version 0.1.1 improves small-rate/default precision and exact full-recovery eligibility; displayed base-case values and decisions are unchanged. Saved manifests, briefs and the audit workbook use the new run identities.
+
+An isolated local Chromium browser exercised all five desktop tabs, applied/draft/invalid/reset behavior, actual ZIP/workbook/brief downloads, and empty/high-only portfolios. A separate 390-pixel visitor session started at base, activated the capital example with Enter and had no page overflow. No console errors, warnings or failed requests were recorded during those cases. See the [scoped browser report](docs/bug-hunt-browser.json); this verifies the local branch, not the hosted deployment.
 
 The earlier hosted desktop build was exercised across all five tabs, scenario apply/reset, capital and stress cases, validation errors, cohort cutoffs, and downloads. Guided examples were checked for the correct applied runs, replacement of draft/advanced inputs, stress-grid clearing and keyboard activation. The three actual decision-brief downloads matched local regeneration exactly; the capital brief retained applied inputs during a draft edit, and its saved manifest reproduced the same CLI decision and run. The comparison summaries were verified at base and $1.25m starting equity. See the browser evidence for tested commits and run IDs. Missing or invalid base data stops the dashboard with a clear error; validated replacements refresh the applied scenario and exports.
 
-PR #1 is merged into `main`, with passing GitHub checks. The live demo still uses `feature/lending-simulator`; that branch is retained for hosting and does not yet include the decision-panel upgrade. The existing screenshots and tour show that earlier build. Anonymous-session and mobile testing, a full accessibility/network audit, hosting load measurements, and a continuous interactive walkthrough recording remain pending. The hosting public setting was observed, but an isolated anonymous browser was unavailable.
+PR #1 is merged into `main`, with passing GitHub checks. The live demo still uses `feature/lending-simulator`; that branch is retained for hosting and does not include the decision-panel upgrade or these bug-hunt patches. The existing screenshots and tour show that earlier build. Hosted anonymous/mobile checks, full accessibility, hosting load measurements and a continuous interactive walkthrough recording remain pending. The hosting public setting was observed, but isolated hosted anonymous access remains unverified.
