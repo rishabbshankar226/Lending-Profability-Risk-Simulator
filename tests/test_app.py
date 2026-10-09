@@ -25,6 +25,11 @@ def navigate(page, view):
     return page
 
 
+def caption_text(page):
+    return [unescape(re.sub(r"<[^>]+>", "", item.proto.body))
+            for item in page.get("html") if item.proto.body.startswith('<p class="workbench-caption">')]
+
+
 def test_preloaded_dashboard_has_five_views_results_and_no_exception():
     page = app()
     assert not page.exception
@@ -48,7 +53,7 @@ def test_decision_panel_shows_recommendation_viewed_policy_and_limit_margins():
         ("Cash cushion above floor", "$97,450"),
         ("Loss headroom to cap", "4.16 pp"),
     ]
-    captions = "\n".join(item.value for item in page.caption)
+    captions = "\n".join(caption_text(page))
     assert "Minimum cash:" in captions and "147,450" in captions and "50,000" in captions
     assert "Net principal loss: 0.84% · Cap: 5.00%" in captions
     assert "pp = percentage points" in captions
@@ -56,7 +61,7 @@ def test_decision_panel_shows_recommendation_viewed_policy_and_limit_margins():
 
 def test_decision_sections_follow_the_page_title_without_skipping_a_heading_level():
     page = app()
-    assert [item.value for item in page.title] == ["Lending Profitability & Risk Simulator"]
+    assert [item.value for item in page.title] == ["Lending workbench"]
     assert [item.value for item in page.main.header[:2]] == [
         "Recommended policy: Conservative", "Overview",
     ]
@@ -74,7 +79,7 @@ def test_viewing_ineligible_policy_keeps_recommendation_and_identifies_cash_shor
         ("Cash shortfall to floor", "$746,143"),
         ("Loss headroom to cap", "3.42 pp"),
     ]
-    assert any("Charts and downloads use the viewed applied policy" in item.value for item in page.caption)
+    assert any("Charts and downloads use the viewed applied policy" in text for text in caption_text(page))
     assert page.session_state["applied_policy"] == "balanced"
     assert page.session_state["results"][1].run_id == "a2feec5a72facbc3"
 
@@ -94,7 +99,7 @@ def test_decision_panel_does_not_present_a_diagnostic_policy_as_a_recommendation
     assert page.header[0].value == ("No positive-profit recommendation" if diagnostic else "No eligible policy")
     assert select_strategy(page.session_state["results"]).recommended_policy is None
     assert any(explanation in item.value for item in page.warning)
-    captions = "\n".join(item.value for item in page.caption)
+    captions = "\n".join(caption_text(page))
     assert ("Diagnostic policy:" in captions) == (diagnostic is not None)
     if diagnostic:
         assert f"Diagnostic policy: {diagnostic}" in captions
@@ -105,7 +110,7 @@ def test_applied_input_summary_retains_last_successful_run_after_draft_or_invali
     page.button(key="example_capital").click().run()
 
     def input_summary():
-        return next(item.value for item in page.caption if item.value.startswith("Starting equity:"))
+        return next(text for text in caption_text(page) if text.startswith("Starting equity:"))
 
     applied = input_summary()
     assert "1,250,000" in applied and "Default stress: 1×" in applied
@@ -132,7 +137,7 @@ def test_decision_panel_identifies_a_credit_loss_breach_in_percentage_points():
     assert select_strategy(page.session_state["results"]).recommended_policy is None
     assert page.metric[2].label == "Loss cap exceeded by"
     assert page.metric[2].value == "0.34 pp"
-    assert any("Net principal loss: 0.84% · Cap: 0.50%" in item.value for item in page.caption)
+    assert any("Net principal loss: 0.84% · Cap: 0.50%" in text for text in caption_text(page))
 
 
 def test_apply_and_complete_reset_restore_assumptions_and_download_scenario():
@@ -360,7 +365,7 @@ def test_empty_portfolio_keeps_operating_costs_and_marks_loss_margin_undefined(i
     assert page.header[0].value == "No eligible policy"
     assert page.metric[0].value == "($292,500)"
     assert page.metric[2].value == "Unavailable"
-    assert any("No funded loans" in item.value for item in page.caption)
+    assert any("No funded loans" in text for text in caption_text(page))
 
 
 def test_empty_portfolio_stress_grid_is_available_without_a_conversion_exception(isolated_project):

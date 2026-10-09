@@ -172,7 +172,7 @@ def stage_stress():
 
 st.set_page_config(page_title="Lending Profitability & Risk Simulator", page_icon="📊", layout="wide")
 apply_styles()
-st.title("Lending Profitability & Risk Simulator")
+st.title("Lending workbench")
 caption("Compare lending policies under cash and credit limits. Synthetic, illustrative, uncalibrated projections · USD.")
 try:
     dataset = get_dataset(sha256((ROOT / "data" / "applications.csv").read_bytes()).hexdigest(),
@@ -302,9 +302,9 @@ with st.container(horizontal=True, wrap=True, vertical_alignment="center", key="
                 st.markdown(brief.replace("# Lending decision brief\n","### Lending decision brief\n",1)
                             .replace("\n## ","\n#### ").replace("$",r"\$"))
 
-decision_summary(selected, decision, view_policy)
 st.segmented_control("Analysis", VIEWS, required=True, key="analysis_view",
-                     on_change=sync_navigation, wrap=True, width="stretch")
+                     on_change=sync_navigation, wrap=True, width="stretch", label_visibility="collapsed")
+decision_summary(selected, decision, view_policy)
 actions = {"view":view_policy,"navigate":navigate,"credit":inspect_credit,"cohort":sync_cohort,
            "pin":pin_baseline,"clear_baseline":clear_baseline,"stress":run_stress,
            "stress_case":sync_stress_case,"stress_metric":sync_stress_metric,"stage":stage_stress}

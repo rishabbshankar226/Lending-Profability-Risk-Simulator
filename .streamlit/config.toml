@@ -20,5 +20,8 @@ showSidebarBorder = true
 [browser]
 gatherUsageStats = false
 
+[client]
+toolbarMode = "minimal"
+
 [server]
 headless = true

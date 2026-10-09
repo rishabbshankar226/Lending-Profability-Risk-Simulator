@@ -11,6 +11,7 @@ FONT = 'Source Sans, sans-serif'
 
 STYLE = """
 <style>
+.workbench-caption{margin:0;color:#526477;font-size:.875rem;line-height:1.55;overflow-wrap:break-word}
 .workbench-status{display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .6rem;
  border-radius:.4rem;font-size:.875rem;font-weight:600;line-height:1.35;background:#EDF2F6;color:#344C60}
 .workbench-status.good{background:#EAF5EF;color:#1F634B}

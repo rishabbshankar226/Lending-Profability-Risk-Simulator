@@ -45,10 +45,11 @@ class Review:
         print(f"PASS {self.name}: {name}", flush=True)
 
     def ready(self):
-        expect(self.page.get_by_role("heading", name="Lending Profitability & Risk Simulator", exact=True)).to_be_visible()
+        expect(self.page.get_by_role("heading", name="Lending workbench", exact=True)).to_be_visible()
         expect(self.page.get_by_test_id("stMetricValue").first).to_be_visible()
         self.page.wait_for_function("""() => !Array.from(document.querySelectorAll('[data-testid="stStatusWidget"]'))
             .some(e => e.getClientRects().length && /running|connecting/i.test(e.innerText))""")
+        self.page.wait_for_function("() => !document.querySelector('[data-stale=\"true\"]')")
         if self.page.get_by_test_id("stPlotlyChart").count():
             self.page.wait_for_function("""() => Array.from(document.querySelectorAll('[data-testid="stPlotlyChart"]'))
                 .every(e => e.querySelector('.js-plotly-plot')?.data?.length)""")
@@ -57,32 +58,41 @@ class Review:
     def metrics(self):
         return self.page.get_by_test_id("stMetricValue").all_inner_texts()[:3]
 
-    def capture(self, suffix):
+    def capture(self, suffix, target=None):
         self.ready()
+        if target is not None:
+            target.scroll_into_view_if_needed()
         self.page.screenshot(path=str(self.output / f"{self.name}-{suffix}.png"), full_page=True)
         self.report["captures"].append(f"{self.name}-{suffix}.png")
 
     def navigate(self, view):
-        self.page.get_by_role("button", name=view, exact=True).click()
+        start = time.monotonic()
+        self.page.get_by_role("radio", name=view, exact=True).click()
         expect(self.page.get_by_role("heading", name=view, exact=True)).to_be_visible()
         self.ready()
+        self.report["operations"].append({"name": "Navigate to " + view, "seconds": time.monotonic() - start})
 
     def expand(self, title):
         self.page.get_by_text(title, exact=True).click()
 
     def policy(self, name):
-        self.page.get_by_role("combobox", name="Viewed policy", exact=True).click()
+        self.ready()
+        combo = self.page.get_by_role("combobox", name="Viewed policy", exact=True)
+        combo.fill(name)
         self.page.get_by_role("option", name=name, exact=True).click()
         expect(self.page.get_by_text(f"Viewing policy: {name}", exact=True)).to_be_visible()
         self.ready()
 
     def open_sidebar(self):
-        if not self.page.get_by_role("heading", name="Scenario", exact=True).is_visible():
-            self.page.get_by_role("button", name=re.compile(r"(open|expand).*sidebar", re.I)).click()
+        sidebar = self.page.get_by_test_id("stSidebar")
+        if sidebar.get_attribute("aria-expanded") != "true":
+            self.page.get_by_test_id("stExpandSidebarButton").click()
+        expect(sidebar).to_have_attribute("aria-expanded", "true")
         expect(self.page.get_by_role("heading", name="Scenario", exact=True)).to_be_visible()
 
     def close_sidebar(self):
-        self.page.get_by_role("button", name=re.compile(r"(close|collapse).*sidebar", re.I)).click()
+        self.page.get_by_test_id("stSidebarCollapseButton").get_by_role("button").click()
+        expect(self.page.get_by_test_id("stSidebar")).to_have_attribute("aria-expanded", "false")
 
     def reset(self):
         self.open_sidebar()
@@ -125,6 +135,33 @@ class Review:
             font:p.layout?.font, legend:p.layout?.legend
         }))""")
 
+    def caption_contrast(self):
+        samples = self.page.locator(".workbench-caption").evaluate_all("""els => els.filter(e=>e.getClientRects().length).map(e=>{
+            let opacity=1, bg='rgb(245, 247, 250)';
+            for(let n=e;n;n=n.parentElement){
+                const s=getComputedStyle(n); opacity*=Number(s.opacity);
+            }
+            for(let n=e;n;n=n.parentElement){
+                const c=getComputedStyle(n).backgroundColor;
+                if(c!=='rgba(0, 0, 0, 0)'&&c!=='transparent'){bg=c;break;}
+            }
+            return {text:e.innerText.slice(0,90),foreground:getComputedStyle(e).color,background:bg,opacity};
+        })""")
+        assert samples, "No supporting text rendered"
+        def rgb(value):
+            return [float(x) for x in re.findall(r"[0-9.]+", value)][:3]
+        def luminance(channels):
+            c = [x/255 for x in channels]
+            c = [x/12.92 if x <= .04045 else ((x+.055)/1.055)**2.4 for x in c]
+            return sum(x*y for x,y in zip(c,(.2126,.7152,.0722)))
+        for sample in samples:
+            foreground, background = rgb(sample["foreground"]), rgb(sample["background"])
+            blended = [f*sample["opacity"] + b*(1-sample["opacity"]) for f,b in zip(foreground,background)]
+            values = sorted((luminance(blended),luminance(background)))
+            sample["ratio"] = (values[1]+.05)/(values[0]+.05)
+            assert sample["ratio"] >= 4.5, sample
+        return {"minimum_ratio": min(s["ratio"] for s in samples), "samples": samples}
+
 
 def desktop_journey(r):
     p = r.page
@@ -136,9 +173,11 @@ def desktop_journey(r):
     assert chart[0]["xaxis"]["type"] == "date"
     assert any(s.get("y0") == 50000 for s in chart[1]["shapes"]), chart
     r.check("Base identity, 39 monthly points, calendar axis and cash floor", chart)
+    r.capture("overview-charts", p.get_by_role("heading", name="Operating profit over time", exact=True))
     r.expand("How operating profit is calculated")
     expect(p.get_by_role("columnheader", name="Component", exact=True)).to_be_visible()
-    r.capture("profit-bridge")
+    r.capture("profit-bridge", p.get_by_role("columnheader", name="Component", exact=True))
+    r.capture("profit-bridge-chart", p.locator(".js-plotly-plot").nth(2))
     r.check("Profit bridge and numeric alternative open")
 
     equity = p.get_by_role("spinbutton", name="Starting equity cash ($)", exact=True)
@@ -165,6 +204,7 @@ def desktop_journey(r):
     expect(p.get_by_text("Unapplied changes · Results use the last successful scenario.", exact=True)).not_to_be_visible()
     r.check("Draft survives navigation; Restore retains applied run")
     r.capture("policies")
+    r.capture("policy-table", p.locator(".policy-table"))
     r.check("Desktop policy table geometry", r.geometry())
 
     r.expand("Compare with a pinned scenario")
@@ -175,6 +215,7 @@ def desktop_journey(r):
     p.get_by_role("button", name="Run scenario", exact=True).click()
     expect(p.get_by_text(re.compile(r"Runoff differs: baseline 39 months, current 48 months"))).to_be_visible()
     r.capture("different-runoff")
+    r.capture("runoff-comparison", p.get_by_text(re.compile(r"Runoff differs: baseline 39 months, current 48 months")))
     r.check("Pinned comparison distinguishes 39- and 48-month runoff")
 
     r.reset()
@@ -184,6 +225,7 @@ def desktop_journey(r):
     r.ready()
     assert r.charts()[0]["traces"][0]["zmax"] == cohort[0]["traces"][0]["zmax"]
     r.capture("cohorts")
+    r.capture("cohort-chart", p.locator(".js-plotly-plot").first)
     r.check("Cohort cutoff retains shared scale and blank-gap hover behavior", r.charts())
 
     r.navigate("Funding & stress")
@@ -198,6 +240,7 @@ def desktop_journey(r):
     assert r.applied_run() == identity
     expect(p.get_by_role("button", name="Stage case as draft", exact=True)).to_be_disabled()
     r.capture("staged-stress")
+    r.capture("stress-chart", p.locator(".js-plotly-plot").nth(1))
     r.check("Stress staging changes only draft and guards an existing draft")
     p.get_by_role("button", name="Run scenario", exact=True).click()
     expect(p.get_by_text("Stress grid has not been run for this applied policy. Run it when you want to explore the cases.", exact=True)).to_be_visible()
@@ -273,15 +316,23 @@ def downloads(r):
 def responsive(r):
     p = r.page
     mobile = p.viewport_size["width"] <= 640
-    r.capture("overview")
+    r.capture("overview", p.get_by_role("heading", name="Lending workbench", exact=True))
     r.check("First-screen reflow", r.geometry())
+    r.check("Supporting text rendered with at least 4.5:1 contrast", r.caption_contrast())
+    nav = p.get_by_role("radio", name="Policies", exact=True).bounding_box()
+    assert nav["y"] + nav["height"] <= p.viewport_size["height"], nav
+    r.check("Analysis navigation is visible in the initial viewport", nav)
     for view in VIEWS[1:]:
         r.navigate(view)
         details = r.geometry()
         if view == "Policies":
             assert details["cardsVisible"] == mobile, details
             assert details["tableVisible"] != mobile, details
-        r.capture(view.lower().replace(" & ", "-").replace(" ", "-"))
+            r.capture("policy-comparison", p.locator(".policy-mobile" if mobile else ".policy-table"))
+        if view != "Methodology":
+            r.capture("chart-" + view.lower().replace(" & ", "-"), p.locator(".js-plotly-plot").first)
+        r.capture(view.lower().replace(" & ", "-").replace(" ", "-"),
+                  p.get_by_role("heading", name=view, exact=True))
         r.check(f"{view} reflow and visible controls", details)
     if mobile:
         r.open_sidebar()
@@ -299,10 +350,21 @@ def responsive(r):
 
 def keyboard(r):
     p = r.page
-    p.get_by_role("button", name="Policies", exact=True).focus()
+    order = []
+    for _ in range(45):
+        p.keyboard.press("Tab")
+        item = p.evaluate("""() => {const e=document.activeElement;return {tag:e.tagName,role:e.getAttribute('role'),
+            label:e.getAttribute('aria-label')||e.innerText?.slice(0,100)||'',type:e.getAttribute('type')};}""")
+        order.append(item)
+        if item["role"] == "radio" and item["label"] == "Overview":
+            break
+    assert any(item["label"] == "Run scenario" for item in order), order
+    assert any(item["label"] == "Viewed policy" for item in order), order
+    r.check("Normal Tab order reaches scenario Run, policy selector and analysis", order)
+    p.get_by_role("radio", name="Policies", exact=True).focus()
     p.keyboard.press("Enter")
     expect(p.get_by_role("heading", name="Policies", exact=True)).to_be_visible()
-    assert p.get_by_role("button", name="Policies", exact=True).evaluate("e=>e===document.activeElement")
+    assert p.get_by_role("radio", name="Policies", exact=True).evaluate("e=>e===document.activeElement")
     r.check("Keyboard navigation activates selected view and preserves focus")
     p.get_by_role("button", name="Applied inputs", exact=True).focus()
     p.keyboard.press("Enter")
@@ -362,7 +424,7 @@ def main():
                     ("reflow-320", (320, 800), responsive, {"is_mobile": True, "has_touch": True}),
                     ("keyboard", (1280, 800), keyboard, {"reduced_motion": "reduce"}),
                 ):
-                    case = {"name": name, "viewport": size, "checks": [], "captures": []}
+                    case = {"name": name, "viewport": size, "checks": [], "captures": [], "operations": []}
                     report["cases"].append(case)
                     context = browser.new_context(viewport={"width": size[0], "height": size[1]}, accept_downloads=True, **options)
                     context.tracing.start(screenshots=True, snapshots=True, sources=True)
@@ -370,8 +432,10 @@ def main():
                     page.set_default_timeout(15000)
                     r = Review(page, output, name, case)
                     try:
+                        start = time.monotonic()
                         page.goto(address, wait_until="domcontentloaded")
                         r.ready()
+                        case["operations"].append({"name": "Initial candidate render", "seconds": time.monotonic() - start})
                         task(r)
                         errors = [e for e in r.console if e["type"] in ("error", "pageerror")]
                         assert not errors, errors

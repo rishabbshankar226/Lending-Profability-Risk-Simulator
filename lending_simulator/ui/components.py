@@ -10,7 +10,7 @@ from lending_simulator.ui.formatting import money, percent, points
 
 
 def caption(text):
-    st.caption(text.replace('$', r'\$'))
+    st.html(f'<p class="workbench-caption">{escape(text)}</p>')
 
 
 def status(result):
@@ -33,7 +33,7 @@ def decision_summary(result, decision, on_view_recommended):
         with recommendation:
             if decision.recommended_policy:
                 st.header(f'Recommended policy: {decision.recommended_policy.title()}')
-                caption(decision.message)
+                caption('Highest projected full-runoff profit within the cash and loss limits.')
             else:
                 title = 'No eligible policy' if decision.status == 'no_eligible_policy' else 'No positive-profit recommendation'
                 st.header(title)
