@@ -4,7 +4,7 @@ Compare how expanding loan approvals changes credit losses, profit, debt use, an
 
 The app models a hypothetical lender retaining 12-month merchant-financed installment loans. Its 10,000 applications and risk assumptions are **synthetic and illustrative**. Historical sources provide context only; this is an **uncalibrated expected-value simulator**.
 
-**Live review demo:** [Open the dashboard](https://rishabb-lending-simulator.streamlit.app/) · **Code review:** [Draft PR #1](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/pull/1)
+**Live dashboard:** [Open the dashboard](https://rishabb-lending-simulator.streamlit.app/) · **Source code:** [main](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/tree/main) · **Merge history:** [PR #1](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/pull/1)
 
 **Start here:** [Two-minute reviewer guide](docs/reviewer-guide.md) · [Application and interview notes](docs/interview-notes.md)
 
@@ -106,4 +106,4 @@ Finance uses 34-digit Decimal arithmetic with a $1e−16 internal reconciliation
 
 All 70 automated model, application-state, export, and HTTP startup checks pass. The hosted desktop build was exercised across all five tabs, scenario apply/reset, capital and stress cases, validation errors, cohort cutoffs, and downloads. Guided examples were checked for the correct applied runs, replacement of draft/advanced inputs, stress-grid clearing and keyboard activation. The three actual decision-brief downloads matched local regeneration exactly; the capital brief retained applied inputs during a draft edit, and its saved manifest reproduced the same CLI decision and run. The comparison summaries were verified at base and $1.25m starting equity. See the browser evidence for tested commits and run IDs. Missing or invalid base data stops the dashboard with a clear error; validated replacements refresh the applied scenario and exports.
 
-The demo runs from the review branch; PR #1 remains unmerged. Anonymous-session and mobile testing, a full accessibility/network audit, hosting load measurements, and a continuous interactive walkthrough recording remain pending. A captioned screenshot tour is available above. The hosting public setting was observed, but an isolated anonymous browser was unavailable.
+PR #1 is merged into `main`, with passing GitHub checks. The live demo still uses `feature/lending-simulator`, whose application code matches the merged implementation; that branch is retained for hosting. Anonymous-session and mobile testing, a full accessibility/network audit, hosting load measurements, and a continuous interactive walkthrough recording remain pending. A captioned screenshot tour is available above. The hosting public setting was observed, but an isolated anonymous browser was unavailable.

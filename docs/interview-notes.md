@@ -20,7 +20,7 @@ Use these drafts after practicing the financial and technical explanations below
 
 - Analyzed illustrative default, recovery and funding assumptions through cohort views and a 20-case sensitivity grid; enforced loss and cash limits and reported scenarios with no profitable eligible policy.
 
-The dollar outputs are scenario findings, not savings or revenue achieved for a real lender. The risk bands are synthetic inputs, not scores learned from borrower outcomes. Link the code-review PR and reviewer guide while the project remains on its review branch.
+The dollar outputs are scenario findings, not savings or revenue achieved for a real lender. The risk bands are synthetic inputs, not scores learned from borrower outcomes. Link the source code on `main` and the reviewer guide; merged PR #1 preserves the implementation review history.
 
 ## Questions and answer checkpoints
 

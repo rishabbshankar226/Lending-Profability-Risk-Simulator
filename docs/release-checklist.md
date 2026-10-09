@@ -1,6 +1,6 @@
 # Browser and release acceptance
 
-**October 7, 2026.** [Live review dashboard](https://rishabb-lending-simulator.streamlit.app/) on `feature/lending-simulator`; [draft PR #1](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/pull/1) remains unmerged.
+**October 9, 2026 (UTC).** [PR #1](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/pull/1) is merged into `main`; [merge checks](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/actions/runs/37868969995) passed. The [live dashboard](https://rishabb-lending-simulator.streamlit.app/) still uses `feature/lending-simulator`, with application code matching the merged implementation.
 
 All 70 automated checks pass. Desktop cases below were exercised against the hosted app, with decision briefs last checked at `e87a74d65c59a24103e67b4dafd2e75d6abf2413`. Detailed run identities, file inspection and screenshots are in [browser-validation.md](browser-validation.md).
 

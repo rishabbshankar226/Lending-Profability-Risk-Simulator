@@ -4,7 +4,7 @@
 
 This Python/SQL project compares three approval policies over 10,000 seeded fictional applications. A Streamlit dashboard connects loan repayments, defaults, recoveries, funding and operating costs over 24 origination months and a common 39-month runoff horizon. Data and risk inputs are synthetic and uncalibrated.
 
-[Open the dashboard](https://rishabb-lending-simulator.streamlit.app/) · [Review the code in draft PR #1](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/pull/1) · [Read the business memo](business-memo.md)
+[Open the dashboard](https://rishabb-lending-simulator.streamlit.app/) · [Review the source on main](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/tree/main) · [Read the business memo](business-memo.md)
 
 For a quick visual introduction, [watch the 90-second captioned screenshot tour](tour/lending-simulator-tour.mp4) or [read its transcript](tour/transcript.md). It uses six actual dashboard captures and has no audio or continuous interaction recording.
 
@@ -30,6 +30,6 @@ Download **Decision brief** for the current recommendation, all policy tradeoffs
 
 ## Scope of the evidence
 
-The implementation passes 70 automated checks. Actual hosted desktop scenarios and downloaded briefs were verified; the [browser record](browser-validation.md) identifies tested commits, run IDs and file hashes. Code remains on the review branch in a draft, unmerged PR. Isolated anonymous access, mobile layout, full accessibility, hosting load measurements and a continuous interactive walkthrough remain pending.
+The implementation passes 70 automated checks. Actual hosted desktop scenarios and downloaded briefs were verified; the [browser record](browser-validation.md) identifies tested commits, run IDs and file hashes. PR #1 is merged into `main`, and the merge passed GitHub checks. The hosted app retains `feature/lending-simulator` with the same application code. Isolated anonymous access, mobile layout, full accessibility, hosting load measurements and a continuous interactive walkthrough remain pending.
 
 This is a management scenario simulator. It does not demonstrate borrower prediction accuracy, causal approval benefits, production underwriting, or real business savings.

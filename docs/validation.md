@@ -2,7 +2,7 @@
 
 ## Performed locally
 
-The financial model, data, SQL, decision rules, exports, CLI, simulated dashboard and HTTP server have 70 passing automated checks in `tests/` (full local suite passed October 7, 2026). Run `python -m pytest`. The suite has no disabled or skipped checks. Python compilation and the reproducible base-case CLI also passed.
+The financial model, data, SQL, decision rules, exports, CLI, simulated dashboard and HTTP server have 70 passing automated checks in `tests/` (full local suite passed October 9, 2026 UTC). Run `python -m pytest`. The suite has no disabled or skipped checks. Python compilation and the reproducible base-case CLI also passed.
 
 Independent financial cases include 12 zero-interest $100 principal payments on a $1,200 loan; a $900 default with a $225 delayed recovery and $675 net loss; $10 monthly interest on $1,000 opening debt at 12%; and a positive-interest amortization benchmark. Other checks cover PD/recovery endpoints, late-loan runoff, equal policy overhead horizon, collateral repayments, funding-rate differences, invalid inputs and monthly financial identities.
 
@@ -50,7 +50,7 @@ Actual base, capital and default-stress Markdown downloads matched local regener
 - Actual demo recording; real dashboard screenshots and the 90-second script are available.
 - Historical calibration/backtesting. Sources remain contextual, and the synthetic risk inputs are illustrative.
 
-The review deployment runs from `feature/lending-simulator`; PR #1 remains unmerged. No predictive accuracy, real loan approvals, investment return or actual business improvement is claimed.
+PR #1 was merged into `main` at `5602a062d3dd0e6f747cb89463252603154376e1`. Its tree exactly matches the reviewed head `becb7231ec7006e6d5a1e23d6a7d53c21f29f956`; [merge CI](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/actions/runs/37868969995) passed. The live deployment still uses the retained `feature/lending-simulator` branch with the same application code. No predictive accuracy, real loan approvals, investment return or actual business improvement is claimed.
 
 ### Heading structure follow-up
 
