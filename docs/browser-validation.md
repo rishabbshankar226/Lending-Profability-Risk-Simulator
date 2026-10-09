@@ -166,3 +166,9 @@ Tab from Base case focused More capital · $1.25m. Enter applied Balanced run `6
 The full 70-check local suite, compilation and [application CI](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/actions/runs/37703275592) passed. A screenshot of the download section, keyboard focus ring and nested preview is saved as [heading-review.jpg](screenshots/heading-review.jpg), bringing the capture set to fourteen.
 
 This verifies heading semantics and those keyboard actions. It does not establish screen-reader announcements, full focus order, measured contrast, mobile layout or isolated anonymous access; those release checks remain pending.
+
+## Captioned screenshot tour
+
+Six additional screenshots were captured from the hosted desktop app on October 7, 2026 (America/Chicago), after the heading repair. The repository source was `d63a78e688efd80b8126bcee15e8e61f412cfb0c`; the latest application-code change was `10afcbacd0cda17ba0d3631f1a7dc64f44c024a5`. Observed runs were base Conservative `5a88f7bef3fa93d4`, capital Balanced `690e9fa563e2d475` and default-stress Conservative `a2d0056e84a3ceb8`. Base policy cards, capital/default values, base methodology checks and the capital brief table matched the earlier verified results.
+
+The six native captures form a [90-second captioned screenshot tour](tour/README.md), with source hashes and scene/run mapping in its storyboard. The MP4's full decode passed and all six sampled scene frames were visually inspected. Added titles/captions fit outside the uncropped screenshots. This media is an assembled, silent screenshot sequence; it does not record continuous interactions, response timings or viewer-load performance. Anonymous/mobile/full-accessibility checks and continuous recording remain pending.

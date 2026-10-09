@@ -12,7 +12,7 @@
 
 **75–90 seconds.** Show Methodology and the download controls. “The engine reconciles loans, debt, cash, cohorts and simplified equity. The workbook has independent amortization/default examples. The decision brief records the current recommendation, policy tradeoffs and exact inputs. Historical data did not fit the product, so I make no prediction-accuracy claim.” Download the brief as the takeaway; keep the workbook available for a deeper financial review.
 
-This is a recording script. The [live review dashboard](https://rishabb-lending-simulator.streamlit.app/) and [browser screenshots](browser-validation.md#screenshots) are available. An actual walkthrough video has not been recorded.
+This is a script for a continuous interaction recording, which remains pending. A separate [90-second captioned screenshot tour](tour/lending-simulator-tour.mp4) is available, with a [transcript and source captures](tour/README.md). It contains six real dashboard screenshots with captions and no audio. The [live review dashboard](https://rishabb-lending-simulator.streamlit.app/) and [browser screenshots](browser-validation.md#screenshots) are also available.
 
 The example buttons run immediately and replace custom or draft assumptions. **Base case** returns to the original scenario; use the sidebar and **Run scenario** for your own inputs.
 

@@ -1,0 +1,23 @@
+{
+  "duration_seconds": 90,
+  "dimensions": [
+    1600,
+    1200
+  ],
+  "codec": "h264",
+  "pixel_format": "yuv420p",
+  "frames": 450,
+  "audio": false,
+  "full_decode_passed": true,
+  "faststart": true,
+  "bytes": 1199082,
+  "sha256": "6da1213b632dad582f47e1966d8b5b48e214a63ca44bc798af085283dfcf176b",
+  "sampled_scene_seconds": [
+    7,
+    22,
+    37,
+    52,
+    67,
+    82
+  ]
+}

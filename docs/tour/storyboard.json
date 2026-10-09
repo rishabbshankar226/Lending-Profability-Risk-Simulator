@@ -1,0 +1,99 @@
+{
+  "title": "Lending Profitability & Risk Simulator",
+  "format": "captioned screenshot tour",
+  "continuous_screen_recording": false,
+  "audio": false,
+  "duration_seconds": 90,
+  "canvas": [
+    1600,
+    1200
+  ],
+  "frames_per_second": 5,
+  "capture_date": "2026-10-07 America/Chicago",
+  "repository_source_commit": "d63a78e688efd80b8126bcee15e8e61f412cfb0c",
+  "application_code_commit": "10afcbacd0cda17ba0d3631f1a7dc64f44c024a5",
+  "model_version": "0.1.0",
+  "source_url": "https://rishabb-lending-simulator.streamlit.app/",
+  "capture_browser": "cloud Chrome; owner session",
+  "classification": "synthetic expected-value projections; uncalibrated",
+  "scenes": [
+    {
+      "number": 1,
+      "start_seconds": 0,
+      "duration_seconds": 15,
+      "title": "The lending growth decision",
+      "caption_lines": [
+        "Compare approval policies across profit, credit losses and cash.",
+        "10,000 synthetic applications; a common 39-month runoff horizon."
+      ],
+      "image": "screenshots/01-overview.jpg",
+      "image_sha256": "b57bbf5a8ad2249ff7f77eb6dd4e4a9676046427103a2ee49beb330d52a1d917",
+      "run_id": "5a88f7bef3fa93d4"
+    },
+    {
+      "number": 2,
+      "start_seconds": 15,
+      "duration_seconds": 15,
+      "title": "Profit alone cannot determine feasible growth",
+      "caption_lines": [
+        "Aggressive earns about $396k, but minimum cash falls to -$1.49m.",
+        "Conservative meets the base limits: about $48k profit and $147k minimum cash."
+      ],
+      "image": "screenshots/02-policies.jpg",
+      "image_sha256": "415126becad2aeec83b380422155a6e7f32debf8dfa7f571358f5be0138c1428",
+      "run_id": "5a88f7bef3fa93d4"
+    },
+    {
+      "number": 3,
+      "start_seconds": 30,
+      "duration_seconds": 15,
+      "title": "More capital changes the recommendation",
+      "caption_lines": [
+        "Starting equity of $1.25m makes Balanced eligible and recommended.",
+        "Profit stays about $294k; minimum cash reaches $54k. Equity has no modeled financing cost."
+      ],
+      "image": "screenshots/03-capital.jpg",
+      "image_sha256": "378ae553c51a65bda56151238351ea028d4eee7bf7b50a60b0cef983cdd2ac7b",
+      "run_id": "690e9fa563e2d475"
+    },
+    {
+      "number": 4,
+      "start_seconds": 45,
+      "duration_seconds": 15,
+      "title": "Stress can remove the profitable recommendation",
+      "caption_lines": [
+        "At 2x lifetime defaults, Conservative loses about $11.6k.",
+        "It is a diagnostic only: no eligible policy produces positive operating profit."
+      ],
+      "image": "screenshots/04-defaults.jpg",
+      "image_sha256": "a99ab837965f402ebadf25881b6b83b308a0c3d01e112928c1246e6008a0833e",
+      "run_id": "a2d0056e84a3ceb8"
+    },
+    {
+      "number": 5,
+      "start_seconds": 60,
+      "duration_seconds": 15,
+      "title": "Check the financial mechanics",
+      "caption_lines": [
+        "Loan, debt, cash, cohort and simplified-equity schedules reconcile.",
+        "Principal collections are not revenue; charge-offs are not a second cash payment."
+      ],
+      "image": "screenshots/05-methodology.jpg",
+      "image_sha256": "bd8e35e83103ecabaa2832261d8a5da82725f5f7169f1f32a3b5336d1380cd3d",
+      "run_id": "5a88f7bef3fa93d4"
+    },
+    {
+      "number": 6,
+      "start_seconds": 75,
+      "duration_seconds": 15,
+      "title": "Leave a reproducible decision brief",
+      "caption_lines": [
+        "The brief records the recommendation, policy tradeoffs and applied inputs.",
+        "Open the live app or saved briefs for deeper review. Historical calibration is unavailable."
+      ],
+      "image": "screenshots/06-brief.jpg",
+      "image_sha256": "53d67ab2de3628bb9eba9ca4a3373cf115cfcb8e1a30934d1e93120bf38fe139",
+      "run_id": "690e9fa563e2d475"
+    }
+  ]
+}

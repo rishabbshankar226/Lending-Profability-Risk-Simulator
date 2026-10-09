@@ -42,8 +42,9 @@ Amounts are rounded display values and conditional illustrative projections. Exa
 | Full accessibility | Heading outline and example/preview/download keyboard actions checked; screen reader, contrast measurement and full focus order not tested | Pending |
 | Network requests | WebSocket/download request diagnostics unavailable through current browser control | Pending |
 | Hosting load behavior | Cold/warm viewer loads, hibernation and sustained multi-user behavior not measured | Pending |
-| Screenshots | Fourteen real captures, including decision-brief controls and policy tradeoffs | Complete |
-| Walkthrough video | 90-second script prepared; actual interactive recording not captured | Pending |
+| Screenshots | Fourteen validation captures plus six current tour captures; native screenshots retained | Complete |
+| Captioned screenshot tour | 90-second MP4, transcript, captions and hashed storyboard; all six decoded scene samples inspected | Complete |
+| Continuous walkthrough recording | 90-second script prepared; actual interactive recording not captured | Pending |
 
 The public review build is available with these scoped limitations. Server health and simulated AppTest do not establish the pending access, mobile, performance or accessibility checks.
 
