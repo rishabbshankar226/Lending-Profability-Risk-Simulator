@@ -44,6 +44,8 @@ jobs:
         run: python -m scripts.browser_acceptance --output artifacts/browser-acceptance
       - name: Capture the exact pre-redesign reference
         run: python -m scripts.capture_workbench_reference --source .browser-reference --output artifacts/browser-acceptance
+      - name: Verify slow export generation and server failure recovery
+        run: python -m scripts.browser_export_resilience --output artifacts/browser-acceptance/export-resilience
       - uses: actions/upload-artifact@v7
         if: always()
         with:

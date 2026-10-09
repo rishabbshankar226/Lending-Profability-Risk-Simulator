@@ -437,13 +437,13 @@ def download_retry(r):
 
 
 @contextmanager
-def live_server(root, log_path):
+def live_server(root, log_path, *, entrypoint=None):
     with socket.socket() as sock:
         sock.bind(("127.0.0.1", 0))
         port = sock.getsockname()[1]
     address = f"http://127.0.0.1:{port}"
     with log_path.open("w") as log:
-        server = subprocess.Popen([sys.executable, "-m", "streamlit", "run", str(root / "app.py"),
+        server = subprocess.Popen([sys.executable, "-m", "streamlit", "run", str(entrypoint or root / "app.py"),
             "--server.headless=true", "--server.address=127.0.0.1", f"--server.port={port}",
             "--browser.gatherUsageStats=false"], cwd=root, stdout=log, stderr=subprocess.STDOUT)
         try:
