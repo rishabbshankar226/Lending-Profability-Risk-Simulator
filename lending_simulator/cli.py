@@ -7,11 +7,12 @@ from pathlib import Path
 import json
 import sys
 
-from lending_simulator.data import load_dataset
+from lending_simulator import MODEL_VERSION
+from lending_simulator.data import DEFAULT_SEED, load_dataset
 from lending_simulator.decisions import compare_policies, select_strategy
 from lending_simulator.exports import scenario_workbook, workbook_spec
 from lending_simulator.presentation import csv_package
-from lending_simulator.types import Assumptions
+from lending_simulator.types import Assumptions, POLICIES
 
 
 def main(argv=None):
@@ -21,12 +22,34 @@ def main(argv=None):
     parser.add_argument("--output", type=Path, default=Path("artifacts/base-case"))
     args = parser.parse_args(argv)
     try:
-        dataset = load_dataset(args.dataset)
         saved = json.loads(args.assumptions.read_text()) if args.assumptions else {}
+        if not isinstance(saved, dict):
+            raise ValueError("Assumptions or manifest must be a JSON object.")
+        if "model_version" in saved and saved["model_version"] != MODEL_VERSION:
+            raise ValueError("The manifest's model version does not match this simulator.")
+        provenance = saved.get("dataset", {})
+        if not isinstance(provenance, dict):
+            raise ValueError("The manifest's dataset must be a JSON object.")
+        dataset = load_dataset(args.dataset, seed=provenance.get("seed", DEFAULT_SEED))
+        if any(key in provenance and provenance[key] != value for key, value in dataset.manifest().items()):
+            raise ValueError("The manifest's dataset provenance does not match the supplied CSV.")
         assumptions = Assumptions.from_dict(saved.get("assumptions", saved))
         if "dataset_hash" in saved and saved["dataset_hash"] != dataset.dataset_hash:
             raise ValueError("The manifest's dataset hash does not match the supplied CSV.")
         results = compare_policies(dataset, assumptions)
+        if "policy" in saved and (not isinstance(saved["policy"], str) or saved["policy"] not in POLICIES):
+            raise ValueError("The manifest contains an unknown policy.")
+        if "run_id" in saved:
+            selected = next((r for r in results if r.policy == saved.get("policy")), None)
+            if selected is None or selected.run_id != saved["run_id"]:
+                raise ValueError("The manifest's run ID does not match the reproduced policy and inputs.")
+            metadata = selected.manifest()
+            for key in ("currency", "start_month", "month_index_base", "operating_horizon_months",
+                        "full_runoff_months", "data_classification", "historical_evidence_level"):
+                if key in saved and saved[key] != metadata[key]:
+                    raise ValueError(f"The manifest's {key} does not match the reproduced run.")
+            if "expected_applications" in saved and Decimal(str(saved["expected_applications"])) != selected.summary.expected_applications:
+                raise ValueError("The manifest's expected applications do not match the reproduced run.")
         decision = select_strategy(results)
         args.output.mkdir(parents=True, exist_ok=True)
         records = []

@@ -90,7 +90,11 @@ def load_dataset(path: Path, seed: int = DEFAULT_SEED) -> Dataset:
         if tuple(reader.fieldnames or ()) != CSV_FIELDS:
             raise ValueError(f"CSV must have exactly these fields: {CSV_FIELDS}")
         try:
-            rows = tuple(Application(r["application_id"], int(r["month"]), r["risk_band"], int(r["principal_cents"])) for r in reader)
+            rows = []
+            for r in reader:
+                if None in r or any(r[name] is None for name in CSV_FIELDS):
+                    raise ValueError("Each CSV record must have exactly the declared fields.")
+                rows.append(Application(r["application_id"], int(r["month"]), r["risk_band"], int(r["principal_cents"])))
         except (TypeError, KeyError, ValueError) as e:
             raise ValueError("CSV contains missing or invalid application fields.") from e
-    return Dataset(rows, seed)
+    return Dataset(tuple(rows), seed)

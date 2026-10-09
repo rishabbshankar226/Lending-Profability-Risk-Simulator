@@ -1,8 +1,8 @@
 # Browser and release acceptance
 
-**October 9, 2026 (UTC).** [PR #1](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/pull/1) is merged into `main`; [merge checks](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/actions/runs/37868969995) passed. The [live dashboard](https://rishabb-lending-simulator.streamlit.app/) still uses `feature/lending-simulator`, with application code matching the merged implementation.
+**October 9, 2026 (UTC).** [PR #1](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/pull/1) is merged into `main`; [merge checks](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/actions/runs/37868969995) passed. The [live dashboard](https://rishabb-lending-simulator.streamlit.app/) still uses `feature/lending-simulator`, with application code matching that earlier merge. The decision-panel upgrade and 0.1.1 audit patches have not been deployed there.
 
-All 70 automated checks pass. Desktop cases below were exercised against the hosted app, with decision briefs last checked at `e87a74d65c59a24103e67b4dafd2e75d6abf2413`. Detailed run identities, file inspection and screenshots are in [browser-validation.md](browser-validation.md).
+The current local audit passes 136 automated checks and the scoped desktop/mobile-width cases in [bug-hunt-browser.json](bug-hunt-browser.json). Tables below preserve historical hosted coverage: that pass had 70 automated checks, with decision briefs last checked at `e87a74d65c59a24103e67b4dafd2e75d6abf2413`. Detailed historical run identities, file inspection and screenshots are in [browser-validation.md](browser-validation.md).
 
 ## Financial and interaction cases
 

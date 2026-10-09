@@ -18,7 +18,10 @@ def contractual_payment(principal: Decimal, annual_rate: Decimal, term: int) -> 
     monthly_rate = annual_rate / 12
     if monthly_rate == 0:
         return principal / term
-    return principal * monthly_rate / (1 - (1 + monthly_rate) ** (-term))
+    # Present value of equal payments avoids subtracting nearly equal numbers
+    # when the nominal rate is close to zero.
+    discount_sum = sum(((1 + monthly_rate) ** (-age) for age in range(1, term + 1)), ZERO)
+    return principal / discount_sum
 
 
 def monthly_hazard(lifetime_pd: Decimal, term: int) -> Decimal:
@@ -26,7 +29,11 @@ def monthly_hazard(lifetime_pd: Decimal, term: int) -> Decimal:
         return ZERO
     if lifetime_pd == 1:
         return D(1)
-    return 1 - (1 - lifetime_pd) ** (D(1) / term)
+    # Preserve significant digits through both subtractions for tiny PDs.
+    with localcontext() as ctx:
+        ctx.prec = max(ctx.prec, len(lifetime_pd.as_tuple().digits)) + max(0, -lifetime_pd.adjusted()) + 4
+        hazard = 1 - (1 - lifetime_pd) ** (D(1) / term)
+    return +hazard
 
 
 def _validate_inputs(cohorts, assumptions, policy, expected_applications):
@@ -177,7 +184,10 @@ def run_model(
         principal = total("originations")
         contribution = total("contribution")
         lowest = min(monthly, key=lambda r: r.ending_cash)
-        net_loss = total("net_credit_loss")
+        # Every recovery is received at full runoff. The lifetime loss fraction
+        # avoids a signed rounding residue from summing delayed monthly credits,
+        # which could falsely breach an exact zero-loss cap at 100% recovery.
+        net_loss = total("gross_chargeoffs") * (1 - a.recovery_rate)
         runoff_residual = max(abs(carry_principal), abs(carry_debt),
                               abs(total("recoveries") - total("gross_chargeoffs") * a.recovery_rate))
         maximum = max(*residuals.values(), runoff_residual)

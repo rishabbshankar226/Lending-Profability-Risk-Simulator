@@ -8,6 +8,7 @@ The same inspectable workbook specification supports the authoring QA renderer.
 from dataclasses import asdict, fields
 from decimal import Decimal
 from io import BytesIO
+from math import isnan
 
 import xlsxwriter
 
@@ -19,7 +20,7 @@ NUMBER = '#,##0.00;(#,##0.00);"-"'
 
 
 def _number(value):
-    if value is None:
+    if value is None or isinstance(value, float) and isnan(value):
         return "n.a."
     if isinstance(value, (Decimal, float, int)) and not isinstance(value, bool):
         return float(value)
@@ -67,7 +68,7 @@ def workbook_spec(result, results, dataset) -> dict:
     cohort_rows = [cohort_fields, [units_for(n) for n in cohort_fields]]
     cohort_rows += [[_number(getattr(row, n)) for n in cohort_fields] for row in result.cohorts]
     comparison = payload["comparison"]
-    policy_rows = [list(comparison[0])] + [list(row.values()) for row in comparison]
+    policy_rows = [list(comparison[0])] + [[_number(value) for value in row.values()] for row in comparison]
 
     # An independently computed float oracle supplies cached preview values.
     # Formula cells remain live and are recalculated during authoring QA.
