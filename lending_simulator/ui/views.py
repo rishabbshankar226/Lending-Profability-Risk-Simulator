@@ -241,8 +241,8 @@ def stress_panel(ctx):
             fig.add_scatter(x=[percent(a.funding_rate)], y=[multiple(a.default_stress)], mode='markers',
                 marker=dict(symbol='square-open',size=35,color='#182C3E',line=dict(width=2)),
                 showlegend=False, hoverinfo='skip')
-        fig.update_xaxes(title='Annual funding rate')
-        fig.update_yaxes(title='Lifetime PD multiplier')
+        fig.update_xaxes(title='Annual funding rate', type='category')
+        fig.update_yaxes(title='Lifetime PD multiplier', type='category')
         charts.show(fig, f'stress-{ctx.selected.run_id}-{field}', 380)
         caption('USD abbreviated in cells; full values and two distinct statuses appear in case detail. '+
                 ('Outlined cell is the applied point.' if present else 'The exact applied stress/rate pair is outside this grid.'))
