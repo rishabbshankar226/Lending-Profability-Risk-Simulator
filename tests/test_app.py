@@ -4,6 +4,8 @@ from dataclasses import replace
 from decimal import Decimal
 import json
 import shutil
+import re
+from html import unescape
 
 import pytest
 import streamlit as st
@@ -17,10 +19,19 @@ def app():
     return AppTest.from_file(Path(__file__).resolve().parents[1] / "app.py", default_timeout=20).run()
 
 
+def navigate(page, view):
+    page.button_group(key="analysis_view").set_value(view).run()
+    assert not page.exception
+    return page
+
+
 def test_preloaded_dashboard_has_five_views_results_and_no_exception():
     page = app()
     assert not page.exception
-    assert [t.label for t in page.tabs] == ["Overview", "Strategy comparison", "Portfolio cohorts", "Funding & stress", "Methodology"]
+    assert page.button_group(key="analysis_view").options == ["Overview", "Policies", "Cohorts", "Funding & stress", "Methodology"]
+    assert page.session_state["active_view"] == "Overview"
+    assert not page.radio
+    assert not any(button.key == "run_stress" for button in page.button)
     assert page.session_state["applied_policy"] == "conservative"
     assert len(page.session_state["results"]) == 3
     assert all(r.checks.passed for r in page.session_state["results"])
@@ -47,7 +58,7 @@ def test_decision_sections_follow_the_page_title_without_skipping_a_heading_leve
     page = app()
     assert [item.value for item in page.title] == ["Lending Profitability & Risk Simulator"]
     assert [item.value for item in page.main.header[:2]] == [
-        "Recommended policy: Conservative", "Explore a scenario",
+        "Recommended policy: Conservative", "Overview",
     ]
 
 
@@ -63,7 +74,7 @@ def test_viewing_ineligible_policy_keeps_recommendation_and_identifies_cash_shor
         ("Cash shortfall to floor", "$746,143"),
         ("Loss headroom to cap", "3.42 pp"),
     ]
-    assert any("Charts and downloads show Balanced" in item.value for item in page.caption)
+    assert any("Charts and downloads use the viewed applied policy" in item.value for item in page.caption)
     assert page.session_state["applied_policy"] == "balanced"
     assert page.session_state["results"][1].run_id == "a2feec5a72facbc3"
 
@@ -80,7 +91,8 @@ def test_decision_panel_does_not_present_a_diagnostic_policy_as_a_recommendation
         control(key=key).set_value(value)
     page.button(key="run_scenario").click().run()
     assert not page.exception
-    assert page.header[0].value == "Recommended policy: None"
+    assert page.header[0].value == ("No positive-profit recommendation" if diagnostic else "No eligible policy")
+    assert select_strategy(page.session_state["results"]).recommended_policy is None
     assert any(explanation in item.value for item in page.warning)
     captions = "\n".join(item.value for item in page.caption)
     assert ("Diagnostic policy:" in captions) == (diagnostic is not None)
@@ -100,6 +112,7 @@ def test_applied_input_summary_retains_last_successful_run_after_draft_or_invali
     assert "Annual funding: 8.00%" in applied and "Monthly growth: 0.00%" in applied
     assert "Facility: " in applied and "2,000,000" in applied
     page.slider(key="stress").set_value(3.0)
+    navigate(page, "Cohorts")
     page.radio(key="cohort_cutoff").set_value("Complete runoff").run()
     assert input_summary() == applied
     page.number_input(key="cash_floor").set_value(-1.0)
@@ -115,7 +128,8 @@ def test_decision_panel_identifies_a_credit_loss_breach_in_percentage_points():
     page.number_input(key="loss_cap_percent").set_value(0.5)
     page.button(key="run_scenario").click().run()
     assert not page.exception
-    assert page.header[0].value == "Recommended policy: None"
+    assert page.header[0].value == "No eligible policy"
+    assert select_strategy(page.session_state["results"]).recommended_policy is None
     assert page.metric[2].label == "Loss cap exceeded by"
     assert page.metric[2].value == "0.34 pp"
     assert any("Net principal loss: 0.84% · Cap: 0.50%" in item.value for item in page.caption)
@@ -126,6 +140,7 @@ def test_apply_and_complete_reset_restore_assumptions_and_download_scenario():
     base_run = page.session_state["results"][0].run_id
     page.slider(key="funding_percent").set_value(12.0)
     page.number_input(key="opex").set_value(10000.0)
+    navigate(page, "Cohorts")
     page.radio(key="cohort_cutoff").set_value("Complete runoff")
     page.selectbox(key="policy").set_value("balanced")
     page.button(key="run_scenario").click().run()
@@ -140,6 +155,8 @@ def test_apply_and_complete_reset_restore_assumptions_and_download_scenario():
     assert page.session_state["applied_policy"] == "conservative"
     assert page.session_state["results"][0].run_id == base_run
     assert page.number_input(key="opex").value == 7500.0
+    assert page.session_state["active_view"] == "Overview"
+    navigate(page, "Cohorts")
     assert page.radio(key="cohort_cutoff").value == "First 24 months"
 
 
@@ -153,9 +170,18 @@ def test_running_unchanged_base_controls_preserves_the_run_identity():
 
 def test_decision_brief_follows_applied_examples_and_retains_last_valid_run():
     page = app()
+    page.session_state["brief_preview"] = True
+    page.run()
 
     def preview():
-        return next(e for e in page.expander if e.label == "Preview decision brief").markdown[0].value
+        expander = next(e for e in page.expander if e.label == "Preview decision brief")
+        if not expander.markdown:
+            # AppTest does not expose a container-opening action. Request the
+            # preview explicitly; real expansion/keyboard behavior is a browser gate.
+            page.session_state["brief_preview"] = True
+            page.run()
+            expander = next(e for e in page.expander if e.label == "Preview decision brief")
+        return expander.markdown[0].value
 
     base = preview()
     assert "Recommended policy: Conservative" in base
@@ -213,18 +239,18 @@ def test_comparison_exposes_each_policy_cash_limit_and_equity_gap(equity, minimu
         page.number_input(key="initial_cash").set_value(equity)
         page.button(key="run_scenario").click().run()
     assert not page.exception
-    comparison = page.tabs[1]
-    assert [metric.value for metric in comparison.metric] == ["$48,133", "$294,468", "$396,446"]
-    captions = [caption.value for caption in comparison.caption]
-    assert [value.split(" · ")[0] for value in captions if value.startswith("Minimum cash:")] == [
-        f"Minimum cash: {amount}" for amount in minimum_cash
-    ]
-    assert [value for value in captions if value.startswith("Additional equity for cash floor:")] == [
-        f"Additional equity for cash floor: {amount}." for amount in equity_gaps
-    ]
-    assert len(comparison.success) == eligible_count
-    assert len(comparison.warning) == 3 - eligible_count
-    assert all("Minimum-cash floor breached" in message.value for message in comparison.warning)
+    navigate(page, "Policies")
+    markup = next(item.proto.body for item in page.get("html") if '<table class="policy-table"' in item.proto.body)
+    body = markup.split("<tbody>", 1)[1].split("</tbody>", 1)[0]
+    rows = [re.findall(r'<t[hd][^>]*>(.*?)</t[hd]>', row) for row in re.findall(r'<tr>(.*?)</tr>', body)]
+    fields = {unescape(row[0]): [unescape(cell) for cell in row[1:]] for row in rows}
+    assert fields["Operating profit"] == ["$48,133", "$294,468", "$396,446"]
+    assert fields["Minimum cash"] == minimum_cash
+    assert fields["Equity for cash floor"] == equity_gaps
+    statuses = fields["Limit / profit status"]
+    assert sum("Meets limits" in message for message in statuses) == eligible_count
+    assert sum("Minimum-cash floor breached" in message for message in statuses) == 3 - eligible_count
+    assert all("Profitable" in message for message in statuses)
 
 
 def test_bad_input_is_reported_and_last_successful_results_remain_visible():
@@ -249,8 +275,10 @@ def test_guided_example_replaces_custom_and_draft_inputs_and_clears_stress(
     page.slider(key="funding_percent").set_value(12.0)
     page.number_input(key="opex").set_value(10000.0)
     page.selectbox(key="policy").set_value("aggressive")
+    navigate(page, "Cohorts")
     page.radio(key="cohort_cutoff").set_value("Complete runoff")
     page.button(key="run_scenario").click().run()
+    navigate(page, "Funding & stress")
     page.button(key="run_stress").click().run()
     assert "stress_points" in page.session_state
     page.number_input(key="cash_floor").set_value(-1.0)
@@ -270,6 +298,8 @@ def test_guided_example_replaces_custom_and_draft_inputs_and_clears_stress(
     assert page.slider(key="growth_percent").value == 0.0
     assert page.number_input(key="opex").value == 7500.0
     assert page.number_input(key="cash_floor").value == 50000.0
+    assert page.session_state["active_view"] == "Funding & stress"
+    navigate(page, "Cohorts")
     assert page.radio(key="cohort_cutoff").value == "First 24 months"
     assert "stress_points" not in page.session_state
 
@@ -287,6 +317,7 @@ def test_custom_run_after_example_keeps_edits_and_other_visitors_independent():
     assert page.session_state["applied_policy"] == "balanced"
     assert page.session_state["results"][1].run_id != applied
     custom_run = page.session_state["results"][1].run_id
+    navigate(page, "Cohorts")
     page.radio(key="cohort_cutoff").set_value("Complete runoff").run()
     assert page.session_state["results"][1].run_id == custom_run
     assert other.session_state["applied_assumptions"] == Assumptions()
@@ -297,7 +328,7 @@ def test_custom_run_after_example_keeps_edits_and_other_visitors_independent():
 
 
 def test_stress_grid_matches_current_applied_policy_and_resets_with_scenario():
-    page = app()
+    page = navigate(app(), "Funding & stress")
     page.button(key="run_stress").click().run()
     assert not page.exception
     grid = page.session_state["stress_points"]
@@ -326,10 +357,23 @@ def test_empty_portfolio_keeps_operating_costs_and_marks_loss_margin_undefined(i
     (path.parent / "manifest.json").write_text(json.dumps(empty.manifest()))
     page = AppTest.from_file(isolated_project, default_timeout=20).run()
     assert not page.exception
-    assert page.header[0].value == "Recommended policy: None"
+    assert page.header[0].value == "No eligible policy"
     assert page.metric[0].value == "($292,500)"
-    assert page.metric[2].value == "n.a."
+    assert page.metric[2].value == "Unavailable"
     assert any("No funded loans" in item.value for item in page.caption)
+
+
+def test_empty_portfolio_stress_grid_is_available_without_a_conversion_exception(isolated_project):
+    path = isolated_project.parent / "data" / "applications.csv"
+    empty = Dataset((), 2262026)
+    save_dataset(empty, path)
+    (path.parent / "manifest.json").write_text(json.dumps(empty.manifest()))
+    page = AppTest.from_file(isolated_project, default_timeout=20).run()
+    navigate(page, "Funding & stress")
+    page.button(key="run_stress").click().run()
+    assert not page.exception
+    assert len(page.session_state["stress_points"]["points"]) == 20
+    assert all(point["loss_ratio"] == "None" for point in page.session_state["stress_points"]["points"])
 
 
 def test_missing_dataset_reports_startup_error_without_an_exception(isolated_project):
@@ -385,3 +429,22 @@ def test_valid_dataset_replacement_refreshes_results_with_applied_inputs(isolate
     assert page.session_state["applied_assumptions"].initial_cash == 1250000
     assert all(r.dataset_hash == changed.dataset_hash for r in page.session_state["results"])
     assert page.session_state["results"][1].run_id != old_run
+
+
+def test_valid_dataset_replacement_retains_unapplied_drafts(isolated_project):
+    page = AppTest.from_file(isolated_project, default_timeout=20).run()
+    page.slider(key="stress").set_value(2).run()
+    path = isolated_project.parent / "data" / "applications.csv"
+    original = load_dataset(path)
+    rows = list(original.applications)
+    rows[0] = replace(rows[0], principal_cents=rows[0].principal_cents + 10000)
+    changed = Dataset(tuple(rows), original.seed)
+    save_dataset(changed, path)
+    (path.parent / "manifest.json").write_text(json.dumps(changed.manifest()))
+    page.run()
+    assert not page.exception
+    assert page.session_state["applied_assumptions"].default_stress == 1
+    assert all(r.dataset_hash == changed.dataset_hash for r in page.session_state["results"])
+    assert page.slider(key="stress").value == 2
+    assert page.session_state["draft_controls"]["stress"] == 2
+    assert any("Unapplied" in item.value for item in page.info)
