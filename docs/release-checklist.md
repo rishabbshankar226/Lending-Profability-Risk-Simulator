@@ -2,7 +2,9 @@
 
 **October 9, 2026 (UTC).** [PR #1](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/pull/1) is merged into `main`; [merge checks](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/actions/runs/37868969995) passed. The [live dashboard](https://rishabb-lending-simulator.streamlit.app/) still uses `feature/lending-simulator`, with application code matching the merged implementation.
 
-All 70 automated checks pass. Desktop cases below were exercised against the hosted app, with decision briefs last checked at `e87a74d65c59a24103e67b4dafd2e75d6abf2413`. Detailed run identities, file inspection and screenshots are in [browser-validation.md](browser-validation.md).
+**Workbench candidate:** 118 automated checks pass, plus compilation and CLI regeneration. It has not been deployed or visually accepted. The [candidate review](ui-workbench-review.md) records the tested source, blocked preview, pending desktop/mobile/keyboard/download cases, operation measurements and rollback. Keep the redesign in draft until those browser gates pass; merge/public rollout need a separate release decision.
+
+**Earlier hosted evidence:** the build below had 70 automated checks at its review. Its desktop cases were exercised against the hosted app, with decision briefs last checked at `e87a74d65c59a24103e67b4dafd2e75d6abf2413`. Detailed run identities, file inspection and screenshots are in [browser-validation.md](browser-validation.md). These passes do not apply to the workbench candidate.
 
 ## Financial and interaction cases
 

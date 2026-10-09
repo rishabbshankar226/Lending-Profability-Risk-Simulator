@@ -6,6 +6,8 @@ The app models a hypothetical lender retaining 12-month merchant-financed instal
 
 **Live dashboard:** [Open the dashboard](https://rishabb-lending-simulator.streamlit.app/) · **Source code:** [main](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/tree/main) · **Merge history:** [PR #1](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/pull/1)
 
+**UI workbench candidate:** this branch adds the redesigned interface. Read the [candidate review and acceptance gates](docs/ui-workbench-review.md). The public dashboard and existing media show the earlier `feature/lending-simulator` build; candidate browser acceptance and deployment remain pending.
+
 **Start here:** [Two-minute reviewer guide](docs/reviewer-guide.md) · [Application and interview notes](docs/interview-notes.md)
 
 **Quick visual tour:** [90-second captioned screenshot video](docs/tour/lending-simulator-tour.mp4) · [Transcript and source captures](docs/tour/README.md). Six real dashboard screenshots, assembled with captions; no audio or continuous interaction recording.
@@ -57,7 +59,7 @@ python -m lending_simulator.cli --assumptions path/to/manifest.json --output art
 
 ## Explore the dashboard
 
-Start with the decision panel above the tabs. **Recommended policy** compares all three policies; **Viewing policy** identifies the portfolio used by the metrics, charts and downloads. The panel shows full-runoff operating profit, the cash cushion or shortfall relative to the floor, and credit-loss headroom or excess in percentage points. Actual minimum cash, loss ratio and both limits remain visible. Applied inputs and the run identity stay tied to the last successful run while you edit the sidebar.
+Start with the decision summary and three primary metrics. **Recommended policy** compares all three policies; **Viewed policy** immediately selects the applied portfolio used by the metrics, charts and exports. The summary shows full-runoff operating profit, the cash cushion or shortfall relative to the floor, and credit-loss headroom or excess in percentage points. Actual minimum cash, loss ratio and both limits remain visible. **Applied inputs** in the toolbar retains the last successful run while you edit the sidebar.
 
 Then explore the one-click examples:
 
@@ -67,17 +69,17 @@ Then explore the one-click examples:
 | More capital · $1.25m | Balanced | Set starting equity to $1.25m |
 | Higher defaults · 2× | Conservative | Double lifetime default assumptions |
 
-Each example replaces all inputs, runs immediately, restores the First 24 months cohort view and clears the old stress grid. Recommendations still compare all three policies using the model's rules.
+Each example replaces all inputs, runs immediately, restores the First 24 months cohort cutoff and clears the old stress grid. It preserves the active view and a pinned baseline. Recommendations still compare all three policies using the model's rules.
 
-1. **Overview:** selected-policy approvals, funded volume, unit contribution, and profit/cash over time. The decision panel remains above every view.
-2. **Strategy comparison:** policy summaries show profit, minimum cash, net principal loss, eligibility and equity gaps together; charts and the detailed table use the same applied inputs.
-3. **Portfolio cohorts:** projected loss by origination month and loan age; future ages remain blank at a cutoff.
-4. **Funding & stress:** cash/debt, additional equity, and a default × funding-rate sensitivity grid.
+1. **Overview:** separate profit and liquidity timelines, dated cash-floor/minimum references, funded volume, contribution and a reconciled profit bridge.
+2. **Policies:** equal policy summaries, profit/cash-margin comparisons and a pinned applied baseline. Different runoff lengths use a common first-24-month profit delta.
+3. **Cohorts:** projected loss by origination month and loan age; blank future values and a shared scale across policies/cutoffs.
+4. **Funding & stress:** cash/debt, additional equity and a manually requested 20-case selected-policy grid. Inspect a case and stage its inputs before Run.
 5. **Methodology:** timing, assumptions, sources, financial checks, SQL, and run manifest.
 
-Use **Run scenario** to apply custom sidebar edits. **Reset to base** restores all assumptions and the cohort cutoff. Downloads always use the applied scenario. Workbook portfolio sheets are saved snapshots; its independent loan and recovery benchmarks contain editable formulas.
+Committed sidebar edits show **Unapplied changes** and an input review; **Run scenario** applies them. **Restore applied inputs** discards the draft without running projections. Navigation and policy selection preserve drafts. **Reset to base** restores all assumptions, Conservative, Overview and the cohort cutoff, clearing stress and the pinned baseline. Only the selected analytical view is built on each rerun.
 
-Download **Decision brief** for a Markdown report with the calculated recommendation, selected portfolio, shared assumptions, policy tradeoffs and reproducible run manifest. **Preview decision brief** shows the same report in the app. Draft or invalid edits retain the last successful applied brief.
+Open **Export** for **Decision brief**, **Audit workbook** or **CSV results + manifest**. Each format is prepared only when requested and captures the viewed applied run; draft edits are not exported. **Preview decision brief** prepares only that report. Workbook portfolio sheets are saved snapshots; independent loan/recovery benchmarks contain editable formulas.
 
 ## How it works
 
@@ -87,7 +89,8 @@ Download **Decision brief** for a Markdown report with the calculated recommenda
 | SQL analytics | `analytics.py`, `queries/*.sql` | Correct policy denominators and cohort inputs in integer cents |
 | Financial model | `model.py`, `types.py` | Pure expected-value repayment, defaults, recoveries, funding and cash |
 | Decisions | `decisions.py` | Exact eligibility, ranking, ties, stress cases and honest empty/loss states |
-| Presentation | `presentation.py`, `exports.py`, `app.py` | Charts and downloads from the same result bundle |
+| Presentation and exports | `presentation.py`, `exports.py` | Model tables, exact packages and reproducible reports |
+| Workbench | `ui/`, `app.py` | Draft/apply state, shared formatting, selected views, charts and deferred exports |
 
 Finance uses 34-digit Decimal arithmetic with a $1e−16 internal reconciliation tolerance. Chart values and workbook snapshots use ordinary numeric display precision; CSVs retain exact Decimal strings. The operating view has 24 origination months; the default comparison runs 39 months through complete recovery runoff. No charge-off is subtracted as a second cash payment.
 
@@ -99,6 +102,7 @@ Finance uses 34-digit Decimal arithmetic with a $1e−16 internal reconciliation
 - [Dataset dictionary and SQL walkthrough](docs/data-and-sql.md)
 - [Historical source-fitness decision](docs/source-fitness.md)
 - [Validation and measured limitations](docs/validation.md)
+- [UI workbench review, state contract and pending visual acceptance](docs/ui-workbench-review.md)
 - [Base-case audit workbook](docs/audit-workbook.xlsx)
 - Decision brief examples: [base](docs/base-decision-brief.md), [capital](docs/capital-decision-brief.md), [default stress](docs/default-stress-decision-brief.md)
 - [Interview and 90-second demo walkthrough](docs/walkthrough.md)
@@ -106,7 +110,9 @@ Finance uses 34-digit Decimal arithmetic with a $1e−16 internal reconciliation
 - [Live browser results and screenshots](docs/browser-validation.md)
 - [Browser and release checklist](docs/release-checklist.md)
 
-All 83 automated model, application-state, export, and HTTP startup checks pass. The decision panel adds coverage for recommendation versus viewed policy, cash/credit margins and exact boundaries, applied inputs through draft/invalid edits, empty portfolios and heading levels. The financial engine, model version and existing example run identities are unchanged. The local preview could not be reached by the cloud browser, so the new layout has not been visually or keyboard tested in a browser; desktop/mobile rendering remains to be verified.
+All 118 automated model, application-state, export, and HTTP startup checks pass. Workbench coverage includes draft preservation/restoration, immediate policy selection, hidden-view navigation, immutable baseline comparison, exact stress staging/markers, undefined values and deferred format generation. The financial engine, model version and example run identities are unchanged; three saved decision briefs match exact regeneration. [Separate operation measurements](docs/workbench-performance.json) cover local server code and AppTest, not browser or hosting latency.
+
+The cloud browser cannot reach the local candidate. Desktop/mobile rendering, keyboard/focus, actual deferred downloads and before/after captures remain required before releasing this redesign. The [candidate review](docs/ui-workbench-review.md) records the blocked visual gate and remaining acceptance cases.
 
 The earlier hosted desktop build was exercised across all five tabs, scenario apply/reset, capital and stress cases, validation errors, cohort cutoffs, and downloads. Guided examples were checked for the correct applied runs, replacement of draft/advanced inputs, stress-grid clearing and keyboard activation. The three actual decision-brief downloads matched local regeneration exactly; the capital brief retained applied inputs during a draft edit, and its saved manifest reproduced the same CLI decision and run. The comparison summaries were verified at base and $1.25m starting equity. See the browser evidence for tested commits and run IDs. Missing or invalid base data stops the dashboard with a clear error; validated replacements refresh the applied scenario and exports.
 

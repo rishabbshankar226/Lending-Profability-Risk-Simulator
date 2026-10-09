@@ -2,7 +2,7 @@
 
 ## Performed locally
 
-The financial model, data, SQL, decision rules, exports, CLI, simulated dashboard and HTTP server have 83 passing automated checks in `tests/`. Run `python -m pytest`. The suite has no disabled or skipped checks. Python compilation and the reproducible base-case CLI also passed. Earlier hosted checks below identify their tested commits; they do not cover the new decision-panel layout.
+The financial model, data, SQL, decision rules, exports, CLI, simulated dashboard and HTTP server have 118 passing automated checks in `tests/`. Run `python -m pytest`. The suite has no disabled or skipped checks. Python compilation and the reproducible base-case CLI also passed. The [workbench candidate review](ui-workbench-review.md) identifies the tested implementation commit, new behavior and pending browser gates. Earlier hosted checks below do not cover this redesign.
 
 Independent financial cases include 12 zero-interest $100 principal payments on a $1,200 loan; a $900 default with a $225 delayed recovery and $675 net loss; $10 monthly interest on $1,000 opening debt at 12%; and a positive-interest amortization benchmark. Other checks cover PD/recovery endpoints, late-loan runoff, equal policy overhead horizon, collateral repayments, funding-rate differences, invalid inputs and monthly financial identities.
 
@@ -23,6 +23,8 @@ The app's runtime downloads use the approved Python/XlsxWriter stack. They inclu
 `docs/performance.json` records one local measurement pass. Reproduce on Linux with `python -m scripts.measure_performance` after installing development requirements. Timings cover engine calculations and Streamlit's **simulated** AppTest execution. Peak process memory includes those operations, not sustained multi-user load or all possible cached cases. Browser rendering, network latency and hosting cold starts were not measured.
 
 The planning targets were a ≤3-second warm view, ≤2-second ordinary scenario and <250 MB peak runtime. Treat recorded local measurements as scoped evidence, not a deployed service-level claim.
+
+The workbench has a separate [23-operation measurement report](workbench-performance.json), produced with `python -m scripts.measure_workbench`. Each operation retains three local samples, its median and maximum. Source hashes identify the candidate; browser/network/hosting timings and p95 are not inferred. See the candidate review for operation scope and memory limits.
 
 ## Hosted browser validation
 
@@ -56,10 +58,16 @@ PR #1 was merged into `main` at `5602a062d3dd0e6f747cb89463252603154376e1`. Its 
 
 The presentation-only change at `10afcbacd0cda17ba0d3631f1a7dc64f44c024a5` passed all 70 existing checks, compilation and [CI](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/actions/runs/37703275592). Hosted DOM inspection confirmed one main title and level-two sections across five views, with the decision preview nested at levels three/four. Keyboard navigation activated the capital example, expanded its preview and downloaded the unchanged brief. See [browser-validation.md](browser-validation.md#heading-and-keyboard-follow-up) and [heading-outline.json](heading-outline.json). This is a scoped accessibility repair; full accessibility, mobile and anonymous checks remain pending.
 
-### Decision-panel follow-up
+### Decision-panel implementation before the workbench candidate
 
 The dashboard now presents the calculated recommendation, viewed policy, full-runoff operating result and cash/credit margins before the guided examples. Limit margins use 34-digit Decimal arithmetic; credit-loss differences are percentage points. Breaches smaller than display precision are labeled with a less-than amount rather than rounded to zero. Undefined loss ratios remain n.a., and an empty portfolio retains full-horizon operating expenses.
 
 Thirteen additional automated cases bring the suite to 83. They cover the base panel, a viewed Balanced policy with a Conservative recommendation, no profitable or eligible recommendation, a credit-cap breach, applied-input continuity through draft/invalid edits, an empty portfolio, five exact margin cases and level-two decision/exploration headings. Existing capital/default/reset, stress-cache and export tests still pass with the same run identities. No financial-engine or model-version changes were made, and no dependency was added.
 
 A local Streamlit preview was started, but the cloud browser could not connect to its loopback URL. The HTTP integration check passed within its controlled subprocess. No screenshots, mobile/desktop visual result, browser keyboard result, screen-reader result or measured interaction-performance claim is made for this layout. Browser validation and hosting-branch rollout remain pending.
+
+### Workbench candidate
+
+The candidate adds 35 cases to the prior 83-check suite and preserves its financial assertions while adapting layout-specific expectations. All 118 pass. It separates draft inputs from applied results, selects policies immediately, builds only the active view, compares an immutable baseline, stages exact stress cases and defers each export format. Empty stress loss values remain unavailable, and cohort scaling ignores unfunded policies. The engine, model version, dataset, SQL, export formats and three saved example briefs are unchanged.
+
+The candidate's workspace address returned `net::ERR_BLOCKED_BY_CLIENT` in the cloud browser. No candidate visual, mobile or keyboard pass is claimed. The first-screen visual gate could not precede broad implementation; state/framework work continued and the candidate remains at review, with browser acceptance required before release. The [full review](ui-workbench-review.md) lists concrete pending cases and the rollback/source reconciliation.
