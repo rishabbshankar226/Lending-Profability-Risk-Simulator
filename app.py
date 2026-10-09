@@ -18,7 +18,7 @@ from lending_simulator.decisions import compare_policies, evaluate_policy, selec
 from lending_simulator.exports import scenario_workbook
 from lending_simulator.presentation import (
     assumption_register, band_curves, cohort_heatmap, comparison_frame,
-    csv_package, decision_brief, evidence_register, month_label, monthly_frame,
+    csv_package, decision_brief, evidence_register, limit_margins, month_label, monthly_frame,
 )
 from lending_simulator.types import Assumptions, POLICIES
 
@@ -41,6 +41,52 @@ def money(value):
 
 def percent(value):
     return "n.a." if value is None else f"{value:.2%}"
+
+
+def decision_panel(result, decision):
+    a, s = result.assumptions, result.summary
+    eligibility = evaluate_policy(result)
+    cash_margin, loss_margin = limit_margins(result)
+    recommendation = decision.recommended_policy.title() if decision.recommended_policy else "None"
+    with st.container(border=True, key="decision_panel"):
+        recommended, viewed = st.columns([2, 1], vertical_alignment="center")
+        recommended.header(f"Recommended policy: {recommendation}")
+        viewed.markdown(f"**Viewing policy: {result.policy.title()}**")
+        viewed.caption("Meets credit and cash limits" if eligibility.eligible else
+                       f"Ineligible: {'; '.join(eligibility.reasons)}")
+        if decision.recommended_policy:
+            st.success(decision.message)
+        else:
+            st.warning(decision.message)
+        if decision.diagnostic_policy:
+            st.caption(f"Diagnostic policy: {decision.diagnostic_policy.title()} · No positive-profit recommendation.")
+        st.caption(f"Charts and downloads show {result.policy.title()}. Recommendations compare all three policies on the applied inputs.")
+
+        profit, cash, loss = st.columns(3)
+        profit.metric("Operating result · full runoff", money(s.operating_result),
+                      help="Interest + merchant fees − funding, servicing, acquisition, net principal loss and all platform costs.")
+        profit.caption(f"{len(result.monthly)} months through {month_label(len(result.monthly) - 1)} · Includes repayment and recovery runoff.")
+        cash_label = ("Cash cushion above floor" if cash_margin > 0 else
+                      "Cash shortfall to floor" if cash_margin < 0 else "Cash at floor")
+        cash_amount = cash_margin.copy_abs()
+        cash.metric(cash_label, "<$1" if 0 < cash_amount < 1 else money(cash_amount),
+                    help="Lowest month-end cash minus the required cash floor. A shortfall is the amount missing from the floor.")
+        cash.caption(f"Minimum cash: {money(s.minimum_cash)} · Floor: {money(a.cash_floor)} · {month_label(s.minimum_cash_month)}.".replace("$", r"\$"))
+        loss_label = ("Loss headroom to cap" if loss_margin is None or loss_margin > 0 else
+                      "Loss cap exceeded by" if loss_margin < 0 else "Loss at cap")
+        loss_amount = None if loss_margin is None else loss_margin.copy_abs()
+        loss_value = ("n.a." if loss_amount is None else "<0.01 pp" if 0 < loss_amount < D(".01") else
+                      f"{loss_amount:.2f} pp")
+        loss.metric(loss_label, loss_value,
+                    help="Net principal loss cap minus the full-runoff loss ratio, in percentage points. Undefined when no principal is funded.")
+        loss.caption(f"Net principal loss: {percent(s.loss_ratio)} · Cap: {percent(a.loss_cap)}.")
+        st.caption("Amounts rounded to whole USD · pp = percentage points. Limit status uses unrounded values; a recommendation requires positive profit and passing financial checks.")
+
+        st.markdown("**Applied inputs**")
+        st.caption((f"Starting equity: {money(a.initial_cash)} · Default stress: {a.default_stress.normalize():f}× · "
+                    f"Annual funding: {percent(a.funding_rate)} · Monthly growth: {percent(a.demand_growth)} · "
+                    f"Facility: {money(a.facility_limit)}").replace("$", r"\$"))
+        st.caption(f"Edit sidebar inputs, then choose Run scenario to update results. · Applied run: {result.run_id}")
 
 
 @st.cache_data(max_entries=2, show_spinner=False)
@@ -148,17 +194,6 @@ elif any(result.dataset_hash != dataset.dataset_hash for result in st.session_st
     apply_scenario(st.session_state.applied_assumptions, st.session_state.applied_policy, dataset)
     st.session_state.pop("stress_points", None)
 
-st.header("Try a guided example")
-st.caption("Examples replace all inputs and run immediately. Compare policies below or use the sidebar to build a custom scenario.")
-examples = (
-    ("base", "Base case", {}),
-    ("capital", "More capital · $1.25m", {"initial_cash": 1250000.0, "policy": "balanced"}),
-    ("defaults", "Higher defaults · 2×", {"stress": 2.0}),
-)
-for column, (name, label, overrides) in zip(st.columns(3), examples):
-    column.button(label, key=f"example_{name}", on_click=load_example, args=(overrides,),
-                  width="stretch")
-
 with st.sidebar:
     st.header("Scenario")
     st.button("Reset to base", key="reset", on_click=reset_scenario, width="stretch")
@@ -201,24 +236,23 @@ s = selected.summary
 frame = monthly_frame(selected)
 comparison = comparison_frame(results)
 decision = select_strategy(results)
-st.caption(f"Applied scenario: {selected.policy.title()} · {len(selected.monthly)} months through {month_label(len(selected.monthly) - 1)} · run {selected.run_id}")
-if decision.recommended_policy:
-    st.success(decision.message)
-else:
-    st.warning(decision.message)
-st.caption(f"Eligibility: net principal loss ≤ {percent(a.loss_cap)} and month-end cash ≥ {money(a.cash_floor)}. Rank by unrounded full-runoff operating profit.")
+decision_panel(selected, decision)
+
+st.header("Explore a scenario")
+st.caption("Examples replace all inputs and run immediately. Use Strategy comparison to explore the tradeoffs, or the sidebar for a custom scenario.")
+examples = (
+    ("base", "Base case", {}),
+    ("capital", "More capital · $1.25m", {"initial_cash": 1250000.0, "policy": "balanced"}),
+    ("defaults", "Higher defaults · 2×", {"stress": 2.0}),
+)
+for column, (name, label, overrides) in zip(st.columns(3), examples):
+    column.button(label, key=f"example_{name}", on_click=load_example, args=(overrides,),
+                  width="stretch")
+
 tabs = st.tabs(["Overview", "Strategy comparison", "Portfolio cohorts", "Funding & stress", "Methodology"])
 
 with tabs[0]:
     st.header(f"{selected.policy.title()} economics")
-    left, middle, right = st.columns(3)
-    left.metric("Operating result · full runoff", money(s.operating_result),
-                help="Interest + merchant fees − funding, servicing, acquisition, net principal loss and all platform costs.")
-    middle.metric("Net principal loss ratio", percent(s.loss_ratio), help="Full-runoff net charged-off principal / original funded principal.")
-    right.metric("Lowest month-end cash", money(s.minimum_cash), help=f"Occurs in {month_label(s.minimum_cash_month)}; includes runoff.")
-    eligibility = evaluate_policy(selected)
-    if not eligibility.eligible:
-        st.warning(f"{selected.policy.title()} is ineligible: {'; '.join(eligibility.reasons)}.")
     c1, c2, c3 = st.columns(3)
     c1.metric("Funded principal", money(s.funded_principal))
     c2.metric("Approval rate", percent(s.approval_rate), help="Expected funded loans / expected applications, using the same demand weights.")

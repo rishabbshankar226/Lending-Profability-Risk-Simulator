@@ -3,7 +3,7 @@
 import csv
 from dataclasses import asdict, fields
 from datetime import date
-from decimal import Decimal
+from decimal import Decimal, localcontext
 from io import BytesIO, StringIO
 from importlib.resources import files
 import json
@@ -25,6 +25,16 @@ RATE_INPUTS = {"borrower_rate", "merchant_fee", "pd_low", "pd_medium", "pd_high"
 def month_label(month: int) -> str:
     ordinal = 2026 * 12 + 9 + month
     return date(ordinal // 12, ordinal % 12 + 1, 1).strftime("%b %Y")
+
+
+def limit_margins(result: ModelResult) -> tuple[Decimal, Decimal | None]:
+    """Cash in USD and loss in percentage points; negative margins breach a limit."""
+    with localcontext() as ctx:
+        ctx.prec = 34
+        cash = result.summary.minimum_cash - result.assumptions.cash_floor
+        loss = (None if result.summary.loss_ratio is None else
+                (result.assumptions.loss_cap - result.summary.loss_ratio) * 100)
+    return cash, loss
 
 
 def monthly_frame(result: ModelResult) -> pd.DataFrame:
