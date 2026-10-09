@@ -6,13 +6,13 @@ The app models a hypothetical lender retaining 12-month merchant-financed instal
 
 **Live dashboard:** [Open the dashboard](https://rishabb-lending-simulator.streamlit.app/) · **Source code:** [main](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/tree/main) · **Merge history:** [PR #1](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/pull/1)
 
-**UI workbench candidate:** this branch adds the redesigned interface. Read the [candidate review and acceptance gates](docs/ui-workbench-review.md). The public dashboard and existing media show the earlier `feature/lending-simulator` build; candidate browser acceptance and deployment remain pending.
+**UI workbench candidate:** this branch adds the redesigned interface. Read the [candidate review and acceptance gates](docs/ui-workbench-review.md). The public dashboard and existing media show the earlier `feature/lending-simulator` build; nine real-browser journeys pass, with [before/after captures and scoped results](docs/workbench-browser-validation.md). Deployment remains pending.
 
 **Start here:** [Two-minute reviewer guide](docs/reviewer-guide.md) · [Application and interview notes](docs/interview-notes.md)
 
-**Quick visual tour:** [90-second captioned screenshot video](docs/tour/lending-simulator-tour.mp4) · [Transcript and source captures](docs/tour/README.md). Six real dashboard screenshots, assembled with captions; no audio or continuous interaction recording.
+**Earlier hosted-build tour:** [90-second captioned screenshot video](docs/tour/lending-simulator-tour.mp4) · [Transcript and source captures](docs/tour/README.md). Six real dashboard screenshots, assembled with captions; no audio or continuous interaction recording.
 
-![Live guided capital example](docs/screenshots/guided-capital.jpg)
+![Finance workbench candidate in actual Chromium](docs/screenshots/workbench/desktop-1440-overview.png)
 
 ## The decision
 
@@ -50,6 +50,16 @@ python -m scripts.generate_dataset
 The CLI produces three scenario workbooks, exact-value CSV packages, comparison metadata, and a workbook specification. Regeneration reproduces the committed application CSV and content hash.
 
 The server test starts Streamlit on a temporary local port, checks HTTP health and the frontend document, then stops it. This verifies startup; it does not inspect browser rendering or interactions.
+
+Run the separate real-browser suite with:
+
+```bash
+python -m pip install -r requirements-browser.txt
+python -m playwright install --with-deps --only-shell chromium
+python -m scripts.browser_acceptance --output artifacts/browser-acceptance
+```
+
+This starts the unchanged application on loopback and exercises it in isolated Chromium. Reports include source hashes, viewport captures, traces, downloads and console/network diagnostics. The empty-input case uses a separate valid zero-row dataset with unchanged application/model code. GitHub Actions also captures the exact pre-redesign base for comparison. No hosting account is required for these checks.
 
 To reproduce downloaded inputs, unzip `manifest.json` and use:
 
@@ -102,7 +112,7 @@ Finance uses 34-digit Decimal arithmetic with a $1e−16 internal reconciliation
 - [Dataset dictionary and SQL walkthrough](docs/data-and-sql.md)
 - [Historical source-fitness decision](docs/source-fitness.md)
 - [Validation and measured limitations](docs/validation.md)
-- [UI workbench review, state contract and pending visual acceptance](docs/ui-workbench-review.md)
+- [UI workbench review and state contract](docs/ui-workbench-review.md)
 - [Base-case audit workbook](docs/audit-workbook.xlsx)
 - Decision brief examples: [base](docs/base-decision-brief.md), [capital](docs/capital-decision-brief.md), [default stress](docs/default-stress-decision-brief.md)
 - [Interview and 90-second demo walkthrough](docs/walkthrough.md)
@@ -112,8 +122,8 @@ Finance uses 34-digit Decimal arithmetic with a $1e−16 internal reconciliation
 
 All 118 automated model, application-state, export, and HTTP startup checks pass. Workbench coverage includes draft preservation/restoration, immediate policy selection, hidden-view navigation, immutable baseline comparison, exact stress staging/markers, undefined values and deferred format generation. The financial engine, model version and example run identities are unchanged; three saved decision briefs match exact regeneration. [Separate operation measurements](docs/workbench-performance.json) cover local server code and AppTest, not browser or hosting latency.
 
-The cloud browser cannot reach the local candidate. Desktop/mobile rendering, keyboard/focus, actual deferred downloads and before/after captures remain required before releasing this redesign. The [candidate review](docs/ui-workbench-review.md) records the blocked visual gate and remaining acceptance cases.
+The separate Chromium workflow passed nine real-browser journeys (59 checks) at 1440, 1280, 390 and 320 CSS-pixel widths, plus two captures of the exact pre-redesign base. It checks rendering/reflow, keyboard/focus, WebSockets, actual exports, captured-file identity, browser cancellation/retry and an empty input source. [Browser evidence and screenshots](docs/workbench-browser-validation.md) distinguish these results from physical devices, full accessibility, deliberately slow generation/failure cases and hosting behavior still awaiting review.
 
 The earlier hosted desktop build was exercised across all five tabs, scenario apply/reset, capital and stress cases, validation errors, cohort cutoffs, and downloads. Guided examples were checked for the correct applied runs, replacement of draft/advanced inputs, stress-grid clearing and keyboard activation. The three actual decision-brief downloads matched local regeneration exactly; the capital brief retained applied inputs during a draft edit, and its saved manifest reproduced the same CLI decision and run. The comparison summaries were verified at base and $1.25m starting equity. See the browser evidence for tested commits and run IDs. Missing or invalid base data stops the dashboard with a clear error; validated replacements refresh the applied scenario and exports.
 
-PR #1 is merged into `main`, with passing GitHub checks. The live demo still uses `feature/lending-simulator`; that branch is retained for hosting and does not yet include the decision-panel upgrade. The existing screenshots and tour show that earlier build. Anonymous-session and mobile testing, a full accessibility/network audit, hosting load measurements, and a continuous interactive walkthrough recording remain pending. The hosting public setting was observed, but an isolated anonymous browser was unavailable.
+PR #1 is merged into `main`, with passing GitHub checks. The live demo still uses `feature/lending-simulator`; that branch is retained for hosting and does not yet include the decision-panel upgrade. The existing screenshots and tour show that earlier build. Public-host anonymous access, physical-device and full accessibility checks, hosting load measurements, and a continuous interactive walkthrough recording remain pending. The hosting public setting was observed, but an isolated anonymous browser was unavailable.

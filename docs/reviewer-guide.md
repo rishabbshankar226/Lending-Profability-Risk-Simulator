@@ -6,7 +6,7 @@ This Python/SQL project compares three approval policies over 10,000 seeded fict
 
 [Open the earlier hosted dashboard](https://rishabb-lending-simulator.streamlit.app/) · [Review this candidate's source](../app.py) · [Read the business memo](business-memo.md)
 
-The workbench redesign is a review candidate with 118 passing automated checks. Its local preview is blocked from the cloud browser; the hosted app and tour below show the earlier build. See [candidate scope and acceptance gates](ui-workbench-review.md) before evaluating visual readiness.
+The workbench redesign is a review candidate with 118 passing automated checks. Nine real-browser journeys pass in isolated CI Chromium, with [actual before/after captures](workbench-browser-validation.md). The hosted app and tour below show the earlier build. See [candidate scope and acceptance gates](ui-workbench-review.md) before evaluating visual readiness.
 
 For a quick visual introduction, [watch the 90-second captioned screenshot tour](tour/lending-simulator-tour.mp4) or [read its transcript](tour/transcript.md). It uses six actual dashboard captures and has no audio or continuous interaction recording.
 
@@ -34,6 +34,6 @@ Download **Decision brief** for the current recommendation, all policy tradeoffs
 
 ## Scope of the evidence
 
-The candidate passes 118 automated checks, compilation and CLI regeneration. Draft/view actions do not rerun projections; opening Export prepares no file; three reference briefs match exactly. The [candidate review](ui-workbench-review.md) separates this evidence from the pending rendered layout, keyboard/focus and download-transport checks. Earlier hosted desktop scenarios and downloads were verified; the [browser record](browser-validation.md) identifies their tested commits and files. The hosted app retains `feature/lending-simulator` and does not include this redesign. Isolated anonymous access, mobile layout, full accessibility and hosting load measurements remain pending.
+The candidate passes 118 automated checks, compilation and CLI regeneration. Draft/view actions do not rerun projections; opening Export prepares no file; three reference briefs match exactly. The [candidate review](ui-workbench-review.md) and [browser record](workbench-browser-validation.md) retain scoped rendered layout, keyboard/focus and actual download evidence. Earlier hosted desktop scenarios and downloads were verified; the [browser record](browser-validation.md) identifies their tested commits and files. The hosted app retains `feature/lending-simulator` and does not include this redesign. Public-host anonymous access, physical-device behavior, full accessibility and hosting load measurements remain pending.
 
 This is a management scenario simulator. It does not demonstrate borrower prediction accuracy, causal approval benefits, production underwriting, or real business savings.

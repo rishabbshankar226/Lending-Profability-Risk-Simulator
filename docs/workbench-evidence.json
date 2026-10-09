@@ -1,0 +1,163 @@
+{
+  "application_commit": "c0d6f393c25d0ceaa51152066a03251c45adc5e2",
+  "reference_commit": "baeda884355734f534babd2bc73ab7018742569f",
+  "ci_run": 38002523325,
+  "ci_url": "https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/actions/runs/38002523325",
+  "financial_tests": {
+    "passed": 118,
+    "skipped": 0,
+    "seconds": 19.31
+  },
+  "browser_journeys": 9,
+  "browser_checks": 59,
+  "browser": "145.0.7632.6",
+  "source_sha256": {
+    "app.py": "787550c6cd6bf477bd7f3d1b0e2cbcec11f20b4bfe317e8a7b9f67abf3d3eb95",
+    ".streamlit/config.toml": "5c79ac18477326bc32f3ec56e518ddabedb4e210e971873e36328fa188cc2869",
+    "lending_simulator/ui/__init__.py": "17173c061b07cb9362a2b4ca3c8ab3a5b87aaad4a27323d49846e1dc7149bb4f",
+    "lending_simulator/ui/charts.py": "ff105d833e6f298473f9d8e2634b4f6684c35ce50df9e7be156ce06841666471",
+    "lending_simulator/ui/components.py": "81da10eb83ec9a91f8e34574e328ebb24227b969f6b6b6871846e9009b96ea9c",
+    "lending_simulator/ui/data.py": "560b1b4160d705a113a2ba441cec7d5b659d83b3b63994a7704424aa22bb3db9",
+    "lending_simulator/ui/downloads.py": "197a8e923d0804806425e8d9c45884519b6b3b0167a546c624d298d92a41f74a",
+    "lending_simulator/ui/formatting.py": "77e61912042213a5d1d51d8485c8e24f50093bc36aa6819518e2e32b94dc8e24",
+    "lending_simulator/ui/state.py": "71a92b6521bbb68fab5a5dffd187897cded823158e92be6e4f7ae9c54f217bfe",
+    "lending_simulator/ui/theme.py": "990b6704da4860a7026b082d61acada200f3a218e494a56fd7c074b6a499e379",
+    "lending_simulator/ui/views.py": "0924762665860d45e224a8ccf7acc2fbf7fa6a7bb7f7a90425b8d1591ac69811"
+  },
+  "protected_source_paths_unchanged": [
+    "lending_simulator/model.py",
+    "lending_simulator/decisions.py",
+    "lending_simulator/types.py",
+    "lending_simulator/data.py",
+    "lending_simulator/analytics.py",
+    "lending_simulator/queries",
+    "lending_simulator/presentation.py",
+    "lending_simulator/exports.py",
+    "requirements.txt",
+    "requirements-dev.txt",
+    "data"
+  ],
+  "reference_briefs": [
+    {
+      "reference": "docs/base-decision-brief.md",
+      "run_id": "5a88f7bef3fa93d4",
+      "sha256": "87737f79818a12f26d05894431559dc4d8cc4009334b982cc1c7267aa41c7625",
+      "byte_exact": true
+    },
+    {
+      "reference": "docs/capital-decision-brief.md",
+      "run_id": "690e9fa563e2d475",
+      "sha256": "a07859eff8a48cf26b058d39f1b2216bab1f4a419bac2c799cdfa181f1760e1b",
+      "byte_exact": true
+    },
+    {
+      "reference": "docs/default-stress-decision-brief.md",
+      "run_id": "a2d0056e84a3ceb8",
+      "sha256": "05a3c9f0d2bd04ce54852d9c2d518c81372eb9ccbcb5e0c553c17338b60aa6f3",
+      "byte_exact": true
+    }
+  ],
+  "reports": {
+    "workbench-browser-report.json": "4f17c2b60f82b437b6e5e14b0aba9b8ccdc0caeb3813bace19c42d9aaf74f030",
+    "workbench-reference-report.json": "d32720455c26fdd17721599a22dc418c0abc5bec7ba9f78b565d5f20560789c5",
+    "workbench-performance.json": "bae954b3bd31caf8199943efee9af17ee1c29e808b61120df8046b682182927e"
+  },
+  "captures": [
+    {
+      "path": "docs/screenshots/workbench/desktop-1440-cohort-chart.png",
+      "sha256": "ae41ef963cc73107a5f55165f0de78e0a3ea95eb7fd7a3bfd99e425133c0877d",
+      "bytes": 97036,
+      "source_commit": "c0d6f393c25d0ceaa51152066a03251c45adc5e2"
+    },
+    {
+      "path": "docs/screenshots/workbench/desktop-1440-higher-defaults.png",
+      "sha256": "ac23296cc41b5bd186e8bfb4bba3863a5fcaf087df75b3e3b6fd3d8e0d00e977",
+      "bytes": 110576,
+      "source_commit": "c0d6f393c25d0ceaa51152066a03251c45adc5e2"
+    },
+    {
+      "path": "docs/screenshots/workbench/desktop-1440-invalid-input.png",
+      "sha256": "fa560b4aed2ddb67ac56d3e2a024ce7f618f73b57e9bc89e8708c08e071c047d",
+      "bytes": 114078,
+      "source_commit": "c0d6f393c25d0ceaa51152066a03251c45adc5e2"
+    },
+    {
+      "path": "docs/screenshots/workbench/desktop-1440-overview-charts.png",
+      "sha256": "0e0cb0b73083a28f705510a13eb5b8552d3e6a6e7ac6bb16da85bfa5d2c30384",
+      "bytes": 100486,
+      "source_commit": "c0d6f393c25d0ceaa51152066a03251c45adc5e2"
+    },
+    {
+      "path": "docs/screenshots/workbench/desktop-1440-overview.png",
+      "sha256": "81352f89d1a08333488e055ce936efaca06fcbe87058a9dcf51c67c8cf638990",
+      "bytes": 110760,
+      "source_commit": "c0d6f393c25d0ceaa51152066a03251c45adc5e2"
+    },
+    {
+      "path": "docs/screenshots/workbench/desktop-1440-policy-table.png",
+      "sha256": "a395cf7c56f83e523630b233addb4ca29b64664521d27779695f6493cc772a21",
+      "bytes": 112468,
+      "source_commit": "c0d6f393c25d0ceaa51152066a03251c45adc5e2"
+    },
+    {
+      "path": "docs/screenshots/workbench/desktop-1440-profit-bridge-chart.png",
+      "sha256": "04d7e8f29e380e432fcb36f8d409c95c5a160bbc43821ef386fbb3a8cf253eb0",
+      "bytes": 89244,
+      "source_commit": "c0d6f393c25d0ceaa51152066a03251c45adc5e2"
+    },
+    {
+      "path": "docs/screenshots/workbench/desktop-1440-runoff-comparison.png",
+      "sha256": "1623d698e274ca7141766100ce271c1771fbd436e1386477d82fbd13f84c7f23",
+      "bytes": 124352,
+      "source_commit": "c0d6f393c25d0ceaa51152066a03251c45adc5e2"
+    },
+    {
+      "path": "docs/screenshots/workbench/desktop-1440-stress-chart.png",
+      "sha256": "fa21d9c9a5ff8a014fafc86c2ef6bc20fa64040c4dc9feacaed88e3020877a35",
+      "bytes": 107698,
+      "source_commit": "c0d6f393c25d0ceaa51152066a03251c45adc5e2"
+    },
+    {
+      "path": "docs/screenshots/workbench/empty-portfolio-stress.png",
+      "sha256": "3c3a65930460fe022e93d0a313546ef1006dde01f9c081f29d8fbf6d486e488d",
+      "bytes": 88376,
+      "source_commit": "c0d6f393c25d0ceaa51152066a03251c45adc5e2"
+    },
+    {
+      "path": "docs/screenshots/workbench/phone-390-overview.png",
+      "sha256": "c1bdebf4c9fb929bbe38e9496a3cadd8108b5cf7cab19cb4ad23693f7b4a4be1",
+      "bytes": 38107,
+      "source_commit": "c0d6f393c25d0ceaa51152066a03251c45adc5e2"
+    },
+    {
+      "path": "docs/screenshots/workbench/phone-390-policy-comparison.png",
+      "sha256": "3fe4699f2bef43365b00ba927d16e331996da1baf727217600ce9c58cf24374e",
+      "bytes": 42035,
+      "source_commit": "c0d6f393c25d0ceaa51152066a03251c45adc5e2"
+    },
+    {
+      "path": "docs/screenshots/workbench/reference-desktop-1440.png",
+      "sha256": "9d2434c053eac53c24a6c9f5dadcb204976344d039b15ec0bdb7e32269a1e01b",
+      "bytes": 112634,
+      "source_commit": "baeda884355734f534babd2bc73ab7018742569f"
+    },
+    {
+      "path": "docs/screenshots/workbench/reference-phone-390.png",
+      "sha256": "47d1c260d0bc7aa008cdf1c97896d3099e1ecaee349313c146240c102f9fbf86",
+      "bytes": 41600,
+      "source_commit": "baeda884355734f534babd2bc73ab7018742569f"
+    }
+  ],
+  "actions_artifact": {
+    "id": 11649828952,
+    "sha256": "4cbad66204678cd856fbe4a8e8802badf4405051b797155295448ef015d3b7c3",
+    "expires_at": "2026-10-23T23:06:17Z",
+    "scope": "Full traces, logs, downloads and all viewport captures retained in Actions; selected raw images/reports retained in this repository."
+  },
+  "limitations": [
+    "Chromium mobile emulation; no physical-device/iOS or hardware numeric-keyboard pass.",
+    "Scoped keyboard/owned-caption checks; no full screen-reader/native-widget/zoom audit.",
+    "Loopback timings; no public-host access, latency, wake or multi-user claim.",
+    "Captured file identity and browser cancellation/retry; no deliberately slow generation overlap or server-generation failure pass."
+  ]
+}

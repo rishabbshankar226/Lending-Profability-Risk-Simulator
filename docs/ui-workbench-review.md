@@ -1,6 +1,6 @@
 # Finance workbench candidate review
 
-**Status: implementation ready for review; browser acceptance incomplete.** This is the candidate on `feat/finance-workbench-ui`, based on `baeda884355734f534babd2bc73ab7018742569f`. The tested implementation commit is **`511cd7fe783b8e1d8186aa863f4a81386150333e`**. Documentation follows in a separate commit; the performance report records hashes of every application/UI source file.
+**Status: automated candidate browser checks passed; ready for human design review.** The candidate is on `feat/finance-workbench-ui`, based on `baeda884355734f534babd2bc73ab7018742569f`. The tested application implementation is **`c0d6f393c25d0ceaa51152066a03251c45adc5e2`**. Browser and performance reports retain hashes of every application/UI/config source; later capture-only/documentation commits retain that application. [Rendered evidence and before/after captures](workbench-browser-validation.md) are available.
 
 The approved direction is a restrained finance workbench. The candidate replaces the dashboard's five eagerly built tabs with a compact decision summary, three primary decision metrics, a stable toolbar, and one selected analytical view. It retains Python/Streamlit 1.65, the synthetic dataset, and the existing financial model and export formats.
 
@@ -10,7 +10,7 @@ The approved direction is a restrained finance workbench. The candidate replaces
 | --- | --- |
 | Hierarchy | One title, recommendation separate from viewed policy, profit/cash/loss margins first, secondary measures below. |
 | Visual system | Light slate surfaces, dark ink, teal actions, consistent Source Sans typography, compact headings, modest borders, common chart tokens. Only owned markup receives custom CSS. |
-| Navigation | Wrapping Overview, Policies, Cohorts, Funding & stress, and Methodology controls. Hidden analytical views are not executed. |
+| Navigation | Wrapping Overview, Policies, Cohorts, Funding & stress, and Methodology controls precede the decision summary and are visible at the tested phone widths. Hidden analytical views are not executed. |
 | Assumptions | Committed edits produce an Unapplied notice and an input review with units and decimal precision. Applied results stay intact until Run. Restore changes inputs without projecting again. |
 | Policy selection | Viewing another policy updates its applied results immediately. The recommendation still compares the complete three-policy bundle. |
 | Overview | Separate profit and liquidity axes with calendar dates, a cash-floor reference, the minimum-cash month, runoff shading, and a reconciled operating-profit bridge. Principal movements are excluded from revenue. |
@@ -44,7 +44,7 @@ Expected-count weights remain fractional and illustrative. No optimizer, authent
 
 ## Automated evidence
 
-`python -m pytest --tb=short --junitxml=artifacts/workbench-tests.xml` passed **118 tests in 69.69 seconds**, with no skipped or disabled cases. The original 83 checks retain their financial and business assertions; layout expectations were adapted to the selected-view navigation, semantic policy table, and explicitly requested preview. Thirty-five cases add draft, comparison, download and chart/state coverage.
+`python -m pytest --tb=short --junitxml=artifacts/workbench-tests.xml` passed **118 tests**, with no skipped or disabled cases. The original 83 checks retain their financial and business assertions; layout expectations were adapted to the selected-view navigation, semantic policy table, and explicitly requested preview. Thirty-five cases add draft, comparison, download and chart/state coverage.
 
 Python compilation and `python -m lending_simulator.cli --output artifacts/workbench-base-case` passed. Base CSV/workbook outputs were generated. Regenerated base, capital and default-stress decision briefs match the committed reference files exactly.
 
@@ -55,11 +55,11 @@ Python compilation and `python -m lending_simulator.cli --output artifacts/workb
 | $1.25m starting equity | Balanced | `690e9fa563e2d475` | $294,468 / $53,857 |
 | 2× defaults | Conservative | `a2d0056e84a3ceb8` | ($11,563) / $129,605; no profitable recommendation |
 
-Model version remains **0.1.0**. The model, decision rules, dataset, SQL, presentation/export source and dependency versions are unchanged.
+Model version remains **0.1.0**. The model, decision rules, dataset, SQL, presentation/export source and production dependency versions are unchanged. Optional browser-test dependencies are pinned separately in `requirements-browser.txt`.
 
 The audit reproduced and fixed the empty-portfolio stress conversion failure, stale dirty notice after applying, draft loss during a valid source refresh, and incorrect common cohort scaling when Conservative funds no loans. The full suite also caught a Methodology import cleanup error; it was corrected before this tested commit.
 
-AppTest confirms every view executes, not browser appearance or focus. AppTest lacks an expander-opening action; preview tests explicitly request its state. Deferred-factory tests verify captured data after another result exists, not an actual browser download during an in-flight policy switch.
+AppTest confirms every view executes, not browser appearance or focus. AppTest lacks an expander-opening action; preview tests explicitly request its state. Deferred-factory tests verify captured data after another result exists. Actual browser downloads retain their captured filename/manifest across a policy switch, and browser cancellation/retry retains the scenario. The transport may finish before selection on loopback; deliberately slow generation overlap is not claimed.
 
 ## Local operation measurements
 
@@ -67,17 +67,17 @@ Reproduce with `python -m scripts.measure_workbench --output artifacts/workbench
 
 | Operation | Median local seconds |
 | --- | ---: |
-| Preload with application caches cleared | 0.770 |
-| Warm Overview rerun | 0.263 |
-| Commit a draft input | 0.232 |
-| Navigate to Policies / Cohorts / Funding / Methodology | 0.172 / 0.288 / 0.194 / 0.162 |
-| Immediate policy switch | 0.204 |
-| Restore draft | 0.216 |
-| Uncached custom Run | 0.497 |
-| Uncached selected-policy stress grid | 0.689 |
-| Generate brief / CSV / workbook | 0.002 / 0.329 / 0.490 |
+| Preload with application caches cleared | 0.486 |
+| Warm Overview rerun | 0.133 |
+| Commit a draft input | 0.122 |
+| Navigate to Policies / Cohorts / Funding / Methodology | 0.093 / 0.172 / 0.089 / 0.103 |
+| Immediate policy switch | 0.112 |
+| Restore draft | 0.134 |
+| Uncached custom Run | 0.291 |
+| Uncached selected-policy stress grid | 0.427 |
+| Generate brief / CSV / workbook | 0.001 / 0.042 / 0.141 |
 
-Peak RSS was 237.48 MB for this sequential mixed process, including AppTest, models, Plotly and exports. It does not establish sustained hosting capacity or independent per-operation memory. Cache limits remain bounded.
+Peak RSS was 238.25 MB for this sequential mixed process, including AppTest, models, Plotly and exports. It does not establish sustained hosting capacity or independent per-operation memory. Cache limits remain bounded.
 
 ## Token contrast calculation
 
@@ -91,26 +91,17 @@ These are sRGB relative-luminance calculations for chosen color pairs, not a ren
 | Good / warning / error status text on its surface | 6.39 / 6.22 / 6.37:1 |
 | Policy markers on table header | 6.73:1 |
 
-Labels, line patterns, limit references, and numeric alternatives supplement color. Real focus outlines, native widget contrast, browser zoom, mobile reflow and screen-reader output remain unverified.
+Labels, line patterns, limit references, and numeric alternatives supplement color. Rendered owned supporting text measures at least 5.40:1; keyboard focus and 390/320-pixel reflow passed the scoped browser checks. Full native-widget contrast, zoom and screen-reader output remain unverified.
 
 ## Browser gate and plan deviation
 
-A real Streamlit candidate server was started. The cloud browser could not connect to localhost, and the candidate's workspace address returned **net::ERR_BLOCKED_BY_CLIENT**. No supported native preview-forwarding or viewport-control capability was available. No tunnel, browser security bypass, alternate stack or replacement production deployment was introduced.
+The cloud browser initially could not reach the workspace candidate. The first-screen visual gate could not precede broad implementation; state/framework work proceeded in a draft candidate. This deviation remains part of the record.
 
-The first-screen visual gate could therefore not be completed before the rest of the implementation. State, financial, export and native-framework work continued to produce this reviewable candidate; this is a documented deviation from the preferred order, not a passed visual gate. No candidate screenshots or before/after browser comparisons are claimed. The existing media shows the earlier hosted build.
+The authorized automated-software route subsequently exercised the unchanged app in isolated Chromium on a GitHub Actions runner. **Nine browser journeys (59 checks) and two exact pre-redesign reference captures passed**, alongside all 118 tests, compilation and CLI generation. The [browser record](workbench-browser-validation.md) identifies exact sources, rendered fixes, raw reports, capture hashes and bounded remaining checks. The native caption-opacity, phone-navigation and stress-axis-label findings were corrected before acceptance.
 
-**Keep this PR in draft until a reachable candidate preview can be reviewed.** The following remain required:
+Human design review, physical devices, browser zoom, full screen-reader/native-widget accessibility, intended-host behavior and deliberately slow generation/failure cases remain separate release checks. The source-URL interception experiment did not delay the actual browser download; it is not used as in-flight transport evidence. Native cancellation/retry and actual captured-file identity are verified.
 
-- Desktop at 1440 × 900 and 1280 × 800: first-screen density, hierarchy, table/legend clipping, all views, every chart and long warning.
-- Phone at approximately 390 × 844 and 320 CSS-pixel reflow: navigation wrapping, sidebar return path, policy cards, numeric input use, tables and reachable exports.
-- Keyboard/focus: normal tab order, Run/Restore/examples/policy actions, nav, inspect actions, popovers and conditional preview; no lost focus or accidental rerun application.
-- Commit a typed numeric edit and immediately click Run; confirm the intended draft was committed.
-- Browser cohort zero versus blank, shared scale, full dates, limit markers and runoff labels.
-- Actual deferred downloads: one format at a time, open/preview laziness, in-flight policy change preserving filename/manifest, failure/retry preserving scenario.
-- Browser console/WebSocket diagnostics, screen-reader summaries, native contrast and reduced-motion checks.
-- Repeat representative operation timing in the intended hosting environment; report operation-specific samples separately.
-
-Merge and public rollout are separate release actions. The current public app uses the older `feature/lending-simulator` source. Do not treat its screenshots or successful interactions as evidence for this candidate.
+Merge and public rollout are separate release actions. The current public app uses the older `feature/lending-simulator` source. Its existing media is distinct from the candidate captures.
 
 ## Review and rollback
 

@@ -2,7 +2,7 @@
 
 ## Performed locally
 
-The financial model, data, SQL, decision rules, exports, CLI, simulated dashboard and HTTP server have 118 passing automated checks in `tests/`. Run `python -m pytest`. The suite has no disabled or skipped checks. Python compilation and the reproducible base-case CLI also passed. The [workbench candidate review](ui-workbench-review.md) identifies the tested implementation commit, new behavior and pending browser gates. Earlier hosted checks below do not cover this redesign.
+The financial model, data, SQL, decision rules, exports, CLI, simulated dashboard and HTTP server have 118 passing automated checks in `tests/`. Run `python -m pytest`. The suite has no disabled or skipped checks. Python compilation and the reproducible base-case CLI also passed. The [workbench candidate review](ui-workbench-review.md) identifies the tested implementation commit, new behavior and scoped browser acceptance. Earlier hosted checks below do not cover this redesign.
 
 Independent financial cases include 12 zero-interest $100 principal payments on a $1,200 loan; a $900 default with a $225 delayed recovery and $675 net loss; $10 monthly interest on $1,000 opening debt at 12%; and a positive-interest amortization benchmark. Other checks cover PD/recovery endpoints, late-loan runoff, equal policy overhead horizon, collateral repayments, funding-rate differences, invalid inputs and monthly financial identities.
 
@@ -46,7 +46,7 @@ Actual base, capital and default-stress Markdown downloads matched local regener
 
 ## Remaining limits
 
-- Narrow/mobile layout, full screen-reader/focus/contrast testing and WebSocket/download network inspection.
+- Full screen-reader/native-widget/zoom testing and physical-device behavior. The workbench candidate has separate CI Chromium reflow, scoped keyboard/contrast, WebSocket and actual-download evidence; the earlier host below is a different build.
 - Isolated anonymous viewing. Hosting showed the public setting checked, but the test browser retained owner authentication.
 - Measured viewer cold/warm loads, hibernation/wake behavior and sustained multi-user capacity.
 - Actual demo recording; real dashboard screenshots and the 90-second script are available.
@@ -70,4 +70,4 @@ A local Streamlit preview was started, but the cloud browser could not connect t
 
 The candidate adds 35 cases to the prior 83-check suite and preserves its financial assertions while adapting layout-specific expectations. All 118 pass. It separates draft inputs from applied results, selects policies immediately, builds only the active view, compares an immutable baseline, stages exact stress cases and defers each export format. Empty stress loss values remain unavailable, and cohort scaling ignores unfunded policies. The engine, model version, dataset, SQL, export formats and three saved example briefs are unchanged.
 
-The candidate's workspace address returned `net::ERR_BLOCKED_BY_CLIENT` in the cloud browser. No candidate visual, mobile or keyboard pass is claimed. The first-screen visual gate could not precede broad implementation; state/framework work continued and the candidate remains at review, with browser acceptance required before release. The [full review](ui-workbench-review.md) lists concrete pending cases and the rollback/source reconciliation.
+The cloud browser initially could not reach the candidate, so the first-screen gate did not precede broad implementation. The subsequent isolated Chromium workflow passed nine rendered browser journeys (59 checks), two exact-base reference captures and the full 118-test suite. The [browser record](workbench-browser-validation.md) retains source hashes, actual files/captures, corrected defects and the scope of keyboard, reflow, contrast and transport evidence. The [full review](ui-workbench-review.md) lists remaining physical-device, accessibility, slow generation/failure and intended-host checks with the rollback/source reconciliation. The candidate has not been merged or deployed.

@@ -1,237 +1,235 @@
 {
   "environment": "Linux-6.18.44-x86_64-with-glibc2.39",
   "python": "3.12.14",
-  "base_commit": "baeda884355734f534babd2bc73ab7018742569f",
+  "base_commit": "c0d6f393c25d0ceaa51152066a03251c45adc5e2",
   "source_sha256": {
-    "app.py": "d8b47809c59122784124eea4bd8202892f76a189c0a476d24cfa5c5bae9f2c9a",
-    ".streamlit/config.toml": "fe0113c0d1911e4045e75f3787e3c991d190fa3298461c78c65e27ef5f909222",
+    "app.py": "787550c6cd6bf477bd7f3d1b0e2cbcec11f20b4bfe317e8a7b9f67abf3d3eb95",
+    ".streamlit/config.toml": "5c79ac18477326bc32f3ec56e518ddabedb4e210e971873e36328fa188cc2869",
     "lending_simulator/ui/__init__.py": "17173c061b07cb9362a2b4ca3c8ab3a5b87aaad4a27323d49846e1dc7149bb4f",
     "lending_simulator/ui/charts.py": "ff105d833e6f298473f9d8e2634b4f6684c35ce50df9e7be156ce06841666471",
-    "lending_simulator/ui/components.py": "675a925f4fe64bd2a9ee4b18d5fd66c1672f925b5be3364c61ed477ff1fd4ec3",
+    "lending_simulator/ui/components.py": "81da10eb83ec9a91f8e34574e328ebb24227b969f6b6b6871846e9009b96ea9c",
     "lending_simulator/ui/data.py": "560b1b4160d705a113a2ba441cec7d5b659d83b3b63994a7704424aa22bb3db9",
     "lending_simulator/ui/downloads.py": "197a8e923d0804806425e8d9c45884519b6b3b0167a546c624d298d92a41f74a",
     "lending_simulator/ui/formatting.py": "77e61912042213a5d1d51d8485c8e24f50093bc36aa6819518e2e32b94dc8e24",
     "lending_simulator/ui/state.py": "71a92b6521bbb68fab5a5dffd187897cded823158e92be6e4f7ae9c54f217bfe",
-    "lending_simulator/ui/theme.py": "6f0e63a5cae2d2dabb70fd87717c32d8e8c764c91ee83eacfbe7c26d1d5d085b",
-    "lending_simulator/ui/views.py": "1bd32ae75d7ba359db0f402e97840995c1d4d79de881239354e23c1769808e11"
+    "lending_simulator/ui/theme.py": "990b6704da4860a7026b082d61acada200f3a218e494a56fd7c074b6a499e379",
+    "lending_simulator/ui/views.py": "0924762665860d45e224a8ccf7acc2fbf7fa6a7bb7f7a90425b8d1591ac69811"
   },
   "scope": "Three local-process samples per named operation. AppTest executes server code; no browser paint, focus, WebSocket/download transport, network, hosting or multi-user latency. Cold means cleared application caches after Python imports. Export cached timing includes payload deserialization. No p95 or service-level acceptance is inferred.",
   "operations": {
     "engine_three_policy_base": {
       "samples_seconds": [
-        0.19772983900020336,
-        0.24098998099998425,
-        0.20509850600046775
+        0.11246520699933171,
+        0.12342709100084903,
+        0.14976707799905853
       ],
-      "median_seconds": 0.20509850600046775,
-      "maximum_seconds": 0.24098998099998425
+      "median_seconds": 0.12342709100084903,
+      "maximum_seconds": 0.14976707799905853
     },
     "engine_three_policy_custom": {
       "samples_seconds": [
-        0.2218421509996915,
-        0.7033284549997916,
-        0.3482449129996894
+        0.12331036199975642,
+        0.12241165600062232,
+        0.11347518199909246
       ],
-      "median_seconds": 0.3482449129996894,
-      "maximum_seconds": 0.7033284549997916
+      "median_seconds": 0.12241165600062232,
+      "maximum_seconds": 0.12331036199975642
     },
     "engine_twenty_stress_cases": {
       "samples_seconds": [
-        0.2896903620003286,
-        0.40322097100033716,
-        0.8127259029997731
+        0.1449095620009757,
+        0.14713703599954897,
+        0.15171605799878307
       ],
-      "median_seconds": 0.40322097100033716,
-      "maximum_seconds": 0.8127259029997731
+      "median_seconds": 0.14713703599954897,
+      "maximum_seconds": 0.15171605799878307
     },
     "apptest_cold_application_caches": {
       "samples_seconds": [
-        0.7997991430002003,
-        0.5665626689997225,
-        0.7696793119994254
+        0.6912399089997052,
+        0.4862316029993963,
+        0.3706774600013887
       ],
-      "median_seconds": 0.7696793119994254,
-      "maximum_seconds": 0.7997991430002003
+      "median_seconds": 0.4862316029993963,
+      "maximum_seconds": 0.6912399089997052
     },
     "apptest_warm_overview": {
       "samples_seconds": [
-        0.13806067200039251,
-        0.5282664840005964,
-        0.2627096040005199
+        0.12709579999864218,
+        0.3163016099988454,
+        0.1325515059997997
       ],
-      "median_seconds": 0.2627096040005199,
-      "maximum_seconds": 0.5282664840005964
+      "median_seconds": 0.1325515059997997,
+      "maximum_seconds": 0.3163016099988454
     },
     "apptest_draft_commit": {
       "samples_seconds": [
-        0.23239566600022954,
-        0.21948507100023562,
-        0.26482838799984165
+        0.12192063300062728,
+        0.09780764599963732,
+        0.12992254100026912
       ],
-      "median_seconds": 0.23239566600022954,
-      "maximum_seconds": 0.26482838799984165
+      "median_seconds": 0.12192063300062728,
+      "maximum_seconds": 0.12992254100026912
     },
     "apptest_view_policies": {
       "samples_seconds": [
-        0.12820592899970507,
-        0.17239448300006188,
-        0.7922677329997896
+        0.09320860899970285,
+        0.07521253199956845,
+        0.3150371689989697
       ],
-      "median_seconds": 0.17239448300006188,
-      "maximum_seconds": 0.7922677329997896
+      "median_seconds": 0.09320860899970285,
+      "maximum_seconds": 0.3150371689989697
     },
     "apptest_view_cohorts": {
       "samples_seconds": [
-        0.2882971569997608,
-        0.3237168670002575,
-        0.277341842000169
+        0.17232762899948284,
+        0.14561225900069985,
+        0.18076590900091105
       ],
-      "median_seconds": 0.2882971569997608,
-      "maximum_seconds": 0.3237168670002575
+      "median_seconds": 0.17232762899948284,
+      "maximum_seconds": 0.18076590900091105
     },
     "apptest_view_funding_stress": {
       "samples_seconds": [
-        0.12480955099999846,
-        0.1942006669996772,
-        0.19865021700024954
+        0.08740817699981562,
+        0.1187549130008847,
+        0.08929781499864475
       ],
-      "median_seconds": 0.1942006669996772,
-      "maximum_seconds": 0.19865021700024954
+      "median_seconds": 0.08929781499864475,
+      "maximum_seconds": 0.1187549130008847
     },
     "apptest_view_methodology": {
       "samples_seconds": [
-        0.15944833000048675,
-        0.1622431810001217,
-        0.24574410500008526
+        0.10329856799944537,
+        0.10575338200033002,
+        0.08917233399915858
       ],
-      "median_seconds": 0.1622431810001217,
-      "maximum_seconds": 0.24574410500008526
+      "median_seconds": 0.10329856799944537,
+      "maximum_seconds": 0.10575338200033002
     },
     "apptest_view_overview": {
       "samples_seconds": [
-        0.19149350599946047,
-        0.20316063700011,
-        0.2640577009997287
+        0.12657163699986995,
+        0.10046415800024988,
+        0.1378226500000892
       ],
-      "median_seconds": 0.20316063700011,
-      "maximum_seconds": 0.2640577009997287
+      "median_seconds": 0.12657163699986995,
+      "maximum_seconds": 0.1378226500000892
     },
     "apptest_immediate_policy": {
       "samples_seconds": [
-        0.19026646099973732,
-        0.20376684599978034,
-        0.4150013520002176
+        0.11197982700105058,
+        0.13493010900128866,
+        0.09743606400115823
       ],
-      "median_seconds": 0.20376684599978034,
-      "maximum_seconds": 0.4150013520002176
+      "median_seconds": 0.11197982700105058,
+      "maximum_seconds": 0.13493010900128866
     },
     "apptest_restore_draft": {
       "samples_seconds": [
-        0.19669826599965745,
-        0.21620571200037375,
-        0.2416597229994295
+        0.1476702430009027,
+        0.09581988299942168,
+        0.13362586699986423
       ],
-      "median_seconds": 0.21620571200037375,
-      "maximum_seconds": 0.2416597229994295
+      "median_seconds": 0.13362586699986423,
+      "maximum_seconds": 0.1476702430009027
     },
     "apptest_custom_apply_uncached": {
       "samples_seconds": [
-        0.5007386549996227,
-        0.4046588150004027,
-        0.4971897799996441
+        0.29882837100012694,
+        0.23055429099986213,
+        0.29147353999906045
       ],
-      "median_seconds": 0.4971897799996441,
-      "maximum_seconds": 0.5007386549996227
+      "median_seconds": 0.29147353999906045,
+      "maximum_seconds": 0.29882837100012694
     },
     "apptest_custom_apply_cached": {
       "samples_seconds": [
-        0.19647754800007533,
-        0.29807432899997366,
-        0.529746748999969
+        0.13178092099951755,
+        0.14469344600001932,
+        0.1178588340007991
       ],
-      "median_seconds": 0.29807432899997366,
-      "maximum_seconds": 0.529746748999969
+      "median_seconds": 0.13178092099951755,
+      "maximum_seconds": 0.14469344600001932
     },
     "apptest_stress_grid_uncached": {
       "samples_seconds": [
-        0.6886810380001407,
-        2.6129666360002375,
-        0.4883372770000278
+        0.3328873249993194,
+        0.57472749399858,
+        0.4274668529997143
       ],
-      "median_seconds": 0.6886810380001407,
-      "maximum_seconds": 2.6129666360002375
+      "median_seconds": 0.4274668529997143,
+      "maximum_seconds": 0.57472749399858
     },
     "apptest_stress_grid_cached": {
       "samples_seconds": [
-        0.21682018599949515,
-        0.2826084730004368,
-        0.3911053379997611
+        0.11072095900090062,
+        0.11112342199885461,
+        0.2185068639992096
       ],
-      "median_seconds": 0.2826084730004368,
-      "maximum_seconds": 0.3911053379997611
+      "median_seconds": 0.11112342199885461,
+      "maximum_seconds": 0.2185068639992096
     },
     "export_brief_uncached": {
       "samples_seconds": [
-        0.0014212149999366375,
-        0.002375144999859913,
-        0.002397064000433602
+        0.001078867999240174,
+        0.002095791000101599,
+        0.0006763189994671848
       ],
-      "median_seconds": 0.002375144999859913,
-      "maximum_seconds": 0.002397064000433602
+      "median_seconds": 0.001078867999240174,
+      "maximum_seconds": 0.002095791000101599
     },
     "export_brief_cached": {
       "samples_seconds": [
-        0.0005750580003223149,
-        0.00024220100021921098,
-        0.0002950890002466622
+        0.0002005890000873478,
+        0.00028334499984339345,
+        0.00018436500067764428
       ],
-      "median_seconds": 0.0002950890002466622,
-      "maximum_seconds": 0.0005750580003223149
+      "median_seconds": 0.0002005890000873478,
+      "maximum_seconds": 0.00028334499984339345
     },
     "export_csv_uncached": {
       "samples_seconds": [
-        0.0740269919997445,
-        0.3287037180007246,
-        0.5560653520005872
+        0.04204656700130727,
+        0.04804368899931433,
+        0.04234958999950322
       ],
-      "median_seconds": 0.3287037180007246,
-      "maximum_seconds": 0.5560653520005872
+      "median_seconds": 0.04234958999950322,
+      "maximum_seconds": 0.04804368899931433
     },
     "export_csv_cached": {
       "samples_seconds": [
-        0.0006008299997120048,
-        0.004287977000785759,
-        0.0014326410000649048
+        0.0011035829993488733,
+        0.00030692099971929565,
+        0.000370011999621056
       ],
-      "median_seconds": 0.0014326410000649048,
-      "maximum_seconds": 0.004287977000785759
+      "median_seconds": 0.000370011999621056,
+      "maximum_seconds": 0.0011035829993488733
     },
     "export_workbook_uncached": {
       "samples_seconds": [
-        0.33138884599975427,
-        0.48995414299952245,
-        0.5061570070001835
+        0.14057972400041763,
+        0.14133256200148026,
+        0.1313117110003077
       ],
-      "median_seconds": 0.48995414299952245,
-      "maximum_seconds": 0.5061570070001835
+      "median_seconds": 0.14057972400041763,
+      "maximum_seconds": 0.14133256200148026
     },
     "export_workbook_cached": {
       "samples_seconds": [
-        0.0006176910001158831,
-        0.0005206079995332402,
-        0.0006526150000354392
+        0.0014063689995964523,
+        0.0004219509992253734,
+        0.0003227140005037654
       ],
-      "median_seconds": 0.0006176910001158831,
-      "maximum_seconds": 0.0006526150000354392
+      "median_seconds": 0.0004219509992253734,
+      "maximum_seconds": 0.0014063689995964523
     }
   },
-  "peak_process_rss_mb": 237.4765625,
+  "peak_process_rss_mb": 238.25,
   "memory_scope": "Peak for this sequential mixed measurement process, including AppTest, models, Plotly and exports. Not isolated runtime or sustained multi-user cache load.",
   "base_run_ids": [
     "5a88f7bef3fa93d4",
     "a2feec5a72facbc3",
     "5d28e1ac49bb98b2"
-  ],
-  "tested_implementation_commit": "511cd7fe783b8e1d8186aa863f4a81386150333e",
-  "measurement_note": "Collected before committing the candidate; base_commit is the previously checked-out base. The source hashes match the tested implementation commit."
+  ]
 }
