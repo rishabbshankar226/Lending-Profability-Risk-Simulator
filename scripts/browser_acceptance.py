@@ -2,18 +2,22 @@
 
 Run with requirements-browser.txt and `playwright install chromium` installed.
 The server binds only to loopback and runs app.py unchanged. No hosting account,
-production deployment, financial fixture, or application-state injection is used.
+production deployment, or application-state injection is used. The empty-input
+case uses a separate valid zero-row dataset with unchanged application/model code.
 """
 
 import argparse
+from contextlib import contextmanager, nullcontext
 from datetime import datetime, timezone
 from hashlib import sha256
 import json
 from pathlib import Path
 import re
+import shutil
 import socket
 import subprocess
 import sys
+import tempfile
 import time
 import traceback
 from urllib.request import urlopen
@@ -223,7 +227,8 @@ def desktop_journey(r):
     r.reset()
     r.navigate("Cohorts")
     cohort = r.charts()
-    p.get_by_role("radio", name="Complete runoff", exact=True).check()
+    p.get_by_text("Complete runoff", exact=True).click()
+    expect(p.get_by_role("radio", name="Complete runoff", exact=True)).to_be_checked()
     r.ready()
     assert r.charts()[0]["traces"][0]["zmax"] == cohort[0]["traces"][0]["zmax"]
     r.capture("cohorts")
@@ -353,6 +358,8 @@ def responsive(r):
 def download_race(r):
     p = r.page
     held = []
+    completed = []
+    p.on("download", completed.append)
     media_url = re.compile(r"^http://127\.0\.0\.1:\d+/media/")
     def hold_response(route):
         # Fetch the real candidate bytes, then hold their delivery to the browser.
@@ -367,9 +374,9 @@ def download_race(r):
     p.keyboard.press("Escape")
     r.policy("Balanced")
     assert r.applied_run() == BALANCED_RUN
-    with p.expect_download() as event:
-        held[0][0].fulfill(response=held[0][1])
-    download = event.value
+    held[0][0].fulfill(response=held[0][1])
+    assert len(completed) == 1, "Expected the original download event"
+    download = completed[0]
     assert download.failure() is None
     path = r.output / download.suggested_filename
     download.save_as(path)
@@ -385,10 +392,6 @@ def download_race(r):
 
 def empty_portfolio(r):
     p = r.page
-    p.get_by_role("spinbutton", name="Starting equity cash ($)", exact=True).fill("0")
-    r.expand("Capital & funding")
-    p.get_by_role("spinbutton", name="Facility limit ($)", exact=True).fill("0")
-    p.get_by_role("button", name="Run scenario", exact=True).click()
     expect(p.get_by_role("heading", name="No eligible policy", exact=True)).to_be_visible()
     expect(p.get_by_test_id("stMetricValue").nth(2)).to_have_text("Unavailable")
     r.navigate("Cohorts")
@@ -403,6 +406,86 @@ def empty_portfolio(r):
     expect(p.get_by_text("Net loss is unavailable: no principal was funded. Costs, cash, and failure reasons remain available.", exact=True)).to_be_visible()
     r.capture("stress", p.get_by_role("heading", name="Default and funding stress", exact=True))
     r.check("Empty-portfolio stress inspection renders unavailable net loss without exception")
+
+
+def download_retry(r):
+    p = r.page
+    media_url = re.compile(r"^http://127\.0\.0\.1:\d+/media/")
+    def fail_transport(route):
+        route.abort("failed")
+    p.route(media_url, fail_transport)
+    p.get_by_role("button", name="Export", exact=True).click()
+    with p.expect_download() as event:
+        p.get_by_role("button", name="CSV results + manifest", exact=True).click()
+    failed = event.value
+    failure = failed.failure()
+    assert failure is not None, "The deliberately interrupted download unexpectedly succeeded"
+    p.unroute(media_url, fail_transport)
+    p.keyboard.press("Escape")
+    assert r.applied_run() == BASE_RUN
+    assert r.metrics() == ["$48,133", "$97,450", "4.16 pp"]
+    p.get_by_role("button", name="Export", exact=True).click()
+    with p.expect_download() as event:
+        p.get_by_role("button", name="CSV results + manifest", exact=True).click()
+    download = event.value
+    assert download.failure() is None
+    path = r.output / ("retried-" + download.suggested_filename)
+    download.save_as(path)
+    with zipfile.ZipFile(path) as package:
+        assert json.loads(package.read("manifest.json"))["run_id"] == BASE_RUN
+    assert all(media_url.match(item["url"]) for item in r.requests), r.requests
+    r.report["intentional_failed_requests"] = r.requests.copy()
+    r.requests.clear()
+    r.check("Interrupted CSV transport preserves scenario and retries with the same captured identity", {
+        "failure": failure, "retried_file": path.name, "run_id": BASE_RUN,
+        "scope": "One deliberate media transport abort; no application or financial output is mocked."})
+
+
+@contextmanager
+def live_server(root, log_path):
+    with socket.socket() as sock:
+        sock.bind(("127.0.0.1", 0))
+        port = sock.getsockname()[1]
+    address = f"http://127.0.0.1:{port}"
+    with log_path.open("w") as log:
+        server = subprocess.Popen([sys.executable, "-m", "streamlit", "run", str(root / "app.py"),
+            "--server.headless=true", "--server.address=127.0.0.1", f"--server.port={port}",
+            "--browser.gatherUsageStats=false"], cwd=root, stdout=log, stderr=subprocess.STDOUT)
+        try:
+            deadline = time.monotonic() + 45
+            while True:
+                try:
+                    with urlopen(address + "/_stcore/health", timeout=1) as health:
+                        if health.status == 200:
+                            break
+                except OSError:
+                    pass
+                if server.poll() is not None or time.monotonic() > deadline:
+                    raise RuntimeError(f"Streamlit did not start; inspect {log_path.name}")
+                time.sleep(.2)
+            yield address
+        finally:
+            server.terminate()
+            try:
+                server.wait(timeout=10)
+            except subprocess.TimeoutExpired:
+                server.kill()
+                server.wait(timeout=10)
+
+
+def empty_dataset_source(destination):
+    """Exercise real validation/rendering on a separate valid, empty input source."""
+    from lending_simulator.data import Dataset, save_dataset
+    shutil.copy2(ROOT / "app.py", destination / "app.py")
+    for directory in ("lending_simulator", ".streamlit", "queries"):
+        shutil.copytree(ROOT / directory, destination / directory,
+                        ignore=shutil.ignore_patterns("__pycache__"))
+    dataset = Dataset((), 2262026)
+    target = destination / "data" / "applications.csv"
+    target.parent.mkdir()
+    save_dataset(dataset, target)
+    (target.parent / "manifest.json").write_text(json.dumps(dataset.manifest()))
+    return dataset.manifest()
 
 
 def keyboard(r):
@@ -450,86 +533,67 @@ def main():
         "source_sha256": {str(p.relative_to(ROOT)): sha256(p.read_bytes()).hexdigest() for p in source_files},
         "scope": "Isolated headless Chromium against unchanged app.py on loopback; synthetic dataset. Mobile sizes are emulation, not physical-device or intended-host measurements.",
         "cases": []}
-    with socket.socket() as sock:
-        sock.bind(("127.0.0.1", 0))
-        port = sock.getsockname()[1]
-    address = f"http://127.0.0.1:{port}"
-    with (output / "streamlit.log").open("w") as log:
-        server = subprocess.Popen([sys.executable, "-m", "streamlit", "run", str(ROOT / "app.py"),
-            "--server.headless=true", "--server.address=127.0.0.1", f"--server.port={port}",
-            "--browser.gatherUsageStats=false"], cwd=ROOT, stdout=log, stderr=subprocess.STDOUT)
-        try:
-            deadline = time.monotonic() + 45
-            while True:
+    with tempfile.TemporaryDirectory(prefix="lending-browser-empty-") as directory:
+        empty_root = Path(directory)
+        report["empty_dataset_case"] = {"source": "Separate copy of unchanged app/code/config with a valid zero-row Dataset and manifest.",
+            "manifest": empty_dataset_source(empty_root)}
+        (output / "report.json").write_text(json.dumps(report, indent=2))
+        with live_server(ROOT, output / "streamlit.log") as address, \
+             live_server(empty_root, output / "streamlit-empty.log") as empty_address, \
+             sync_playwright() as engine:
+            browser = engine.chromium.launch()
+            report["browser"] = browser.version
+            for name, size, task, options in (
+                ("desktop-1440", (1440, 900), desktop_journey, {}),
+                ("desktop-1280", (1280, 800), responsive, {}),
+                ("downloads", (1440, 900), downloads, {}),
+                ("phone-390", (390, 844), responsive, {"is_mobile": True, "has_touch": True}),
+                ("reflow-320", (320, 800), responsive, {"is_mobile": True, "has_touch": True}),
+                ("keyboard", (1280, 800), keyboard, {"reduced_motion": "reduce"}),
+                ("download-race", (1440, 900), download_race, {}),
+                ("empty-portfolio", (1440, 900), empty_portfolio, {}),
+                ("download-retry", (1440, 900), download_retry, {}),
+            ):
+                case = {"name": name, "viewport": size, "checks": [], "captures": [], "operations": []}
+                report["cases"].append(case)
+                context = browser.new_context(viewport={"width": size[0], "height": size[1]}, accept_downloads=True, **options)
+                context.tracing.start(screenshots=True, snapshots=True, sources=True)
+                page = context.new_page()
+                page.set_default_timeout(15000)
+                r = Review(page, output, name, case)
                 try:
-                    with urlopen(address + "/_stcore/health", timeout=1) as health:
-                        if health.status == 200:
-                            break
-                except OSError:
-                    pass
-                if server.poll() is not None or time.monotonic() > deadline:
-                    raise RuntimeError("Streamlit did not start; inspect streamlit.log")
-                time.sleep(.2)
-            with sync_playwright() as engine:
-                browser = engine.chromium.launch()
-                report["browser"] = browser.version
-                for name, size, task, options in (
-                    ("desktop-1440", (1440, 900), desktop_journey, {}),
-                    ("desktop-1280", (1280, 800), responsive, {}),
-                    ("downloads", (1440, 900), downloads, {}),
-                    ("phone-390", (390, 844), responsive, {"is_mobile": True, "has_touch": True}),
-                    ("reflow-320", (320, 800), responsive, {"is_mobile": True, "has_touch": True}),
-                    ("keyboard", (1280, 800), keyboard, {"reduced_motion": "reduce"}),
-                    ("download-race", (1440, 900), download_race, {}),
-                    ("empty-portfolio", (1440, 900), empty_portfolio, {}),
-                ):
-                    case = {"name": name, "viewport": size, "checks": [], "captures": [], "operations": []}
-                    report["cases"].append(case)
-                    context = browser.new_context(viewport={"width": size[0], "height": size[1]}, accept_downloads=True, **options)
-                    context.tracing.start(screenshots=True, snapshots=True, sources=True)
-                    page = context.new_page()
-                    page.set_default_timeout(15000)
-                    r = Review(page, output, name, case)
-                    try:
-                        start = time.monotonic()
-                        page.goto(address, wait_until="domcontentloaded")
-                        r.ready()
-                        case["operations"].append({"name": "Initial candidate render", "seconds": time.monotonic() - start})
-                        task(r)
-                        errors = [e for e in r.console if e["type"] in ("error", "pageerror")]
-                        assert not errors, errors
-                        assert not r.requests, r.requests
-                        assert r.websockets, "No Streamlit WebSocket observed"
-                        r.check("No browser errors or failed requests; Streamlit WebSocket connected")
-                        case["status"] = "passed"
-                    except Exception:
-                        case["status"] = "failed"
-                        case["error"] = traceback.format_exc()
-                        print(f"FAIL {name}: {case['error']}", flush=True)
-                        page.screenshot(path=str(output / f"{name}-failure.png"), full_page=True)
-                        (output / f"{name}-failure.txt").write_text(page.locator("body").inner_text())
-                        case["controls"] = page.locator("button,input,[role=combobox],[role=radio],summary").evaluate_all("""els=>els.map(e=>({
-                            tag:e.tagName,role:e.getAttribute('role'),text:e.innerText?.slice(0,100),
-                            label:e.getAttribute('aria-label'),type:e.getAttribute('type'),
-                            visible:!!e.getClientRects().length}))""")
-                    finally:
-                        case["console"] = r.console
-                        case["failed_requests"] = r.requests
-                        case["websockets"] = r.websockets
-                        context.tracing.stop(path=str(output / f"{name}-trace.zip"))
-                        context.close()
-                        (output / "report.json").write_text(json.dumps(report, indent=2))
-                browser.close()
-        finally:
-            server.terminate()
-            try:
-                server.wait(timeout=10)
-            except subprocess.TimeoutExpired:
-                server.kill()
-            (output / "report.json").write_text(json.dumps(report, indent=2))
+                    start = time.monotonic()
+                    page.goto(empty_address if name == "empty-portfolio" else address, wait_until="domcontentloaded")
+                    r.ready()
+                    case["operations"].append({"name": "Initial candidate render", "seconds": time.monotonic() - start})
+                    task(r)
+                    errors = [e for e in r.console if e["type"] in ("error", "pageerror")]
+                    assert not errors, errors
+                    assert not r.requests, r.requests
+                    assert r.websockets, "No Streamlit WebSocket observed"
+                    r.check("No unexpected browser errors or failed requests; Streamlit WebSocket connected")
+                    case["status"] = "passed"
+                except Exception:
+                    case["status"] = "failed"
+                    case["error"] = traceback.format_exc()
+                    print(f"FAIL {name}: {case['error']}", flush=True)
+                    page.screenshot(path=str(output / f"{name}-failure.png"), full_page=True)
+                    (output / f"{name}-failure.txt").write_text(page.locator("body").inner_text())
+                    case["controls"] = page.locator("button,input,[role=combobox],[role=radio],summary").evaluate_all("""els=>els.map(e=>({
+                        tag:e.tagName,role:e.getAttribute('role'),text:e.innerText?.slice(0,100),
+                        label:e.getAttribute('aria-label'),type:e.getAttribute('type'),
+                        visible:!!e.getClientRects().length}))""")
+                finally:
+                    case["console"] = r.console
+                    case["failed_requests"] = r.requests
+                    case["websockets"] = r.websockets
+                    context.tracing.stop(path=str(output / f"{name}-trace.zip"))
+                    context.close()
+                    (output / "report.json").write_text(json.dumps(report, indent=2))
+            browser.close()
     failures = sum(case.get("status") != "passed" for case in report["cases"])
     print(f"Browser acceptance: {len(report['cases']) - failures} passed, {failures} failed. Evidence: {output}", flush=True)
-    if failures or len(report["cases"]) != 8:
+    if failures or len(report["cases"]) != 9:
         raise SystemExit(1)
 
 
