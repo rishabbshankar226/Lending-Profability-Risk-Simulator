@@ -1,0 +1,41 @@
+{
+  "reviewed_at": "2026-10-07",
+  "evidence_level": "Contextual comparison only",
+  "calibrated": false,
+  "historical_outcome_rows_accepted": 0,
+  "decision": "Retain the approved 12-month illustrative product. No matched historical outcome dataset was accepted for calibration or backtesting.",
+  "sources": [
+    {
+      "id": "prosper-prospectus-2026-09",
+      "publisher": "Prosper Funding LLC / SEC",
+      "url": "https://www.sec.gov/Archives/edgar/data/1416265/000141626526000038/prospectus-september2026.htm",
+      "section": "About the Marketplace: Calculating Loss Estimates and Comparing Estimated Loss Rates to Actual Losses",
+      "as_of": "2026-06-30",
+      "classification": "published historical context",
+      "product": "US unsecured consumer installment loans",
+      "term_months": [24, 36, 48, 60],
+      "grain": "vintage / term / rating / loan-age chart",
+      "measure": "cumulative gross charge-offs / term-specific originated principal",
+      "extraction": "Definitions reviewed. No chart points digitized or treated as exact observations.",
+      "suitability": "Term, population, and fee structure differ from the hypothetical 12-month merchant-financed product.",
+      "use": "Source link and short factual source-fitness summary only; no licensed loan-level records redistributed."
+    },
+    {
+      "id": "prosper-data-access",
+      "publisher": "Prosper",
+      "url": "https://help.prosper.com/hc/en-us/articles/210013083-Where-can-I-download-data-about-loans-through-Prosper",
+      "classification": "data-access documentation",
+      "suitability": "Loan-level API access requires a valid account; the monthly loan file requires a Data License Agreement. Neither was obtained for this project.",
+      "use": "No restricted data downloaded or redistributed."
+    },
+    {
+      "id": "uci-credit-card-default",
+      "publisher": "UCI Machine Learning Repository",
+      "url": "https://archive.ics.uci.edu/dataset/350/default",
+      "classification": "excluded historical dataset",
+      "product": "Taiwan credit cards, 2005 payment history",
+      "suitability": "Revolving credit and a short default-payment target do not calibrate lifetime default on a 12-month US installment loan.",
+      "use": "Excluded; no data loaded into the model."
+    }
+  ]
+}

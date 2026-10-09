@@ -1,0 +1,74 @@
+{
+  "date": "2026-10-07",
+  "application_commit": "10afcbacd0cda17ba0d3631f1a7dc64f44c024a5",
+  "url": "https://rishabb-lending-simulator.streamlit.app/",
+  "tabs": {
+    "Overview": [
+      "  - heading \"Scenario\" [level=2]",
+      "  - heading \"Lending Profitability & Risk Simulator\" [level=1]:",
+      "  - heading \"Try a guided example\" [level=2]:",
+      "    - heading \"Conservative economics\" [level=2]:",
+      "    - heading \"Profit and liquidity over time\" [level=2]:",
+      "  - heading \"Download applied scenario\" [level=2]:"
+    ],
+    "Strategy comparison": [
+      "  - heading \"Scenario\" [level=2]",
+      "  - heading \"Lending Profitability & Risk Simulator\" [level=1]:",
+      "  - heading \"Try a guided example\" [level=2]:",
+      "    - heading \"Profit, credit losses and cash by policy\" [level=2]:",
+      "    - heading \"Full-runoff profit on shared inputs\" [level=2]:",
+      "  - heading \"Download applied scenario\" [level=2]:"
+    ],
+    "Portfolio cohorts": [
+      "  - heading \"Scenario\" [level=2]",
+      "  - heading \"Lending Profitability & Risk Simulator\" [level=1]:",
+      "  - heading \"Try a guided example\" [level=2]:",
+      "    - heading \"Projected cohort loss by loan age\" [level=2]:",
+      "    - heading \"Risk-band repayment and net loss\" [level=2]:",
+      "  - heading \"Download applied scenario\" [level=2]:"
+    ],
+    "Funding & stress": [
+      "  - heading \"Scenario\" [level=2]",
+      "  - heading \"Lending Profitability & Risk Simulator\" [level=1]:",
+      "  - heading \"Try a guided example\" [level=2]:",
+      "    - heading \"Cash and debt facility\" [level=2]:",
+      "    - heading \"Default and funding stress\" [level=2]:",
+      "  - heading \"Download applied scenario\" [level=2]:"
+    ],
+    "Methodology": [
+      "  - heading \"Scenario\" [level=2]",
+      "  - heading \"Lending Profitability & Risk Simulator\" [level=1]:",
+      "  - heading \"Try a guided example\" [level=2]:",
+      "    - heading \"Financial timing and checks\" [level=2]:",
+      "    - heading \"Assumptions register\" [level=2]:",
+      "    - heading \"Historical evidence and data fitness\" [level=2]:",
+      "  - heading \"Download applied scenario\" [level=2]:"
+    ]
+  },
+  "preview": [
+    "  - heading \"Scenario\" [level=2]",
+    "  - heading \"Lending Profitability & Risk Simulator\" [level=1]:",
+    "  - heading \"Try a guided example\" [level=2]:",
+    "    - heading \"Balanced economics\" [level=2]:",
+    "    - heading \"Profit and liquidity over time\" [level=2]:",
+    "  - heading \"Download applied scenario\" [level=2]:",
+    "  - heading \"Lending decision brief\" [level=3]:",
+    "  - heading \"Decision\" [level=4]:",
+    "  - heading \"Applied assumptions\" [level=4]:",
+    "  - heading \"Policy tradeoffs\" [level=4]:",
+    "  - heading \"Scope and reproducibility\" [level=4]:"
+  ],
+  "keyboard": {
+    "base_to_capital_tab": true,
+    "capital_enter_run": "690e9fa563e2d475",
+    "preview_enter_open": true
+  },
+  "download": {
+    "scenario": "Balanced with starting equity USD 1250000",
+    "run_id": "690e9fa563e2d475",
+    "sha256": "a07859eff8a48cf26b058d39f1b2216bab1f4a419bac2c799cdfa181f1760e1b",
+    "bytes": 4329,
+    "matches_saved_capital_brief": true,
+    "standalone_heading_level": 1
+  }
+}

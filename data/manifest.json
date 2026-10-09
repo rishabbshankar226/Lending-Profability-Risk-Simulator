@@ -1,0 +1,19 @@
+{
+  "dataset_version": "synthetic-applications-v1",
+  "seed": 2262026,
+  "dataset_hash": "ae93b99dafe7655cc435e73a892a3a34e0a24378de890580f06dfb57fc60a67f",
+  "rows": 10000,
+  "classification": "synthetic",
+  "grain": "one fictional application",
+  "primary_key": "application_id",
+  "currency": "USD",
+  "start_month": "2026-10",
+  "origination_months": 24,
+  "risk_counts": {
+    "low": 4500,
+    "medium": 3500,
+    "high": 2000
+  },
+  "generator": "Python 3.12 random.Random; fixed band counts shuffled; shuffled month allocation; inclusive uniform integer cents $500-$2500",
+  "growth_weight": "(1 + monthly_demand_growth) ** month; same rows for all policies"
+}
