@@ -22,6 +22,26 @@ def brief_dataset():
     return load_dataset(Path(__file__).resolve().parents[1] / "data" / "applications.csv")
 
 
+@pytest.mark.parametrize("cash, loss, cash_margin, loss_margin", [
+    ("50000", ".05", "0", "0"),
+    ("49999", ".051", "-1", "-.1"),
+    ("50001", ".049", "1", ".1"),
+    ("50000.000000000000000000000000001", ".050000000000000000000000000000001",
+     "1e-27", "-1e-31"),
+    ("50000", None, "0", None),
+])
+def test_limit_margins_preserve_exact_boundaries_and_percentage_point_units(
+        brief_dataset, cash, loss, cash_margin, loss_margin):
+    from lending_simulator.presentation import limit_margins
+
+    result = compare_policies(brief_dataset, Assumptions())[0]
+    result = replace(result, summary=replace(
+        result.summary, minimum_cash=D(cash), loss_ratio=None if loss is None else D(loss)))
+    cash_gap, loss_gap = limit_margins(result)
+    assert cash_gap == D(cash_margin)
+    assert loss_gap == (None if loss_margin is None else D(loss_margin))
+
+
 @pytest.mark.parametrize("assumptions, policy, recommendation, explanation", [
     (Assumptions(), "balanced", "Conservative", "highest expected full-runoff"),
     (replace(Assumptions(), initial_cash=D("1250000")), "balanced", "Balanced", "highest expected full-runoff"),

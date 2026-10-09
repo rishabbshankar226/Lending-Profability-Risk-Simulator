@@ -2,7 +2,7 @@
 
 ## Performed locally
 
-The financial model, data, SQL, decision rules, exports, CLI, simulated dashboard and HTTP server have 70 passing automated checks in `tests/` (full local suite passed October 9, 2026 UTC). Run `python -m pytest`. The suite has no disabled or skipped checks. Python compilation and the reproducible base-case CLI also passed.
+The financial model, data, SQL, decision rules, exports, CLI, simulated dashboard and HTTP server have 83 passing automated checks in `tests/`. Run `python -m pytest`. The suite has no disabled or skipped checks. Python compilation and the reproducible base-case CLI also passed. Earlier hosted checks below identify their tested commits; they do not cover the new decision-panel layout.
 
 Independent financial cases include 12 zero-interest $100 principal payments on a $1,200 loan; a $900 default with a $225 delayed recovery and $675 net loss; $10 monthly interest on $1,000 opening debt at 12%; and a positive-interest amortization benchmark. Other checks cover PD/recovery endpoints, late-loan runoff, equal policy overhead horizon, collateral repayments, funding-rate differences, invalid inputs and monthly financial identities.
 
@@ -12,7 +12,7 @@ Decision checks cover exact loss/cash boundaries, an ineligible high-profit poli
 
 Six startup/state regressions were reproduced before their fixes: a missing CSV, incomplete/non-object manifests, hash/version changes after a warm run, and a valid dataset replacement retaining old results. They now pass. Manifest validation checks the required provenance fields against the loaded dataset; both file digests participate in the cache identity. Valid replacements refresh results using the visitor's applied policy and assumptions.
 
-The HTTP integration check in `tests/test_server.py` starts a real Streamlit process on a temporary loopback port, verifies `/_stcore/health` returns HTTP 200/`ok`, verifies `/` serves an HTML document, and terminates the process. The local preview server also returned HTTP 200/`ok`. These are server checks: they do not render the frontend, establish a browser WebSocket session, or verify user interactions.
+The HTTP integration check in `tests/test_server.py` starts a real Streamlit process on a temporary loopback port, verifies `/_stcore/health` returns HTTP 200/`ok`, verifies `/` serves an HTML document, and terminates the process. An earlier local preview server also returned HTTP 200/`ok`. These are server checks: they do not render the frontend, establish a browser WebSocket session, or verify user interactions.
 
 Workbook checks inspect formula cells and saved values. The independent workbook was authored/recalculated with Artifact Tool from the inspectable workbook specification. Its 12% nominal amortization benchmark produced a $106.618546414 monthly payment and zero final principal. Changing interest to zero produced $100/month; changing recovery to 100% produced zero net loss. The original inputs were restored, formula errors scanned, and every sheet rendered for review. This is calculation/render verification, not a claim to have tested native Excel on the user's computer.
 
@@ -55,3 +55,11 @@ PR #1 was merged into `main` at `5602a062d3dd0e6f747cb89463252603154376e1`. Its 
 ### Heading structure follow-up
 
 The presentation-only change at `10afcbacd0cda17ba0d3631f1a7dc64f44c024a5` passed all 70 existing checks, compilation and [CI](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/actions/runs/37703275592). Hosted DOM inspection confirmed one main title and level-two sections across five views, with the decision preview nested at levels three/four. Keyboard navigation activated the capital example, expanded its preview and downloaded the unchanged brief. See [browser-validation.md](browser-validation.md#heading-and-keyboard-follow-up) and [heading-outline.json](heading-outline.json). This is a scoped accessibility repair; full accessibility, mobile and anonymous checks remain pending.
+
+### Decision-panel follow-up
+
+The dashboard now presents the calculated recommendation, viewed policy, full-runoff operating result and cash/credit margins before the guided examples. Limit margins use 34-digit Decimal arithmetic; credit-loss differences are percentage points. Breaches smaller than display precision are labeled with a less-than amount rather than rounded to zero. Undefined loss ratios remain n.a., and an empty portfolio retains full-horizon operating expenses.
+
+Thirteen additional automated cases bring the suite to 83. They cover the base panel, a viewed Balanced policy with a Conservative recommendation, no profitable or eligible recommendation, a credit-cap breach, applied-input continuity through draft/invalid edits, an empty portfolio, five exact margin cases and level-two decision/exploration headings. Existing capital/default/reset, stress-cache and export tests still pass with the same run identities. No financial-engine or model-version changes were made, and no dependency was added.
+
+A local Streamlit preview was started, but the cloud browser could not connect to its loopback URL. The HTTP integration check passed within its controlled subprocess. No screenshots, mobile/desktop visual result, browser keyboard result, screen-reader result or measured interaction-performance claim is made for this layout. Browser validation and hosting-branch rollout remain pending.

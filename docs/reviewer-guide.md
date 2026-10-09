@@ -30,6 +30,6 @@ Download **Decision brief** for the current recommendation, all policy tradeoffs
 
 ## Scope of the evidence
 
-The implementation passes 70 automated checks. Actual hosted desktop scenarios and downloaded briefs were verified; the [browser record](browser-validation.md) identifies tested commits, run IDs and file hashes. PR #1 is merged into `main`, and the merge passed GitHub checks. The hosted app retains `feature/lending-simulator` with the same application code. Isolated anonymous access, mobile layout, full accessibility, hosting load measurements and a continuous interactive walkthrough remain pending.
+The implementation passes 83 automated checks. The new decision panel has automated coverage; its browser rendering remains unverified because the local preview was unreachable from the cloud browser. Earlier hosted desktop scenarios and downloaded briefs were verified; the [browser record](browser-validation.md) identifies tested commits, run IDs and file hashes. PR #1 is merged into `main`, and the merge passed GitHub checks. The hosted app retains `feature/lending-simulator` and does not yet include the decision-panel upgrade. Isolated anonymous access, mobile layout, full accessibility, hosting load measurements and a continuous interactive walkthrough remain pending.
 
 This is a management scenario simulator. It does not demonstrate borrower prediction accuracy, causal approval benefits, production underwriting, or real business savings.

@@ -27,6 +27,100 @@ def test_preloaded_dashboard_has_five_views_results_and_no_exception():
     assert page.metric[0].label == "Operating result · full runoff"
 
 
+def test_decision_panel_shows_recommendation_viewed_policy_and_limit_margins():
+    page = app()
+    assert not page.exception
+    assert page.header[0].value == "Recommended policy: Conservative"
+    assert any("Viewing policy: Conservative" in item.value for item in page.markdown)
+    assert [(metric.label, metric.value) for metric in page.metric[:3]] == [
+        ("Operating result · full runoff", "$48,133"),
+        ("Cash cushion above floor", "$97,450"),
+        ("Loss headroom to cap", "4.16 pp"),
+    ]
+    captions = "\n".join(item.value for item in page.caption)
+    assert "Minimum cash:" in captions and "147,450" in captions and "50,000" in captions
+    assert "Net principal loss: 0.84% · Cap: 5.00%" in captions
+    assert "pp = percentage points" in captions
+
+
+def test_decision_sections_follow_the_page_title_without_skipping_a_heading_level():
+    page = app()
+    assert [item.value for item in page.title] == ["Lending Profitability & Risk Simulator"]
+    assert [item.value for item in page.main.header[:2]] == [
+        "Recommended policy: Conservative", "Explore a scenario",
+    ]
+
+
+def test_viewing_ineligible_policy_keeps_recommendation_and_identifies_cash_shortfall():
+    page = app()
+    page.selectbox(key="policy").set_value("balanced")
+    page.button(key="run_scenario").click().run()
+    assert not page.exception
+    assert page.header[0].value == "Recommended policy: Conservative"
+    assert any("Viewing policy: Balanced" in item.value for item in page.markdown)
+    assert [(metric.label, metric.value) for metric in page.metric[:3]] == [
+        ("Operating result · full runoff", "$294,468"),
+        ("Cash shortfall to floor", "$746,143"),
+        ("Loss headroom to cap", "3.42 pp"),
+    ]
+    assert any("Charts and downloads show Balanced" in item.value for item in page.caption)
+    assert page.session_state["applied_policy"] == "balanced"
+    assert page.session_state["results"][1].run_id == "a2feec5a72facbc3"
+
+
+@pytest.mark.parametrize("overrides, explanation, diagnostic", [
+    ({"stress": 2.0}, "No eligible strategy is profitable", "Conservative"),
+    ({"initial_cash": 0.0}, "No policy meets", None),
+])
+def test_decision_panel_does_not_present_a_diagnostic_policy_as_a_recommendation(
+        overrides, explanation, diagnostic):
+    page = app()
+    for key, value in overrides.items():
+        control = page.slider if key == "stress" else page.number_input
+        control(key=key).set_value(value)
+    page.button(key="run_scenario").click().run()
+    assert not page.exception
+    assert page.header[0].value == "Recommended policy: None"
+    assert any(explanation in item.value for item in page.warning)
+    captions = "\n".join(item.value for item in page.caption)
+    assert ("Diagnostic policy:" in captions) == (diagnostic is not None)
+    if diagnostic:
+        assert f"Diagnostic policy: {diagnostic}" in captions
+
+
+def test_applied_input_summary_retains_last_successful_run_after_draft_or_invalid_edits():
+    page = app()
+    page.button(key="example_capital").click().run()
+
+    def input_summary():
+        return next(item.value for item in page.caption if item.value.startswith("Starting equity:"))
+
+    applied = input_summary()
+    assert "1,250,000" in applied and "Default stress: 1×" in applied
+    assert "Annual funding: 8.00%" in applied and "Monthly growth: 0.00%" in applied
+    assert "Facility: " in applied and "2,000,000" in applied
+    page.slider(key="stress").set_value(3.0)
+    page.radio(key="cohort_cutoff").set_value("Complete runoff").run()
+    assert input_summary() == applied
+    page.number_input(key="cash_floor").set_value(-1.0)
+    page.button(key="run_scenario").click().run()
+    assert not page.exception
+    assert page.error
+    assert input_summary() == applied
+    assert page.header[0].value == "Recommended policy: Balanced"
+
+
+def test_decision_panel_identifies_a_credit_loss_breach_in_percentage_points():
+    page = app()
+    page.number_input(key="loss_cap_percent").set_value(0.5)
+    page.button(key="run_scenario").click().run()
+    assert not page.exception
+    assert page.header[0].value == "Recommended policy: None"
+    assert page.metric[2].label == "Loss cap exceeded by"
+    assert page.metric[2].value == "0.34 pp"
+    assert any("Net principal loss: 0.84% · Cap: 0.50%" in item.value for item in page.caption)
+
+
 def test_apply_and_complete_reset_restore_assumptions_and_download_scenario():
     page = app()
     base_run = page.session_state["results"][0].run_id
@@ -222,6 +316,20 @@ def isolated_project(tmp_path):
     st.cache_data.clear()
     yield tmp_path / "app.py"
     st.cache_data.clear()
+
+
+def test_empty_portfolio_keeps_operating_costs_and_marks_loss_margin_undefined(isolated_project):
+    path = isolated_project.parent / "data" / "applications.csv"
+    original = load_dataset(path)
+    empty = Dataset((), original.seed)
+    save_dataset(empty, path)
+    (path.parent / "manifest.json").write_text(json.dumps(empty.manifest()))
+    page = AppTest.from_file(isolated_project, default_timeout=20).run()
+    assert not page.exception
+    assert page.header[0].value == "Recommended policy: None"
+    assert page.metric[0].value == "($292,500)"
+    assert page.metric[2].value == "n.a."
+    assert any("No funded loans" in item.value for item in page.caption)
 
 
 def test_missing_dataset_reports_startup_error_without_an_exception(isolated_project):
