@@ -477,7 +477,7 @@ def empty_dataset_source(destination):
     """Exercise real validation/rendering on a separate valid, empty input source."""
     from lending_simulator.data import Dataset, save_dataset
     shutil.copy2(ROOT / "app.py", destination / "app.py")
-    for directory in ("lending_simulator", ".streamlit", "queries"):
+    for directory in ("lending_simulator", ".streamlit"):
         shutil.copytree(ROOT / directory, destination / directory,
                         ignore=shutil.ignore_patterns("__pycache__"))
     dataset = Dataset((), 2262026)
