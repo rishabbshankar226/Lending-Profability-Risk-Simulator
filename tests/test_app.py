@@ -65,7 +65,7 @@ def test_viewing_ineligible_policy_keeps_recommendation_and_identifies_cash_shor
     ]
     assert any("Charts and downloads show Balanced" in item.value for item in page.caption)
     assert page.session_state["applied_policy"] == "balanced"
-    assert page.session_state["results"][1].run_id == "a2feec5a72facbc3"
+    assert page.session_state["results"][1].run_id == "70d251749e3b54d6"
 
 
 @pytest.mark.parametrize("overrides, explanation, diagnostic", [
@@ -159,11 +159,11 @@ def test_decision_brief_follows_applied_examples_and_retains_last_valid_run():
 
     base = preview()
     assert "Recommended policy: Conservative" in base
-    assert '"run_id": "5a88f7bef3fa93d4"' in base
+    assert '"run_id": "438a13c9e03c52a9"' in base
     page.button(key="example_capital").click().run()
     capital = preview()
     assert "Recommended policy: Balanced" in capital
-    assert '"run_id": "690e9fa563e2d475"' in capital
+    assert '"run_id": "89fea7fd94029201"' in capital
     page.number_input(key="cash_floor").set_value(-1.0)
     assert preview() == capital
     page.button(key="run_scenario").click().run()
@@ -237,11 +237,11 @@ def test_bad_input_is_reported_and_last_successful_results_remain_visible():
 
 
 @pytest.mark.parametrize("example, assumptions, policy, run_id, profit, recommendation", [
-    ("base", Assumptions(), "conservative", "5a88f7bef3fa93d4", "$48,133", "conservative"),
+    ("base", Assumptions(), "conservative", "438a13c9e03c52a9", "$48,133", "conservative"),
     ("capital", replace(Assumptions(), initial_cash=1250000), "balanced",
-     "690e9fa563e2d475", "$294,468", "balanced"),
+     "89fea7fd94029201", "$294,468", "balanced"),
     ("defaults", replace(Assumptions(), default_stress=2), "conservative",
-     "a2d0056e84a3ceb8", "($11,563)", None),
+     "153c7d2b57999d98", "($11,563)", None),
 ])
 def test_guided_example_replaces_custom_and_draft_inputs_and_clears_stress(
         example, assumptions, policy, run_id, profit, recommendation):
@@ -293,7 +293,7 @@ def test_custom_run_after_example_keeps_edits_and_other_visitors_independent():
     assert other.session_state["applied_policy"] == "conservative"
     page.button(key="reset").click().run()
     assert page.session_state["applied_assumptions"] == Assumptions()
-    assert page.session_state["results"][0].run_id == "5a88f7bef3fa93d4"
+    assert page.session_state["results"][0].run_id == "438a13c9e03c52a9"
 
 
 def test_stress_grid_matches_current_applied_policy_and_resets_with_scenario():
@@ -385,3 +385,115 @@ def test_valid_dataset_replacement_refreshes_results_with_applied_inputs(isolate
     assert page.session_state["applied_assumptions"].initial_cash == 1250000
     assert all(r.dataset_hash == changed.dataset_hash for r in page.session_state["results"])
     assert page.session_state["results"][1].run_id != old_run
+
+
+def test_empty_portfolio_stress_grid_keeps_loss_ratios_missing_and_every_case_ineligible(isolated_project):
+    path = isolated_project.parent / "data" / "applications.csv"
+    original = load_dataset(path)
+    empty = Dataset((), original.seed)
+    save_dataset(empty, path)
+    (path.parent / "manifest.json").write_text(json.dumps(empty.manifest()))
+    page = AppTest.from_file(isolated_project, default_timeout=20).run()
+    assert not page.exception
+
+    page.button(key="run_stress").click().run()
+
+    assert not page.exception
+    saved = page.session_state["stress_points"]
+    assert saved["run_id"] == page.session_state["results"][0].run_id
+    assert len(saved["points"]) == 20
+    assert all(point["loss_ratio"] is None for point in saved["points"])
+    assert all(not point["eligible"] and "No funded loans" in point["reasons"]
+               for point in saved["points"])
+    details = next(item for item in page.expander
+                   if item.label == "Stress contribution, cash gaps, and failure reasons")
+    table = details.dataframe[0].value
+    assert len(table) == 20
+    assert table["loss_ratio"].isna().all()
+    assert not table["eligible"].any()
+
+
+def test_high_only_population_keeps_downloads_available_when_switching_policies(isolated_project):
+    path = isolated_project.parent / "data" / "applications.csv"
+    original = load_dataset(path)
+    high_only = Dataset((next(row for row in original.applications if row.risk_band == "high"),),
+                        original.seed)
+    save_dataset(high_only, path)
+    (path.parent / "manifest.json").write_text(json.dumps(high_only.manifest()))
+    page = AppTest.from_file(isolated_project, default_timeout=20).run()
+    assert not page.exception
+
+    for policy in ("conservative", "aggressive", "balanced"):
+        if page.session_state["applied_policy"] != policy:
+            page.selectbox(key="policy").set_value(policy)
+            page.button(key="run_scenario").click().run()
+        assert not page.exception
+        selected = next(result for result in page.session_state["results"] if result.policy == policy)
+        assert selected.dataset_hash == high_only.dataset_hash
+        assert [item.proto.label for item in page.get("download_button")] == [
+            "CSV results + manifest", "Audit workbook", "Decision brief",
+        ]
+        if policy == "aggressive":
+            assert selected.summary.funded_loans == 1
+            assert selected.summary.loss_ratio is not None
+            assert selected.summary.unit_contribution is not None
+        else:
+            assert selected.summary.funded_loans == 0
+            assert selected.summary.loss_ratio is None
+            assert selected.summary.unit_contribution is None
+            assert page.metric[2].value == "n.a."
+            assert any("No funded loans" in item.value for item in page.caption)
+
+
+def test_high_only_replacement_preserves_applied_inputs_and_clears_old_stress_grid(isolated_project):
+    page = AppTest.from_file(isolated_project, default_timeout=20).run()
+    page.selectbox(key="policy").set_value("balanced")
+    page.number_input(key="initial_cash").set_value(1250000.0)
+    page.button(key="run_scenario").click().run()
+    page.button(key="run_stress").click().run()
+    assert not page.exception
+    assert "stress_points" in page.session_state
+    applied = page.session_state["applied_assumptions"]
+    old_run = page.session_state["results"][1].run_id
+    page.slider(key="stress").set_value(3.0)
+    path = isolated_project.parent / "data" / "applications.csv"
+    original = load_dataset(path)
+    high_only = Dataset((next(row for row in original.applications if row.risk_band == "high"),),
+                        original.seed)
+    save_dataset(high_only, path)
+    (path.parent / "manifest.json").write_text(json.dumps(high_only.manifest()))
+
+    page.run()
+
+    assert not page.exception
+    assert page.session_state["applied_policy"] == "balanced"
+    assert page.session_state["applied_assumptions"] == applied
+    assert page.session_state["applied_assumptions"].default_stress == 1
+    assert all(result.dataset_hash == high_only.dataset_hash for result in page.session_state["results"])
+    assert page.session_state["results"][1].run_id != old_run
+    assert "stress_points" not in page.session_state
+    assert page.metric[2].value == "n.a."
+    assert len(page.get("download_button")) == 3
+
+
+def test_enormous_finite_operating_cost_reports_error_and_retains_last_valid_scenario(isolated_project):
+    page = AppTest.from_file(isolated_project, default_timeout=20).run()
+    assert not page.exception
+    applied = page.session_state["applied_assumptions"]
+    results = page.session_state["results"]
+    applied_policy = page.session_state["applied_policy"]
+    run_ids = tuple(result.run_id for result in results)
+    operating_result = page.metric[0].value
+
+    page.number_input(key="opex").set_value(1e308)
+    page.button(key="run_scenario").click().run()
+
+    assert not page.exception
+    assert any("Scenario could not run:" in item.value and "last successful result" in item.value
+               for item in page.error)
+    assert page.session_state["applied_assumptions"] == applied
+    assert page.session_state["results"] == results
+    assert page.session_state["applied_policy"] == applied_policy
+    assert tuple(result.run_id for result in page.session_state["results"]) == run_ids
+    assert page.metric[0].value == operating_result
+    assert len(page.get("download_button")) == 3

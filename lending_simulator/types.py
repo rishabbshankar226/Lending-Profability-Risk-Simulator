@@ -16,6 +16,7 @@ POLICIES = {
 }
 BANDS = ("low", "medium", "high")
 ORIGINATION_MONTHS = 24
+MAX_USD_INPUT = D("1e12")
 
 
 def decimal_text(value: Decimal) -> str:
@@ -70,6 +71,9 @@ class Assumptions:
                 raise ValueError(f"{name} must be between 0 and 1.")
         if self.default_stress > 10:
             raise ValueError("Default stress must be at most 10 times base PD.")
+        for name in ("initial_cash", "facility_limit", "acquisition_cost", "servicing_cost", "monthly_opex", "cash_floor"):
+            if getattr(self, name) > MAX_USD_INPUT:
+                raise ValueError(f"{name} must be at most $1 trillion.")
 
     def lifetime_pd(self, band: str) -> Decimal:
         # A stress above 100% is capped; the dashboard reports the effective PD.
@@ -80,6 +84,8 @@ class Assumptions:
 
     @classmethod
     def from_dict(cls, values: dict) -> "Assumptions":
+        if not isinstance(values, dict):
+            raise ValueError("Assumptions must be a JSON object.")
         allowed = {field.name for field in fields(cls)}
         unknown = set(values) - allowed
         if unknown:

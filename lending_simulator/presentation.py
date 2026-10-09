@@ -241,6 +241,7 @@ def assumption_register(assumptions: Assumptions) -> list[dict]:
 def workbook_payload(result: ModelResult, results: tuple[ModelResult, ...], dataset: Dataset) -> dict:
     if result.dataset_hash != dataset.dataset_hash or result not in results:
         raise ValueError("Workbook must contain the selected scenario's results and dataset.")
+    select_strategy(results)  # Validate the comparison's shared population, inputs and horizon.
     return {"selected_run_id": result.run_id, "manifest": result.manifest() | {"dataset": dataset.manifest()},
             "summary": _record(result.summary), "monthly": [_record(r) for r in result.monthly],
             "cohorts": [_record(r) for r in result.cohorts], "assumptions": assumption_register(result.assumptions),
