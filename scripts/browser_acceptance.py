@@ -219,6 +219,8 @@ def desktop_journey(r):
 
     r.expand("Compare with a pinned scenario")
     p.get_by_role("button", name="Pin applied scenario", exact=True).click()
+    expect(p.get_by_text(re.compile(r"Baseline runs: .*Balanced 690e9fa563e2d475"))).to_be_visible()
+    r.ready()
     r.expand("Credit assumptions")
     lag = p.get_by_role("spinbutton", name="Recovery lag (months)", exact=True)
     lag.fill("12")

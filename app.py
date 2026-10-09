@@ -221,7 +221,7 @@ with st.sidebar:
         st.number_input("Facility limit ($)", step=250000.0, key="facility", on_change=sync_draft)
         st.number_input("Collateral advance rate (%)", step=5.0, key="advance_percent", on_change=sync_draft)
     credit_editor = st.expander("Credit assumptions", expanded=s.get("credit_editor", False),
-                                key="credit_editor", on_change="rerun")
+                                key="credit_editor")
     with credit_editor:
         st.number_input("Low-band lifetime PD (%)", step=1.0, key="low_percent", on_change=sync_draft)
         st.number_input("Medium-band lifetime PD (%)", step=1.0, key="medium_percent", on_change=sync_draft)
