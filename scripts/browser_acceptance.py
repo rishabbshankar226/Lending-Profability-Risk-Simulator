@@ -183,7 +183,7 @@ def desktop_journey(r):
     assert chart[0]["xaxis"]["type"] == "date"
     assert any(s.get("y0") == 50000 for s in chart[1]["shapes"]), chart
     r.check("Base identity, 39 monthly points, calendar axis and cash floor", chart)
-    r.capture("overview-charts", p.get_by_role("heading", name="Operating profit over time", exact=True))
+    r.capture("overview-charts", p.locator(".js-plotly-plot").first)
     r.expand("How operating profit is calculated")
     expect(p.get_by_role("columnheader", name="Component", exact=True)).to_be_visible()
     r.capture("profit-bridge", p.get_by_role("columnheader", name="Component", exact=True))
@@ -274,7 +274,7 @@ def desktop_journey(r):
     expect(p.get_by_text(re.compile(r"Scenario could not run:"))).to_be_visible()
     assert r.metrics()[0] == "$48,133"
     assert r.applied_run() == BASE_RUN
-    r.capture("invalid-input")
+    r.capture("invalid-input", p.get_by_text(re.compile(r"Scenario could not run:")))
     r.check("Invalid inputs retain last successful scenario")
     p.get_by_role("button", name="Restore applied inputs", exact=True).click()
 
