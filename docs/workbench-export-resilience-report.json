@@ -1,0 +1,236 @@
+{
+  "created_at": "2026-10-09T23:26:21.208371+00:00",
+  "source_commit": "f2e69fa06a33bab87b5e4a65406d881c1e6566db",
+  "source_sha256": {
+    "app.py": "787550c6cd6bf477bd7f3d1b0e2cbcec11f20b4bfe317e8a7b9f67abf3d3eb95",
+    ".streamlit/config.toml": "5c79ac18477326bc32f3ec56e518ddabedb4e210e971873e36328fa188cc2869",
+    "lending_simulator/ui/__init__.py": "17173c061b07cb9362a2b4ca3c8ab3a5b87aaad4a27323d49846e1dc7149bb4f",
+    "lending_simulator/ui/charts.py": "ff105d833e6f298473f9d8e2634b4f6684c35ce50df9e7be156ce06841666471",
+    "lending_simulator/ui/components.py": "81da10eb83ec9a91f8e34574e328ebb24227b969f6b6b6871846e9009b96ea9c",
+    "lending_simulator/ui/data.py": "560b1b4160d705a113a2ba441cec7d5b659d83b3b63994a7704424aa22bb3db9",
+    "lending_simulator/ui/downloads.py": "197a8e923d0804806425e8d9c45884519b6b3b0167a546c624d298d92a41f74a",
+    "lending_simulator/ui/formatting.py": "77e61912042213a5d1d51d8485c8e24f50093bc36aa6819518e2e32b94dc8e24",
+    "lending_simulator/ui/state.py": "71a92b6521bbb68fab5a5dffd187897cded823158e92be6e4f7ae9c54f217bfe",
+    "lending_simulator/ui/theme.py": "990b6704da4860a7026b082d61acada200f3a218e494a56fd7c074b6a499e379",
+    "lending_simulator/ui/views.py": "0924762665860d45e224a8ccf7acc2fbf7fa6a7bb7f7a90425b8d1591ac69811"
+  },
+  "fixture": "Test-only wrapper holds or fails one CSV builder call inside the real cached_export. Each case has a fresh server/cache. Original builder produces every successful file. Unchanged app.py, model, dataset and UI. No deployment or state injection.",
+  "cases": [
+    {
+      "name": "slow-generation",
+      "viewport": [
+        1440,
+        900
+      ],
+      "checks": [
+        {
+          "name": "Requested export shows a disabled generating control while held on the server",
+          "details": {
+            "token": "7a01a19e2a3749e7a74f6c6a8e419642",
+            "mode": "hold",
+            "kind": "csv",
+            "run_id": "5a88f7bef3fa93d4",
+            "event": "started",
+            "time": 174.478396173
+          }
+        },
+        {
+          "name": "Balanced renders and its applied identity changes before original generation is released",
+          "details": {
+            "applied_run": "a2feec5a72facbc3",
+            "selected_at": 176.015220612,
+            "original_started_at": 174.478396173,
+            "original_still_held": true,
+            "metrics": [
+              "$294,468",
+              "$746,143",
+              "3.42 pp"
+            ]
+          }
+        },
+        {
+          "name": "Released export downloads the original Conservative file while Balanced stays applied",
+          "details": {
+            "file": "held-lending-5a88f7bef3fa93d4.zip",
+            "bytes": 52477,
+            "sha256": "9a68f9157f5aabf784561536a8423084088d3d5add271b976fb97198efdde077",
+            "run_id": "5a88f7bef3fa93d4",
+            "started_at": 174.478396173,
+            "switched_at": 176.015220612,
+            "released_at": 176.204144745,
+            "completed_at": 176.226815676
+          }
+        },
+        {
+          "name": "A later export uses the currently viewed Balanced run",
+          "details": {
+            "file": "new-lending-a2feec5a72facbc3.zip",
+            "bytes": 93427,
+            "sha256": "6afdfc13dfc98ef344f91ff4aa059e6a1e96231d53c4791fef9924283282bb52",
+            "run_id": "a2feec5a72facbc3"
+          }
+        },
+        {
+          "name": "No unexpected browser errors or failed requests; WebSocket connected",
+          "details": null
+        }
+      ],
+      "captures": [
+        "slow-generation-generating.png",
+        "slow-generation-changed-policy-while-generating.png"
+      ],
+      "operations": [],
+      "status": "passed",
+      "console": [],
+      "failed_requests": [],
+      "websockets": [
+        "ws://127.0.0.1:55109/_stcore/stream"
+      ],
+      "generation_events": [
+        {
+          "token": "7a01a19e2a3749e7a74f6c6a8e419642",
+          "mode": "hold",
+          "kind": "csv",
+          "run_id": "5a88f7bef3fa93d4",
+          "event": "started",
+          "time": 174.478396173
+        },
+        {
+          "token": "7a01a19e2a3749e7a74f6c6a8e419642",
+          "mode": "hold",
+          "kind": "csv",
+          "run_id": "5a88f7bef3fa93d4",
+          "event": "released",
+          "time": 176.204144745
+        },
+        {
+          "token": "7a01a19e2a3749e7a74f6c6a8e419642",
+          "mode": "hold",
+          "kind": "csv",
+          "run_id": "5a88f7bef3fa93d4",
+          "event": "completed",
+          "bytes": 52477,
+          "sha256": "9a68f9157f5aabf784561536a8423084088d3d5add271b976fb97198efdde077",
+          "time": 176.226815676
+        },
+        {
+          "token": "c410db3e5e2c4610a283c6aee1681381",
+          "mode": "normal",
+          "kind": "csv",
+          "run_id": "a2feec5a72facbc3",
+          "event": "started",
+          "time": 176.491166227
+        },
+        {
+          "token": "c410db3e5e2c4610a283c6aee1681381",
+          "mode": "normal",
+          "kind": "csv",
+          "run_id": "a2feec5a72facbc3",
+          "event": "completed",
+          "bytes": 93427,
+          "sha256": "6afdfc13dfc98ef344f91ff4aa059e6a1e96231d53c4791fef9924283282bb52",
+          "time": 176.53983717
+        }
+      ]
+    },
+    {
+      "name": "generation-retry",
+      "viewport": [
+        1440,
+        900
+      ],
+      "checks": [
+        {
+          "name": "Server generation failure shows an inline error and restores the same download control",
+          "details": {
+            "token": "f8711207ec464641be7e62cc99e0754d",
+            "mode": "fail",
+            "kind": "csv",
+            "run_id": "5a88f7bef3fa93d4",
+            "event": "failed",
+            "time": 182.014667682
+          }
+        },
+        {
+          "name": "Failed generation produces no download and leaves applied metrics intact",
+          "details": {
+            "metrics": [
+              "$48,133",
+              "$97,450",
+              "4.16 pp"
+            ]
+          }
+        },
+        {
+          "name": "Retry clears the error and downloads the exact applied run",
+          "details": {
+            "file": "retry-lending-5a88f7bef3fa93d4.zip",
+            "bytes": 52477,
+            "sha256": "6084f20765acbf9a3a33a13d4d93febc26a8d03e804c3ece989b1a5d4ec668fb",
+            "run_id": "5a88f7bef3fa93d4"
+          }
+        },
+        {
+          "name": "The applied scenario and normal analysis remain usable after failure and retry",
+          "details": null
+        },
+        {
+          "name": "No unexpected browser errors or failed requests; WebSocket connected",
+          "details": null
+        }
+      ],
+      "captures": [
+        "generation-retry-generation-error.png"
+      ],
+      "operations": [
+        {
+          "name": "Navigate to Policies",
+          "seconds": 0.5804511100000127
+        }
+      ],
+      "status": "passed",
+      "console": [],
+      "failed_requests": [],
+      "websockets": [
+        "ws://127.0.0.1:53945/_stcore/stream"
+      ],
+      "generation_events": [
+        {
+          "token": "f8711207ec464641be7e62cc99e0754d",
+          "mode": "fail",
+          "kind": "csv",
+          "run_id": "5a88f7bef3fa93d4",
+          "event": "started",
+          "time": 182.01433295
+        },
+        {
+          "token": "f8711207ec464641be7e62cc99e0754d",
+          "mode": "fail",
+          "kind": "csv",
+          "run_id": "5a88f7bef3fa93d4",
+          "event": "failed",
+          "time": 182.014667682
+        },
+        {
+          "token": "373107b1c0fe4ad1812398cd4f5c7601",
+          "mode": "normal",
+          "kind": "csv",
+          "run_id": "5a88f7bef3fa93d4",
+          "event": "started",
+          "time": 182.38751574
+        },
+        {
+          "token": "373107b1c0fe4ad1812398cd4f5c7601",
+          "mode": "normal",
+          "kind": "csv",
+          "run_id": "5a88f7bef3fa93d4",
+          "event": "completed",
+          "bytes": 52477,
+          "sha256": "6084f20765acbf9a3a33a13d4d93febc26a8d03e804c3ece989b1a5d4ec668fb",
+          "time": 182.414306456
+        }
+      ]
+    }
+  ],
+  "browser": "145.0.7632.6"
+}

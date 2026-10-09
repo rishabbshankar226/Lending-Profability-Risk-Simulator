@@ -60,7 +60,8 @@
   "reports": {
     "workbench-browser-report.json": "4f17c2b60f82b437b6e5e14b0aba9b8ccdc0caeb3813bace19c42d9aaf74f030",
     "workbench-reference-report.json": "d32720455c26fdd17721599a22dc418c0abc5bec7ba9f78b565d5f20560789c5",
-    "workbench-performance.json": "bae954b3bd31caf8199943efee9af17ee1c29e808b61120df8046b682182927e"
+    "workbench-performance.json": "bae954b3bd31caf8199943efee9af17ee1c29e808b61120df8046b682182927e",
+    "workbench-export-resilience-report.json": "7fc30eb01e32d9f53a618b705276f62f72230e5b930d82cf0b2abf028d592e6b"
   },
   "captures": [
     {
@@ -146,6 +147,27 @@
       "sha256": "47d1c260d0bc7aa008cdf1c97896d3099e1ecaee349313c146240c102f9fbf86",
       "bytes": 41600,
       "source_commit": "baeda884355734f534babd2bc73ab7018742569f"
+    },
+    {
+      "path": "docs/screenshots/workbench/slow-generation-generating.png",
+      "sha256": "5497f79be0ecb561a8b93a3d05230f864f4f1c5f56d7ca3b69879006ccae5c22",
+      "bytes": 108216,
+      "source_commit": "f2e69fa06a33bab87b5e4a65406d881c1e6566db",
+      "fixture": "slow-generation"
+    },
+    {
+      "path": "docs/screenshots/workbench/slow-generation-changed-policy-while-generating.png",
+      "sha256": "bdc5afec07c6d979a775ab4d1e56f7ae76ce07232759b0002d94d517df38a932",
+      "bytes": 109229,
+      "source_commit": "f2e69fa06a33bab87b5e4a65406d881c1e6566db",
+      "fixture": "slow-generation"
+    },
+    {
+      "path": "docs/screenshots/workbench/generation-retry-generation-error.png",
+      "sha256": "998b361a7513b0f7dc20ec507b494d001332e4129f73af584d9c50a9044bd89b",
+      "bytes": 110486,
+      "source_commit": "f2e69fa06a33bab87b5e4a65406d881c1e6566db",
+      "fixture": "generation-retry"
     }
   ],
   "actions_artifact": {
@@ -158,6 +180,30 @@
     "Chromium mobile emulation; no physical-device/iOS or hardware numeric-keyboard pass.",
     "Scoped keyboard/owned-caption checks; no full screen-reader/native-widget/zoom audit.",
     "Loopback timings; no public-host access, latency, wake or multi-user claim.",
-    "Captured file identity and browser cancellation/retry; no deliberately slow generation overlap or server-generation failure pass."
-  ]
+    "Controlled CSV builder hold/failure with original successful files; no throttled network transfer or hosted export-failure claim."
+  ],
+  "accepted_browser_totals": {
+    "journeys": 11,
+    "checks": 69
+  },
+  "export_resilience": {
+    "tested_checkout": "f2e69fa06a33bab87b5e4a65406d881c1e6566db",
+    "ci_run": 38004218065,
+    "ci_url": "https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/actions/runs/38004218065",
+    "journeys": 2,
+    "checks": 10,
+    "report": "workbench-export-resilience-report.json",
+    "application_hashes_match_original_acceptance": true,
+    "financial_tests": {
+      "passed": 118,
+      "skipped": 0,
+      "seconds": 31.92
+    },
+    "fixture": "Test-only wrapper holds or fails one CSV builder call inside the real cached_export. Each case has a fresh server/cache. Original builder produces every successful file. Unchanged app.py, model, dataset and UI. No deployment or state injection.",
+    "actions_artifact": {
+      "id": 11650347809,
+      "sha256": "b05f044629f437bd3a0df8e891d04c0eebda2ba207bdc151b1f53fa5fac85c1d",
+      "expires_at": "2026-10-23T23:26:36Z"
+    }
+  }
 }

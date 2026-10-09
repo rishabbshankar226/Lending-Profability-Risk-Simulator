@@ -6,7 +6,7 @@ The app models a hypothetical lender retaining 12-month merchant-financed instal
 
 **Live dashboard:** [Open the dashboard](https://rishabb-lending-simulator.streamlit.app/) · **Source code:** [main](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/tree/main) · **Merge history:** [PR #1](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/pull/1)
 
-**UI workbench candidate:** this branch adds the redesigned interface. Read the [candidate review and acceptance gates](docs/ui-workbench-review.md). The public dashboard and existing media show the earlier `feature/lending-simulator` build; nine real-browser journeys pass, with [before/after captures and scoped results](docs/workbench-browser-validation.md). Deployment remains pending.
+**UI workbench candidate:** this branch adds the redesigned interface. Read the [candidate review and acceptance gates](docs/ui-workbench-review.md). The public dashboard and existing media show the earlier `feature/lending-simulator` build; eleven real-browser journeys pass, with [before/after captures and scoped results](docs/workbench-browser-validation.md). Deployment remains pending.
 
 **Start here:** [Two-minute reviewer guide](docs/reviewer-guide.md) · [Application and interview notes](docs/interview-notes.md)
 
@@ -57,9 +57,12 @@ Run the separate real-browser suite with:
 python -m pip install -r requirements-browser.txt
 python -m playwright install --with-deps --only-shell chromium
 python -m scripts.browser_acceptance --output artifacts/browser-acceptance
+python -m scripts.browser_export_resilience --output artifacts/browser-acceptance/export-resilience
 ```
 
 This starts the unchanged application on loopback and exercises it in isolated Chromium. Reports include source hashes, viewport captures, traces, downloads and console/network diagnostics. The empty-input case uses a separate valid zero-row dataset with unchanged application/model code. GitHub Actions also captures the exact pre-redesign base for comparison. No hosting account is required for these checks.
+
+The export-resilience script uses a separate test-only entrypoint and fresh server/cache for each case. It holds one real CSV generation until the browser changes policy, or raises once inside the cached CSV builder. Every successful file uses the original builder and applied inputs. This fixture is never loaded by the production app; it verifies loading/error recovery without mocking financial results or claiming a throttled network transfer.
 
 To reproduce downloaded inputs, unzip `manifest.json` and use:
 
@@ -122,7 +125,7 @@ Finance uses 34-digit Decimal arithmetic with a $1e−16 internal reconciliation
 
 All 118 automated model, application-state, export, and HTTP startup checks pass. Workbench coverage includes draft preservation/restoration, immediate policy selection, hidden-view navigation, immutable baseline comparison, exact stress staging/markers, undefined values and deferred format generation. The financial engine, model version and example run identities are unchanged; three saved decision briefs match exact regeneration. [Separate operation measurements](docs/workbench-performance.json) cover local server code and AppTest, not browser or hosting latency.
 
-The separate Chromium workflow passed nine real-browser journeys (59 checks) at 1440, 1280, 390 and 320 CSS-pixel widths, plus two captures of the exact pre-redesign base. It checks rendering/reflow, keyboard/focus, WebSockets, actual exports, captured-file identity, browser cancellation/retry and an empty input source. [Browser evidence and screenshots](docs/workbench-browser-validation.md) distinguish these results from physical devices, full accessibility, deliberately slow generation/failure cases and hosting behavior still awaiting review.
+The separate Chromium workflow passed eleven real-browser journeys (69 checks) at 1440, 1280, 390 and 320 CSS-pixel widths, plus two captures of the exact pre-redesign base. It checks rendering/reflow, keyboard/focus, WebSockets, actual exports, captured-file identity, browser cancellation/retry and an empty input source. Two controlled export cases prove selection during held server generation and recovery after an uncached builder failure. [Browser evidence and screenshots](docs/workbench-browser-validation.md) distinguish these results from physical devices, full accessibility and hosting behavior still awaiting review.
 
 The earlier hosted desktop build was exercised across all five tabs, scenario apply/reset, capital and stress cases, validation errors, cohort cutoffs, and downloads. Guided examples were checked for the correct applied runs, replacement of draft/advanced inputs, stress-grid clearing and keyboard activation. The three actual decision-brief downloads matched local regeneration exactly; the capital brief retained applied inputs during a draft edit, and its saved manifest reproduced the same CLI decision and run. The comparison summaries were verified at base and $1.25m starting equity. See the browser evidence for tested commits and run IDs. Missing or invalid base data stops the dashboard with a clear error; validated replacements refresh the applied scenario and exports.
 
