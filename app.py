@@ -1,92 +1,29 @@
-"""Public-demo entrypoint. Every financial result comes from the pure engine."""
+"""Lending workbench. Applied financial results are immutable until an explicit run."""
 
-from dataclasses import asdict
+from dataclasses import replace
 from decimal import Decimal as D
 from hashlib import sha256
 from pathlib import Path
 import json
 
 import pandas as pd
-import plotly.express as px
-import plotly.graph_objects as go
 import streamlit as st
 
 from lending_simulator import MODEL_VERSION
-from lending_simulator.analytics import policy_population, query_text
 from lending_simulator.data import DEFAULT_SEED, load_dataset
-from lending_simulator.decisions import compare_policies, evaluate_policy, select_strategy, sensitivity
-from lending_simulator.exports import scenario_workbook
-from lending_simulator.presentation import (
-    assumption_register, band_curves, cohort_heatmap, comparison_frame,
-    csv_package, decision_brief, evidence_register, limit_margins, month_label, monthly_frame,
-)
+from lending_simulator.decisions import compare_policies, select_strategy, sensitivity
+from lending_simulator.presentation import assumption_register
 from lending_simulator.types import Assumptions, POLICIES
+from lending_simulator.ui.components import caption, decision_summary, readable_table
+from lending_simulator.ui.data import ScenarioSnapshot
+from lending_simulator.ui.downloads import download_factory
+from lending_simulator.ui.formatting import money, percent, multiple, assumption_value
+from lending_simulator.ui.state import FIELDS, controls_for, parse_controls, draft_changes, stage_case
+from lending_simulator.ui.theme import apply_styles
+from lending_simulator.ui.views import ViewContext, render
 
 ROOT = Path(__file__).resolve().parent
-COLORS = {"Conservative": "#145b72", "Balanced": "#84734d", "Aggressive": "#8a477b"}
-DEFAULTS = {
-    "policy": "conservative", "growth_percent": 0.0, "stress": 1.0, "funding_percent": 8.0,
-    "initial_cash": 500000.0, "borrower_percent": 18.0, "merchant_percent": 2.0,
-    "low_percent": 2.0, "medium_percent": 6.0, "high_percent": 12.0,
-    "recovery_percent": 25.0, "lag": 3, "advance_percent": 80.0,
-    "facility": 2000000.0, "acquisition": 25.0, "servicing": 1.0,
-    "opex": 7500.0, "loss_cap_percent": 5.0, "cash_floor": 50000.0,
-    "cohort_cutoff": "First 24 months",
-}
-
-
-def money(value):
-    return "n.a." if value is None else f"${value:,.0f}" if value >= 0 else f"(${abs(value):,.0f})"
-
-
-def percent(value):
-    return "n.a." if value is None else f"{value:.2%}"
-
-
-def decision_panel(result, decision):
-    a, s = result.assumptions, result.summary
-    eligibility = evaluate_policy(result)
-    cash_margin, loss_margin = limit_margins(result)
-    recommendation = decision.recommended_policy.title() if decision.recommended_policy else "None"
-    with st.container(border=True, key="decision_panel"):
-        recommended, viewed = st.columns([2, 1], vertical_alignment="center")
-        recommended.header(f"Recommended policy: {recommendation}")
-        viewed.markdown(f"**Viewing policy: {result.policy.title()}**")
-        viewed.caption("Meets credit and cash limits" if eligibility.eligible else
-                       f"Ineligible: {'; '.join(eligibility.reasons)}")
-        if decision.recommended_policy:
-            st.success(decision.message)
-        else:
-            st.warning(decision.message)
-        if decision.diagnostic_policy:
-            st.caption(f"Diagnostic policy: {decision.diagnostic_policy.title()} · No positive-profit recommendation.")
-        st.caption(f"Charts and downloads show {result.policy.title()}. Recommendations compare all three policies on the applied inputs.")
-
-        profit, cash, loss = st.columns(3)
-        profit.metric("Operating result · full runoff", money(s.operating_result),
-                      help="Interest + merchant fees − funding, servicing, acquisition, net principal loss and all platform costs.")
-        profit.caption(f"{len(result.monthly)} months through {month_label(len(result.monthly) - 1)} · Includes repayment and recovery runoff.")
-        cash_label = ("Cash cushion above floor" if cash_margin > 0 else
-                      "Cash shortfall to floor" if cash_margin < 0 else "Cash at floor")
-        cash_amount = cash_margin.copy_abs()
-        cash.metric(cash_label, "<$1" if 0 < cash_amount < 1 else money(cash_amount),
-                    help="Lowest month-end cash minus the required cash floor. A shortfall is the amount missing from the floor.")
-        cash.caption(f"Minimum cash: {money(s.minimum_cash)} · Floor: {money(a.cash_floor)} · {month_label(s.minimum_cash_month)}.".replace("$", r"\$"))
-        loss_label = ("Loss headroom to cap" if loss_margin is None or loss_margin > 0 else
-                      "Loss cap exceeded by" if loss_margin < 0 else "Loss at cap")
-        loss_amount = None if loss_margin is None else loss_margin.copy_abs()
-        loss_value = ("n.a." if loss_amount is None else "<0.01 pp" if 0 < loss_amount < D(".01") else
-                      f"{loss_amount:.2f} pp")
-        loss.metric(loss_label, loss_value,
-                    help="Net principal loss cap minus the full-runoff loss ratio, in percentage points. Undefined when no principal is funded.")
-        loss.caption(f"Net principal loss: {percent(s.loss_ratio)} · Cap: {percent(a.loss_cap)}.")
-        st.caption("Amounts rounded to whole USD · pp = percentage points. Limit status uses unrounded values; a recommendation requires positive profit and passing financial checks.")
-
-        st.markdown("**Applied inputs**")
-        st.caption((f"Starting equity: {money(a.initial_cash)} · Default stress: {a.default_stress.normalize():f}× · "
-                    f"Annual funding: {percent(a.funding_rate)} · Monthly growth: {percent(a.demand_growth)} · "
-                    f"Facility: {money(a.facility_limit)}").replace("$", r"\$"))
-        st.caption(f"Edit sidebar inputs, then choose Run scenario to update results. · Applied run: {result.run_id}")
+VIEWS = ("Overview", "Policies", "Cohorts", "Funding & stress", "Methodology")
 
 
 @st.cache_data(max_entries=2, show_spinner=False)
@@ -106,296 +43,269 @@ def cached_results(assumption_json, dataset_hash, dataset_version, model_version
     return compare_policies(_dataset, Assumptions.from_dict(json.loads(assumption_json)))
 
 
-@st.cache_data(max_entries=4, show_spinner=False)
-def cached_downloads(run_id, model_version, _result, _results, _dataset):
-    if run_id != _result.run_id or model_version != MODEL_VERSION:
-        raise ValueError("Download identity does not match the selected result.")
-    return (csv_package(_result, _dataset), scenario_workbook(_result, _results, _dataset),
-            decision_brief(_result, _results))
-
-
 @st.cache_data(max_entries=3, show_spinner=False)
 def cached_sensitivity(assumption_json, dataset_hash, policy, model_version, _dataset):
-    if dataset_hash != _dataset.dataset_hash or model_version != MODEL_VERSION:
+    if _dataset.dataset_hash != dataset_hash or model_version != MODEL_VERSION:
         raise ValueError("Stress cache identity does not match its inputs.")
     return sensitivity(_dataset, Assumptions.from_dict(json.loads(assumption_json)), policy)
 
 
-def inputs_from_controls():
-    s = st.session_state
-    rates = {"borrower_rate": "borrower_percent", "merchant_fee": "merchant_percent", "pd_low": "low_percent",
-             "pd_medium": "medium_percent", "pd_high": "high_percent", "recovery_rate": "recovery_percent",
-             "funding_rate": "funding_percent", "advance_rate": "advance_percent", "demand_growth": "growth_percent",
-             "loss_cap": "loss_cap_percent"}
-    inputs = {name: D(str(s[control])) / 100 for name, control in rates.items()}
-    inputs.update(default_stress=D(str(s.stress)), initial_cash=D(str(s.initial_cash)),
-                  facility_limit=D(str(s.facility)), acquisition_cost=D(str(s.acquisition)),
-                  servicing_cost=D(str(s.servicing)), monthly_opex=D(str(s.opex)),
-                  cash_floor=D(str(s.cash_floor)), recovery_lag=s.lag)
-    a = Assumptions(**inputs)
-    a.validate()
-    return a
+def clear_stress():
+    for key in ("stress_points", "stress_case", "stress_case_view", "stress_metric", "stress_metric_view"):
+        st.session_state.pop(key, None)
 
 
-def apply_scenario(a, policy, dataset):
-    assumption_json = json.dumps(a.to_dict(), sort_keys=True)
-    results = cached_results(assumption_json, dataset.dataset_hash, dataset.version, MODEL_VERSION, dataset)
+def apply_scenario(a, policy, dataset, *, replace_draft=True):
+    results = cached_results(json.dumps(a.to_dict(), sort_keys=True), dataset.dataset_hash,
+                             dataset.version, MODEL_VERSION, dataset)
+    # Check the complete bundle before publishing the transaction.
+    select_strategy(results)
+    previous = st.session_state.get("results")
+    if previous is None or tuple(r.run_id for r in previous) != tuple(r.run_id for r in results):
+        clear_stress()
     st.session_state.update(applied_assumptions=a, applied_policy=policy, results=results)
+    if replace_draft:
+        st.session_state.draft_controls = controls_for(a)
+    st.session_state.pop("scenario_error", None)
 
 
-def load_example(overrides):
-    st.session_state.update(DEFAULTS | overrides)
-    st.session_state["apply_requested"] = True
-    st.session_state.pop("stress_points", None)
+def set_controls(controls):
+    st.session_state.draft_controls = dict(controls)
+    for key, value in controls.items():
+        st.session_state[key] = value
+
+
+def sync_draft():
+    old = st.session_state.draft_controls
+    st.session_state.draft_controls = {key: st.session_state.get(key, old[key]) for _, key, _, _ in FIELDS}
+    st.session_state.pop("scenario_error", None)
+
+
+def restore_applied():
+    set_controls(controls_for(st.session_state.applied_assumptions))
+    st.session_state.pop("scenario_error", None)
+
+
+def load_example(overrides, policy="conservative", reset=False):
+    set_controls(controls_for(replace(Assumptions(), **overrides)))
+    st.session_state.update(policy=policy, requested_policy=policy, apply_requested=True,
+                            cohort_view="First 24 months", cohort_cutoff="First 24 months")
+    clear_stress()
+    st.session_state.pop("scenario_error", None)
+    if reset:
+        st.session_state.update(active_view="Overview", analysis_view="Overview")
+        st.session_state.pop("baseline", None)
 
 
 def reset_scenario():
-    load_example({})
+    load_example({}, reset=True)
 
 
-def chart(fig, height=330):
-    fig.update_layout(height=height, margin=dict(l=15, r=15, t=20, b=35),
-                      font=dict(family="Arial", size=12, color="#182c3e"),
-                      paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
-                      legend=dict(orientation="h", y=1.08, x=0), hovermode="x unified")
-    fig.update_xaxes(showgrid=False)
-    fig.update_yaxes(gridcolor="#e3e9ef", zerolinecolor="#8293a4")
-    st.plotly_chart(fig, width="stretch", config={"displaylogo": False, "responsive": True})
+def view_policy(policy):
+    if policy not in POLICIES:
+        raise ValueError("Unknown viewed policy.")
+    if st.session_state.applied_policy != policy:
+        clear_stress()
+    st.session_state.update(policy=policy, applied_policy=policy)
 
 
-def line_plot(frame, fields, ytitle="USD"):
-    fig = go.Figure()
-    palette = ["#145b72", "#8a477b", "#84734d"]
-    for i, (field, label) in enumerate(fields):
-        fig.add_scatter(x=frame["period"], y=frame[field], name=label, mode="lines",
-                        line=dict(color=palette[i % len(palette)], width=2.5,
-                                  dash="solid" if i == 0 else "dash"),
-                        hovertemplate="%{x}: $%{y:,.0f}<extra>%{fullData.name}</extra>")
-    fig.update_yaxes(title=ytitle, tickprefix="$", tickformat=",.0f")
-    return fig
+def sync_policy():
+    view_policy(st.session_state.policy)
+
+
+def navigate(view):
+    st.session_state.update(active_view=view, analysis_view=view)
+
+
+def sync_navigation():
+    st.session_state.active_view = st.session_state.analysis_view
+
+
+def inspect_credit():
+    st.session_state.credit_editor = True
+
+
+def sync_cohort():
+    st.session_state.cohort_view = st.session_state.cohort_cutoff
+
+
+def pin_baseline():
+    st.session_state.baseline = ScenarioSnapshot.capture(st.session_state.results)
+
+
+def clear_baseline():
+    st.session_state.pop("baseline", None)
+
+
+def current_result():
+    return next(r for r in st.session_state.results if r.policy == st.session_state.applied_policy)
+
+
+def run_stress():
+    r = current_result()
+    with st.spinner("Calculating 20 selected-policy stress cases…"):
+        points = cached_sensitivity(json.dumps(r.assumptions.to_dict(), sort_keys=True),
+                                    r.dataset_hash, r.policy, MODEL_VERSION, dataset)
+    st.session_state.stress_points = {"run_id": r.run_id, "points": points}
+    for key in ("stress_case", "stress_case_view", "stress_metric", "stress_metric_view"):
+        st.session_state.pop(key, None)
+
+
+def sync_stress_case():
+    st.session_state.stress_case_view = st.session_state.stress_case
+
+
+def sync_stress_metric():
+    st.session_state.stress_metric_view = st.session_state.stress_metric
+
+
+def stage_stress():
+    saved = st.session_state.get("stress_points")
+    try:
+        if not saved or saved["run_id"] != current_result().run_id:
+            raise ValueError("Run a stress grid for this applied policy before staging a case.")
+        point = saved["points"][st.session_state.stress_case]
+        set_controls(stage_case(st.session_state.applied_assumptions, st.session_state.draft_controls, point))
+    except (ValueError, ArithmeticError) as error:
+        st.session_state.scenario_error = str(error)
 
 
 st.set_page_config(page_title="Lending Profitability & Risk Simulator", page_icon="📊", layout="wide")
-st.title("Lending Profitability & Risk Simulator")
-st.caption("Synthetic expected-value projections · 12-month retained loans · USD · historical calibration unavailable")
+apply_styles()
+st.title("Lending workbench")
+caption("Compare lending policies under cash and credit limits. Synthetic, illustrative, uncalibrated projections · USD.")
 try:
-    csv_digest = sha256((ROOT / "data" / "applications.csv").read_bytes()).hexdigest()
-    manifest_digest = sha256((ROOT / "data" / "manifest.json").read_bytes()).hexdigest()
-    dataset = get_dataset(csv_digest, manifest_digest, "synthetic-applications-v1")
+    dataset = get_dataset(sha256((ROOT / "data" / "applications.csv").read_bytes()).hexdigest(),
+                          sha256((ROOT / "data" / "manifest.json").read_bytes()).hexdigest(),
+                          "synthetic-applications-v1")
 except (ValueError, OSError) as error:
     st.error(f"Base dataset could not be loaded: {error}")
     st.stop()
-for key, value in DEFAULTS.items():
-    st.session_state.setdefault(key, value)
-apply_requested = st.session_state.pop("apply_requested", False)
-if "results" not in st.session_state or apply_requested:
-    apply_scenario(inputs_from_controls(), st.session_state.policy, dataset)
-elif any(result.dataset_hash != dataset.dataset_hash for result in st.session_state.results):
-    apply_scenario(st.session_state.applied_assumptions, st.session_state.applied_policy, dataset)
-    st.session_state.pop("stress_points", None)
+
+s = st.session_state
+s.setdefault("draft_controls", controls_for(Assumptions()))
+s.setdefault("policy", "conservative")
+s.setdefault("active_view", "Overview")
+s.setdefault("analysis_view", s.active_view)
+s.setdefault("cohort_view", "First 24 months")
+for _, key, _, _ in FIELDS:
+    s.setdefault(key, s.draft_controls[key])
+apply_requested = s.pop("apply_requested", False)
+if "results" not in s or apply_requested:
+    try:
+        apply_scenario(parse_controls(s.draft_controls), s.pop("requested_policy", s.policy), dataset)
+    except (ValueError, ArithmeticError) as error:
+        s.scenario_error = str(error)
+        if "results" not in s:
+            st.error(s.scenario_error)
+            st.stop()
+elif any(r.dataset_hash != dataset.dataset_hash for r in s.results):
+    apply_scenario(s.applied_assumptions, s.applied_policy, dataset, replace_draft=False)
 
 with st.sidebar:
     st.header("Scenario")
-    st.button("Reset to base", key="reset", on_click=reset_scenario, width="stretch")
-    with st.form("scenario_form"):
-        st.selectbox("Approval policy", list(POLICIES), format_func=str.title, key="policy")
-        st.slider("Monthly application growth (%)", -10.0, 10.0, step=.5, key="growth_percent",
-                  help="Weights the fixed applicant population. Changes neither risk mix nor pricing.")
-        st.slider("Lifetime default stress (×)", 0.0, 5.0, step=.25, key="stress")
-        st.slider("Annual funding rate (%)", 0.0, 30.0, step=.5, key="funding_percent")
-        st.number_input("Starting equity cash ($)", step=50000.0, key="initial_cash")
-        with st.expander("Credit and cash limits"):
-            st.number_input("Net principal loss cap (%)", step=.5, key="loss_cap_percent")
-            st.number_input("Minimum month-end cash ($)", step=10000.0, key="cash_floor")
-            st.caption("Illustrative management limits. Both apply to the full-runoff horizon.")
-        with st.expander("Advanced assumptions"):
-            st.number_input("Annual nominal borrower rate (%)", step=1.0, key="borrower_percent")
-            st.number_input("Merchant fee (%)", step=.5, key="merchant_percent")
-            st.number_input("Low-band lifetime PD (%)", step=1.0, key="low_percent")
-            st.number_input("Medium-band lifetime PD (%)", step=1.0, key="medium_percent")
-            st.number_input("High-band lifetime PD (%)", step=1.0, key="high_percent")
-            st.number_input("Recovery of charged-off principal (%)", step=5.0, key="recovery_percent")
-            st.number_input("Recovery lag (months)", step=1, key="lag")
-            st.number_input("Collateral advance rate (%)", step=5.0, key="advance_percent")
-            st.number_input("Facility limit ($)", step=250000.0, key="facility")
-            st.number_input("Acquisition cost / funded loan ($)", step=5.0, key="acquisition")
-            st.number_input("Servicing cost / surviving loan / month ($)", step=.5, key="servicing")
-            st.number_input("Platform operating expense / month ($)", step=500.0, key="opex")
-        run = st.form_submit_button("Run scenario", key="run_scenario", type="primary", width="stretch")
-    if run:
+    caption("Edit inputs, then Run scenario. Results stay on applied assumptions.")
+    with st.expander("One-click examples"):
+        caption("Replace all financial inputs and run immediately. A pinned baseline is retained.")
+        st.button("Base case", key="example_base", on_click=load_example, args=({},), width="stretch")
+        st.button("More capital · $1.25m", key="example_capital", on_click=load_example,
+                  args=({"initial_cash": D(1250000)}, "balanced"), width="stretch")
+        st.button("Higher defaults · 2×", key="example_defaults", on_click=load_example,
+                  args=({"default_stress": D(2)},), width="stretch")
+    st.slider("Monthly application growth (%)", -10.0, 10.0, step=.5, key="growth_percent",
+              on_change=sync_draft, help="Weights the fixed population, without changing risk mix or prices.")
+    st.slider("Lifetime default stress (×)", 0.0, 5.0, step=.25, key="stress", on_change=sync_draft)
+    st.slider("Annual funding rate (%)", 0.0, 30.0, step=.5, key="funding_percent", on_change=sync_draft)
+    st.number_input("Starting equity cash ($)", step=50000.0, key="initial_cash", on_change=sync_draft)
+    with st.expander("Capital & funding"):
+        st.number_input("Facility limit ($)", step=250000.0, key="facility", on_change=sync_draft)
+        st.number_input("Collateral advance rate (%)", step=5.0, key="advance_percent", on_change=sync_draft)
+    credit_editor = st.expander("Credit assumptions", expanded=s.get("credit_editor", False),
+                                key="credit_editor")
+    with credit_editor:
+        st.number_input("Low-band lifetime PD (%)", step=1.0, key="low_percent", on_change=sync_draft)
+        st.number_input("Medium-band lifetime PD (%)", step=1.0, key="medium_percent", on_change=sync_draft)
+        st.number_input("High-band lifetime PD (%)", step=1.0, key="high_percent", on_change=sync_draft)
+        st.number_input("Recovery of charged-off principal (%)", step=5.0, key="recovery_percent", on_change=sync_draft)
+        st.number_input("Recovery lag (months)", step=1, key="lag", on_change=sync_draft)
+        try:
+            risk = replace(Assumptions(), default_stress=D(str(s.stress)),
+                           pd_low=D(str(s.low_percent))/100, pd_medium=D(str(s.medium_percent))/100,
+                           pd_high=D(str(s.high_percent))/100)
+            risk.validate()
+            caption("Draft effective lifetime PD: "+", ".join(
+                f"{band.title()} {percent(risk.lifetime_pd(band))}" for band in ("low","medium","high"))+".")
+            if any(risk.lifetime_pd(band) == 1 for band in ("low","medium","high")):
+                st.info("A risk band reaches the 100% effective lifetime-PD cap.")
+        except (ValueError, ArithmeticError):
+            caption("Draft PD preview unavailable. Correct the credit inputs to see it.")
+    with st.expander("Credit and cash limits"):
+        st.number_input("Net principal loss cap (%)", step=.5, key="loss_cap_percent", on_change=sync_draft)
+        st.number_input("Minimum month-end cash ($)", step=10000.0, key="cash_floor", on_change=sync_draft)
+        caption("Illustrative limits apply through complete runoff, using unrounded values.")
+    with st.expander("Advanced economics"):
+        st.number_input("Annual nominal borrower rate (%)", step=1.0, key="borrower_percent", on_change=sync_draft)
+        st.number_input("Merchant fee (%)", step=.5, key="merchant_percent", on_change=sync_draft)
+        st.number_input("Acquisition cost / funded loan ($)", step=5.0, key="acquisition", on_change=sync_draft)
+        st.number_input("Servicing cost / surviving loan / month ($)", step=.5, key="servicing", on_change=sync_draft)
+        st.number_input("Platform operating expense / month ($)", step=500.0, key="opex", on_change=sync_draft)
+    draft_notice = st.container()
+    if st.button("Run scenario", key="run_scenario", type="primary", width="stretch"):
         try:
             with st.spinner("Comparing three policies…"):
-                apply_scenario(inputs_from_controls(), st.session_state.policy, dataset)
+                apply_scenario(parse_controls(s.draft_controls), s.applied_policy, dataset)
+            st.success("Scenario applied. Results compare all three policies.")
         except (ValueError, ArithmeticError) as error:
-            st.error(f"Scenario could not run: {str(error).replace('_', ' ').rstrip('.')}. Showing the last successful result.")
+            s.scenario_error = str(error)
+    changes = draft_changes(s.draft_controls, s.applied_assumptions)
+    if changes:
+        with draft_notice:
+            st.info("Unapplied changes · Results use the last successful scenario.")
+            with st.expander(f"Review {len(changes)} changed inputs"):
+                readable_table(pd.DataFrame([{"Input":c.label,
+                    "Applied":assumption_value(c.field,c.before),
+                    "Draft":assumption_value(c.field,c.after)} for c in changes]))
+    if s.get("scenario_error"):
+        st.error(f"Scenario could not run: {s.scenario_error} Showing the last successful result.")
+    if changes:
+        st.button("Restore applied inputs", key="restore_applied", on_click=restore_applied, width="stretch")
+    st.button("Reset to base", key="reset", on_click=reset_scenario, width="stretch",
+              help="Restore base inputs, Conservative, Overview, and cohort cutoff; clear stress and baseline.")
 
-results = st.session_state.results
-a = st.session_state.applied_assumptions
-selected = next(r for r in results if r.policy == st.session_state.applied_policy)
-s = selected.summary
-frame = monthly_frame(selected)
-comparison = comparison_frame(results)
-decision = select_strategy(results)
-decision_panel(selected, decision)
+selected = current_result()
+a = s.applied_assumptions
+decision = select_strategy(s.results)
+with st.container(horizontal=True, wrap=True, vertical_alignment="center", key="workbench_toolbar"):
+    st.selectbox("Viewed policy", list(POLICIES), format_func=str.title, key="policy",
+                 on_change=sync_policy, width=240)
+    with st.popover("Applied inputs"):
+        caption(f"Starting equity: {money(a.initial_cash)} · Default stress: {multiple(a.default_stress)} · "
+                f"Annual funding: {percent(a.funding_rate)} · Monthly growth: {percent(a.demand_growth)} · "
+                f"Facility: {money(a.facility_limit)}.")
+        st.dataframe(pd.DataFrame(assumption_register(a)), hide_index=True, width="stretch")
+        caption(f"Applied run: {selected.run_id} · Model {MODEL_VERSION} · Dataset {dataset.version}.")
+    with st.popover("Export", key="exports_panel", help="Download the viewed applied scenario"):
+        caption(f"{selected.policy.title()} · Applied run {selected.run_id}. Draft edits are not exported.")
+        formats = (
+            ("brief","Decision brief",f"lending-decision-{selected.run_id}.md","text/markdown","brief_download"),
+            ("workbook","Audit workbook",f"lending-{selected.run_id}.xlsx","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet","workbook_download"),
+            ("csv","CSV results + manifest",f"lending-{selected.run_id}.zip","application/zip","csv_download"),
+        )
+        for kind,label,filename,mime,key in formats:
+            st.download_button(label, download_factory(kind,selected,s.results,dataset),filename,mime,
+                               key=f"{key}_{selected.run_id}",on_click="ignore",width="stretch")
+        caption("Brief: decision and exact inputs. Workbook: saved portfolio outputs plus editable benchmarks. CSV: exact schedules and reproducibility.")
+        preview = st.expander("Preview decision brief", key="brief_preview", on_change="rerun")
+        with preview:
+            if preview.open:
+                brief = download_factory("brief",selected,s.results,dataset)()
+                st.markdown(brief.replace("# Lending decision brief\n","### Lending decision brief\n",1)
+                            .replace("\n## ","\n#### ").replace("$",r"\$"))
 
-st.header("Explore a scenario")
-st.caption("Examples replace all inputs and run immediately. Use Strategy comparison to explore the tradeoffs, or the sidebar for a custom scenario.")
-examples = (
-    ("base", "Base case", {}),
-    ("capital", "More capital · $1.25m", {"initial_cash": 1250000.0, "policy": "balanced"}),
-    ("defaults", "Higher defaults · 2×", {"stress": 2.0}),
-)
-for column, (name, label, overrides) in zip(st.columns(3), examples):
-    column.button(label, key=f"example_{name}", on_click=load_example, args=(overrides,),
-                  width="stretch")
-
-tabs = st.tabs(["Overview", "Strategy comparison", "Portfolio cohorts", "Funding & stress", "Methodology"])
-
-with tabs[0]:
-    st.header(f"{selected.policy.title()} economics")
-    c1, c2, c3 = st.columns(3)
-    c1.metric("Funded principal", money(s.funded_principal))
-    c2.metric("Approval rate", percent(s.approval_rate), help="Expected funded loans / expected applications, using the same demand weights.")
-    c3.metric("Contribution / funded loan", money(s.unit_contribution), help="Full-runoff contribution before platform operating expense / expected funded loans.")
-    st.caption(f"First 24 months operating result: {money(s.operating_result_24m)}. Full-runoff contribution: {money(s.contribution)}. Expected funded loans: {s.funded_loans:,.1f}.".replace("$", r"\$"))
-    st.header("Profit and liquidity over time")
-    chart(line_plot(frame, [("cumulative_operating_result", "Cumulative operating result"), ("ending_cash", "Month-end cash")]))
-    st.caption("Profit includes noncash charge-offs. Cash reflects the original loan advance, actual expected collections and debt draws/repayments.")
-
-with tabs[1]:
-    st.header("Profit, credit losses and cash by policy")
-    st.caption("Eligibility tests the credit-loss cap and cash floor. The recommendation also requires positive operating profit.")
-    for result, column in zip(results, st.columns(3)):
-        with column, st.container(border=True):
-            summary = result.summary
-            limits = evaluate_policy(result)
-            st.markdown(f"**{result.policy.title()}**")
-            st.metric("Full-runoff operating profit", money(summary.operating_result))
-            st.caption(f"Minimum cash: {money(summary.minimum_cash)} · Net principal loss: {percent(summary.loss_ratio)}.")
-            if limits.eligible:
-                st.success("Meets credit and cash limits")
-            else:
-                st.warning("; ".join(limits.reasons))
-            st.caption(f"Additional equity for cash floor: {money(summary.additional_equity_required)}.")
-    st.header("Full-runoff profit on shared inputs")
-    fig = px.bar(comparison, x="Policy", y="Operating result (full runoff)", color="Policy", color_discrete_map=COLORS,
-                 custom_data=["Minimum cash", "Net principal loss ratio", "Reason"])
-    fig.update_traces(hovertemplate="%{x}<br>Operating result: $%{y:,.0f}<br>Minimum cash: $%{customdata[0]:,.0f}<br>Net loss: %{customdata[1]:.2%}<br>%{customdata[2]}<extra></extra>")
-    fig.update_layout(showlegend=False)
-    fig.update_yaxes(title="Full-runoff operating result (USD)", tickprefix="$", rangemode="tozero")
-    chart(fig)
-    display = comparison.drop(columns=["Run ID", "Expected funded loans"]).copy()
-    for column in display:
-        if column in ("Approval rate", "Net principal loss ratio"):
-            display[column] = display[column].map(lambda v: "n.a." if pd.isna(v) else f"{v:.2%}")
-        elif column not in ("Policy", "Eligible", "Reason"):
-            display[column] = display[column].map(lambda v: "n.a." if pd.isna(v) else money(v))
-    st.dataframe(display, hide_index=True, width="stretch")
-    st.caption("Conservative approves low risk; balanced approves low + medium; aggressive approves all bands. Additional equity changes cash eligibility, not modeled profit.")
-
-with tabs[2]:
-    st.header("Projected cohort loss by loan age")
-    view = st.radio("Cohort cutoff", ["First 24 months", "Complete runoff"], horizontal=True, key="cohort_cutoff")
-    heatmap = cohort_heatmap(selected, 23 if view == "First 24 months" else None)
-    fig = go.Figure(go.Heatmap(z=heatmap.values * 100, x=list(heatmap.columns),
-                              y=[month_label(m) for m in heatmap.index], colorscale="Blues", zmin=0,
-                              colorbar=dict(title="Net loss %"), hoverongaps=False,
-                              hovertemplate="Origination: %{y}<br>Age: %{x} months<br>Projected net loss: %{z:.2f}%<extra></extra>"))
-    fig.update_xaxes(title="Months since origination")
-    fig.update_yaxes(autorange="reversed")
-    chart(fig, height=480)
-    st.caption("Net charged-off principal after received recoveries / each cohort's original funded principal. Future ages are blank at the selected cutoff. Every value is projected.")
-    curves = band_curves(selected)
-    if curves.empty:
-        st.info("No funded cohorts under this policy; risk-band ratios are unavailable.")
-    else:
-        st.header("Risk-band repayment and net loss")
-        c1, c2 = st.columns(2)
-        with c1:
-            fig = px.line(curves, x="age", y="principal_repaid_ratio", color="risk_band", markers=True,
-                          labels={"age": "Loan age (months)", "principal_repaid_ratio": "Principal repaid / originated", "risk_band": "Risk band"})
-            fig.update_yaxes(tickformat=".0%", range=[0, 1])
-            chart(fig, 300)
-        with c2:
-            fig = px.line(curves, x="age", y="net_loss_ratio", color="risk_band", markers=True,
-                          labels={"age": "Loan age (months)", "net_loss_ratio": "Net loss / originated", "risk_band": "Risk band"})
-            fig.update_yaxes(tickformat=".1%", rangemode="tozero")
-            chart(fig, 300)
-
-with tabs[3]:
-    st.header("Cash and debt facility")
-    fig = line_plot(frame, [("ending_cash", "Month-end cash"), ("ending_debt", "Drawn debt")])
-    fig.add_hline(y=float(a.cash_floor), line_dash="dot", line_color="#b24a3a", annotation_text="Cash floor")
-    chart(fig)
-    c1, c2, c3 = st.columns(3)
-    c1.metric("Additional equity to meet floor", money(s.additional_equity_required))
-    c2.metric("Peak drawn debt", money(s.peak_debt))
-    c3.metric("Minimum facility headroom", money(s.minimum_facility_headroom))
-    st.caption("Negative cash is an unfunded diagnostic path. No extra equity appears automatically. Debt is capped at the lesser of the facility limit and collateral advance; defaults can require repayments.")
-    st.header("Default and funding stress")
-    st.caption("Absolute lifetime-PD multipliers (0.5× to 3×) and annual funding rates (4% to 16%). Other applied inputs stay fixed.")
-    if st.button("Run stress grid", key="run_stress"):
-        with st.spinner("Calculating stress cases…"):
-            points = cached_sensitivity(json.dumps(a.to_dict(), sort_keys=True), dataset.dataset_hash, selected.policy, MODEL_VERSION, dataset)
-            st.session_state.stress_points = {"run_id": selected.run_id, "points": points}
-    saved = st.session_state.get("stress_points")
-    if saved and saved["run_id"] == selected.run_id:
-        stress_frame = pd.DataFrame(saved["points"])
-        for field in ("default_stress", "funding_rate", "operating_result", "contribution", "minimum_cash", "loss_ratio", "additional_equity_required"):
-            stress_frame[field] = stress_frame[field].astype(float)
-        grid = stress_frame.pivot(index="default_stress", columns="funding_rate", values="operating_result")
-        status = stress_frame.pivot(index="default_stress", columns="funding_rate", values="eligible")
-        text = [[f"{money(grid.loc[i, j])}<br>{'Eligible' if status.loc[i, j] else 'Ineligible'}" for j in grid.columns] for i in grid.index]
-        fig = go.Figure(go.Heatmap(z=grid.values, x=[f"{x:.0%}" for x in grid.columns], y=[f"{x:g}×" for x in grid.index],
-                                  text=text, texttemplate="%{text}", colorscale="RdBu", zmid=0,
-                                  colorbar=dict(title="Profit ($)"), hovertemplate="Funding: %{x}<br>Default stress: %{y}<br>%{text}<extra></extra>"))
-        fig.update_xaxes(title="Annual funding rate", type="category")
-        fig.update_yaxes(title="Lifetime default multiplier", type="category")
-        chart(fig, 380)
-        with st.expander("Stress contribution, cash gaps, and failure reasons"):
-            st.dataframe(stress_frame.drop(columns="run_id"), hide_index=True, width="stretch")
-    else:
-        st.info("Run the grid to compare profit, cash eligibility, and credit limits across stress cases.")
-    with st.expander("Monthly funding and cash detail"):
-        st.dataframe(frame[["period", "ending_principal", "ending_debt", "net_debt_draw", "funding_expense", "ending_cash"]], hide_index=True, width="stretch")
-
-with tabs[4]:
-    st.header("Financial timing and checks")
-    st.markdown("Loans originate at month-end. From the following month, defaults occur before scheduled payments. Survivors pay interest and principal; recoveries arrive after the chosen lag. Debt adjusts to ending collateral, and interest uses opening debt.")
-    st.markdown("Principal collections reduce the loan asset. A charge-off removes principal and future collections; it creates no second cash outflow. Net credit expense equals gross charge-offs minus received recoveries. Platform costs continue throughout the common runoff horizon.")
-    st.caption("Simplified management accounting. No GAAP allowance/provision, taxes, prepayment, delinquency stages, price response, intramonth liquidity, or rejected-applicant outcome model.")
-    check_values = {k.replace("_", " ").title(): str(v) for k, v in asdict(selected.checks).items()}
-    st.dataframe(pd.DataFrame(check_values.items(), columns=["Check", "Result"]), hide_index=True, width="stretch")
-    st.header("Assumptions register")
-    st.dataframe(pd.DataFrame(assumption_register(a)), hide_index=True, width="stretch")
-    st.caption(f"Effective lifetime PD after stress: low {percent(a.lifetime_pd('low'))}, medium {percent(a.lifetime_pd('medium'))}, high {percent(a.lifetime_pd('high'))}. Values above 100% are capped.")
-    st.header("Historical evidence and data fitness")
-    evidence = evidence_register()
-    st.warning(evidence["decision"])
-    for source in evidence["sources"]:
-        st.markdown(f"[{source['publisher']}]({source['url']}) — {source['suitability']}")
-    st.caption("No historical default forecast, held-out evaluation, or borrower-level calibration was performed. Longer-term cumulative loss and annualized loss cannot be treated as 12-month PD.")
-    with st.expander("Dataset and SQL"):
-        st.json(dataset.manifest())
-        st.dataframe(pd.DataFrame(policy_population(dataset)), hide_index=True, width="stretch")
-        st.caption("These SQL counts describe the unweighted base dataset; scenario counts use explicit growth weights.")
-        st.code(query_text("policy_population"), language="sql")
-        st.code(query_text("cohort_inputs"), language="sql")
-    with st.expander("Selected run manifest"):
-        st.json(selected.manifest())
-
-st.divider()
-st.header("Download applied scenario")
-st.caption("Downloads match the displayed applied scenario. Portfolio workbook cells are saved outputs; its two independent benchmark sheets recalculate from their blue inputs.")
-csv_bytes, workbook_bytes, brief_text = cached_downloads(selected.run_id, MODEL_VERSION, selected, results, dataset)
-c1, c2, c3 = st.columns(3)
-with c1:
-    st.download_button("CSV results + manifest", csv_bytes, f"lending-{selected.run_id}.zip", "application/zip", key="csv_download", width="stretch")
-with c2:
-    st.download_button("Audit workbook", workbook_bytes, f"lending-{selected.run_id}.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", key="workbook_download", width="stretch")
-with c3:
-    st.download_button("Decision brief", brief_text, f"lending-decision-{selected.run_id}.md", "text/markdown", key="brief_download", width="stretch")
-with st.expander("Preview decision brief"):
-    # Nest the preview below the download section; keep the standalone file unchanged.
-    preview_text = brief_text.replace("# Lending decision brief\n", "### Lending decision brief\n", 1)
-    st.markdown(preview_text.replace("\n## ", "\n#### "))
+st.segmented_control("Analysis", VIEWS, required=True, key="analysis_view",
+                     on_change=sync_navigation, wrap=True, width="stretch", label_visibility="collapsed")
+decision_summary(selected, decision, view_policy)
+actions = {"view":view_policy,"navigate":navigate,"credit":inspect_credit,"cohort":sync_cohort,
+           "pin":pin_baseline,"clear_baseline":clear_baseline,"stress":run_stress,
+           "stress_case":sync_stress_case,"stress_metric":sync_stress_metric,"stage":stage_stress}
+render(s.active_view, ViewContext(selected, s.results, dataset, decision, actions))

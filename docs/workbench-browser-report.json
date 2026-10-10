@@ -1,0 +1,1765 @@
+{
+  "created_at": "2026-10-10T03:39:45.554416+00:00",
+  "source_commit": "ba68ea38b4b09f38e6e0824906c2bc0de84efc19",
+  "source_sha256": {
+    "app.py": "e333ec1f22b2c22fb9e4f9babd2749bfb12a864086fae18823dbc1e282fb4086",
+    ".streamlit/config.toml": "52cdda4a8cec15437ed0af5a6c2dabcebbb8c04003b3c714a5e8cb37c9d2d563",
+    "lending_simulator/ui/__init__.py": "17173c061b07cb9362a2b4ca3c8ab3a5b87aaad4a27323d49846e1dc7149bb4f",
+    "lending_simulator/ui/charts.py": "ff105d833e6f298473f9d8e2634b4f6684c35ce50df9e7be156ce06841666471",
+    "lending_simulator/ui/components.py": "edd55a014881f029b7700dd3a21551d8f9578afd72ee32c82ff0b0a13461c48b",
+    "lending_simulator/ui/data.py": "560b1b4160d705a113a2ba441cec7d5b659d83b3b63994a7704424aa22bb3db9",
+    "lending_simulator/ui/downloads.py": "197a8e923d0804806425e8d9c45884519b6b3b0167a546c624d298d92a41f74a",
+    "lending_simulator/ui/formatting.py": "77e61912042213a5d1d51d8485c8e24f50093bc36aa6819518e2e32b94dc8e24",
+    "lending_simulator/ui/state.py": "71a92b6521bbb68fab5a5dffd187897cded823158e92be6e4f7ae9c54f217bfe",
+    "lending_simulator/ui/theme.py": "990b6704da4860a7026b082d61acada200f3a218e494a56fd7c074b6a499e379",
+    "lending_simulator/ui/views.py": "8c50bff2bd1554c3603c1f916c315ba3f4137600c592fc337108dc776946ad7e"
+  },
+  "scope": "Isolated headless Chromium against unchanged app.py on loopback; synthetic dataset. Mobile sizes are emulation, not physical-device or intended-host measurements.",
+  "cases": [
+    {
+      "name": "desktop-1440",
+      "viewport": [
+        1440,
+        900
+      ],
+      "checks": [
+        {
+          "name": "Base identity, 39 monthly points, calendar axis and cash floor",
+          "details": [
+            {
+              "width": 482,
+              "height": 330,
+              "traces": [
+                {
+                  "type": "scatter",
+                  "name": "Cumulative operating profit",
+                  "points": 39,
+                  "first": "2026-10-01",
+                  "last": "2029-12-01",
+                  "zmin": null,
+                  "zmax": null,
+                  "dash": "solid",
+                  "marker": null,
+                  "hoverongaps": null
+                }
+              ],
+              "shapes": [
+                {
+                  "fillcolor": "#EDF2F6",
+                  "layer": "below",
+                  "line": {
+                    "width": 0
+                  },
+                  "opacity": 0.6,
+                  "type": "rect",
+                  "x0": "2028-10-01",
+                  "x1": "2029-12-01",
+                  "y0": 0,
+                  "y1": 1,
+                  "yref": "paper"
+                }
+              ],
+              "xaxis": {
+                "type": "date",
+                "nticks": 6,
+                "tickformat": "%b\n%Y",
+                "tickfont": {
+                  "color": "#526477"
+                },
+                "showgrid": false,
+                "automargin": true,
+                "range": [
+                  "2026-10-01",
+                  "2029-12-01"
+                ],
+                "autorange": true
+              },
+              "yaxis": {
+                "title": {
+                  "text": "USD"
+                },
+                "tickprefix": "$",
+                "tickformat": "~s",
+                "rangemode": "tozero",
+                "tickfont": {
+                  "color": "#526477"
+                },
+                "gridcolor": "#DFE6ED",
+                "zerolinecolor": "#8799A8",
+                "automargin": true,
+                "type": "linear",
+                "range": [
+                  -21796.802366012285,
+                  117829.99109958811
+                ],
+                "autorange": true
+              },
+              "font": {
+                "family": "Source Sans, sans-serif",
+                "size": 14,
+                "color": "#182C3E"
+              },
+              "legend": {
+                "font": {
+                  "size": 13
+                },
+                "orientation": "h",
+                "y": 1.14,
+                "x": 0
+              }
+            },
+            {
+              "width": 482,
+              "height": 330,
+              "traces": [
+                {
+                  "type": "scatter",
+                  "name": "Month-end cash",
+                  "points": 39,
+                  "first": "2026-10-01",
+                  "last": "2029-12-01",
+                  "zmin": null,
+                  "zmax": null,
+                  "dash": "solid",
+                  "marker": null,
+                  "hoverongaps": null
+                },
+                {
+                  "type": "scatter",
+                  "name": "Minimum cash",
+                  "points": 1,
+                  "first": "2027-09-01",
+                  "last": "2027-09-01",
+                  "zmin": null,
+                  "zmax": null,
+                  "dash": null,
+                  "marker": "diamond",
+                  "hoverongaps": null
+                }
+              ],
+              "shapes": [
+                {
+                  "line": {
+                    "color": "#943D34",
+                    "dash": "dot"
+                  },
+                  "type": "line",
+                  "x0": 0,
+                  "x1": 1,
+                  "xref": "x domain",
+                  "y0": 50000,
+                  "y1": 50000,
+                  "yref": "y"
+                }
+              ],
+              "xaxis": {
+                "type": "date",
+                "nticks": 6,
+                "tickformat": "%b\n%Y",
+                "tickfont": {
+                  "color": "#526477"
+                },
+                "showgrid": false,
+                "automargin": true,
+                "range": [
+                  "2026-10-01",
+                  "2029-12-01"
+                ],
+                "autorange": true
+              },
+              "yaxis": {
+                "title": {
+                  "text": "USD"
+                },
+                "tickprefix": "$",
+                "tickformat": "~s",
+                "rangemode": "tozero",
+                "tickfont": {
+                  "color": "#526477"
+                },
+                "gridcolor": "#DFE6ED",
+                "zerolinecolor": "#8799A8",
+                "automargin": true,
+                "type": "linear",
+                "range": [
+                  0,
+                  602815.4887812905
+                ],
+                "autorange": true
+              },
+              "font": {
+                "family": "Source Sans, sans-serif",
+                "size": 14,
+                "color": "#182C3E"
+              },
+              "legend": {
+                "font": {
+                  "size": 13
+                },
+                "orientation": "h",
+                "y": 1.14,
+                "x": 0
+              }
+            },
+            {
+              "width": 946,
+              "height": 420,
+              "traces": [
+                {
+                  "type": "waterfall",
+                  "name": null,
+                  "points": 8,
+                  "first": 665744.8120051518,
+                  "last": 48132.73278806946,
+                  "zmin": null,
+                  "zmax": null,
+                  "dash": null,
+                  "marker": null,
+                  "hoverongaps": null
+                }
+              ],
+              "shapes": null,
+              "xaxis": {
+                "title": {
+                  "text": "USD"
+                },
+                "tickprefix": "$",
+                "tickformat": "~s",
+                "tickfont": {
+                  "color": "#526477"
+                },
+                "showgrid": false,
+                "automargin": true,
+                "type": "linear",
+                "range": [
+                  0,
+                  841833.9743212124
+                ],
+                "autorange": true
+              },
+              "yaxis": {
+                "autorange": true,
+                "showgrid": false,
+                "tickfont": {
+                  "color": "#526477"
+                },
+                "gridcolor": "#DFE6ED",
+                "zerolinecolor": "#8799A8",
+                "automargin": true,
+                "type": "category",
+                "range": [
+                  7.5,
+                  -0.5
+                ]
+              },
+              "font": {
+                "family": "Source Sans, sans-serif",
+                "size": 14,
+                "color": "#182C3E"
+              },
+              "legend": {
+                "font": {
+                  "size": 13
+                },
+                "orientation": "h",
+                "y": 1.14,
+                "x": 0
+              }
+            }
+          ]
+        },
+        {
+          "name": "Profit bridge and numeric alternative open",
+          "details": null
+        },
+        {
+          "name": "Typed numeric edit commits when Run is clicked immediately",
+          "details": null
+        },
+        {
+          "name": "More-capital recommendation and viewed run remain distinct",
+          "details": null
+        },
+        {
+          "name": "Draft survives navigation; Restore retains applied run",
+          "details": null
+        },
+        {
+          "name": "Desktop policy table geometry",
+          "details": {
+            "viewport": 1440,
+            "mainWidth": 1140,
+            "scrollWidth": 1140,
+            "clientWidth": 1140,
+            "overflow": [],
+            "tableVisible": true,
+            "cardsVisible": false
+          }
+        },
+        {
+          "name": "Pinned comparison distinguishes 39- and 48-month runoff",
+          "details": null
+        },
+        {
+          "name": "Cohort cutoff retains shared scale and blank-gap hover behavior",
+          "details": [
+            {
+              "width": 980,
+              "height": 480,
+              "traces": [
+                {
+                  "type": "heatmap",
+                  "name": null,
+                  "points": 16,
+                  "first": 0,
+                  "last": 15,
+                  "zmin": 0,
+                  "zmax": 2.5062942219578295,
+                  "dash": null,
+                  "marker": null,
+                  "hoverongaps": false
+                }
+              ],
+              "shapes": null,
+              "xaxis": {
+                "title": {
+                  "text": "Loan age (months)"
+                },
+                "nticks": 8,
+                "tickfont": {
+                  "color": "#526477"
+                },
+                "showgrid": false,
+                "automargin": true,
+                "type": "linear",
+                "range": [
+                  -0.5,
+                  15.5
+                ],
+                "autorange": true
+              },
+              "yaxis": {
+                "autorange": true,
+                "title": {
+                  "text": "Origination month"
+                },
+                "nticks": 12,
+                "tickfont": {
+                  "color": "#526477"
+                },
+                "gridcolor": "#DFE6ED",
+                "zerolinecolor": "#8799A8",
+                "automargin": true,
+                "type": "category",
+                "range": [
+                  23.5,
+                  -0.5
+                ]
+              },
+              "font": {
+                "family": "Source Sans, sans-serif",
+                "size": 14,
+                "color": "#182C3E"
+              },
+              "legend": {
+                "font": {
+                  "size": 13
+                },
+                "orientation": "h",
+                "y": 1.14,
+                "x": 0
+              }
+            },
+            {
+              "width": 482,
+              "height": 320,
+              "traces": [
+                {
+                  "type": "scatter",
+                  "name": "Low",
+                  "points": null,
+                  "first": null,
+                  "last": null,
+                  "zmin": null,
+                  "zmax": null,
+                  "dash": "solid",
+                  "marker": null,
+                  "hoverongaps": null
+                }
+              ],
+              "shapes": null,
+              "xaxis": {
+                "title": {
+                  "text": "Loan age (months)"
+                },
+                "nticks": 7,
+                "tickfont": {
+                  "color": "#526477"
+                },
+                "showgrid": false,
+                "automargin": true,
+                "type": "linear",
+                "range": [
+                  0,
+                  15
+                ],
+                "autorange": true
+              },
+              "yaxis": {
+                "title": {
+                  "text": "Principal repaid / originated"
+                },
+                "tickformat": ".0%",
+                "range": [
+                  0,
+                  1
+                ],
+                "rangemode": "tozero",
+                "tickfont": {
+                  "color": "#526477"
+                },
+                "gridcolor": "#DFE6ED",
+                "zerolinecolor": "#8799A8",
+                "automargin": true,
+                "type": "linear"
+              },
+              "font": {
+                "family": "Source Sans, sans-serif",
+                "size": 14,
+                "color": "#182C3E"
+              },
+              "legend": {
+                "font": {
+                  "size": 13
+                },
+                "orientation": "h",
+                "y": 1.14,
+                "x": 0
+              }
+            },
+            {
+              "width": 482,
+              "height": 320,
+              "traces": [
+                {
+                  "type": "scatter",
+                  "name": "Low",
+                  "points": null,
+                  "first": null,
+                  "last": null,
+                  "zmin": null,
+                  "zmax": null,
+                  "dash": "solid",
+                  "marker": null,
+                  "hoverongaps": null
+                }
+              ],
+              "shapes": null,
+              "xaxis": {
+                "title": {
+                  "text": "Loan age (months)"
+                },
+                "nticks": 7,
+                "tickfont": {
+                  "color": "#526477"
+                },
+                "showgrid": false,
+                "automargin": true,
+                "type": "linear",
+                "range": [
+                  0,
+                  15
+                ],
+                "autorange": true
+              },
+              "yaxis": {
+                "title": {
+                  "text": "Net loss / originated"
+                },
+                "tickformat": ".0%",
+                "rangemode": "tozero",
+                "tickfont": {
+                  "color": "#526477"
+                },
+                "gridcolor": "#DFE6ED",
+                "zerolinecolor": "#8799A8",
+                "automargin": true,
+                "type": "linear",
+                "range": [
+                  0,
+                  0.009045857420155838
+                ],
+                "autorange": true
+              },
+              "font": {
+                "family": "Source Sans, sans-serif",
+                "size": 14,
+                "color": "#182C3E"
+              },
+              "legend": {
+                "font": {
+                  "size": 13
+                },
+                "orientation": "h",
+                "y": 1.14,
+                "x": 0
+              }
+            }
+          ]
+        },
+        {
+          "name": "Stress axes retain percentage and multiplier categories",
+          "details": {
+            "width": 980,
+            "height": 380,
+            "traces": [
+              {
+                "type": "heatmap",
+                "name": null,
+                "points": 4,
+                "first": "4.00%",
+                "last": "16.00%",
+                "zmin": null,
+                "zmax": null,
+                "dash": null,
+                "marker": null,
+                "hoverongaps": null
+              },
+              {
+                "type": "scatter",
+                "name": null,
+                "points": 1,
+                "first": "8.00%",
+                "last": "8.00%",
+                "zmin": null,
+                "zmax": null,
+                "dash": null,
+                "marker": "square-open",
+                "hoverongaps": null
+              }
+            ],
+            "shapes": null,
+            "xaxis": {
+              "title": {
+                "text": "Annual funding rate"
+              },
+              "type": "category",
+              "tickfont": {
+                "color": "#526477"
+              },
+              "showgrid": false,
+              "automargin": true,
+              "range": [
+                -0.5,
+                3.5
+              ],
+              "autorange": true
+            },
+            "yaxis": {
+              "title": {
+                "text": "Lifetime PD multiplier"
+              },
+              "type": "category",
+              "tickfont": {
+                "color": "#526477"
+              },
+              "gridcolor": "#DFE6ED",
+              "zerolinecolor": "#8799A8",
+              "automargin": true,
+              "range": [
+                -0.5,
+                4.5
+              ],
+              "autorange": true
+            },
+            "font": {
+              "family": "Source Sans, sans-serif",
+              "size": 14,
+              "color": "#182C3E"
+            },
+            "legend": {
+              "font": {
+                "size": 13
+              },
+              "orientation": "h",
+              "y": 1.14,
+              "x": 0
+            }
+          }
+        },
+        {
+          "name": "Stress staging changes only draft and guards an existing draft",
+          "details": null
+        },
+        {
+          "name": "Applying staged stress compares policies and clears stale grid",
+          "details": null
+        },
+        {
+          "name": "Loss-making example has no positive-profit recommendation",
+          "details": null
+        },
+        {
+          "name": "Invalid inputs retain last successful scenario",
+          "details": null
+        },
+        {
+          "name": "Methodology exposes reconciliation status without runtime error",
+          "details": null
+        },
+        {
+          "name": "No unexpected browser errors or failed requests; Streamlit WebSocket connected",
+          "details": null
+        }
+      ],
+      "captures": [
+        "desktop-1440-overview.png",
+        "desktop-1440-overview-charts.png",
+        "desktop-1440-profit-bridge.png",
+        "desktop-1440-profit-bridge-chart.png",
+        "desktop-1440-capital.png",
+        "desktop-1440-policies.png",
+        "desktop-1440-policy-table.png",
+        "desktop-1440-different-runoff.png",
+        "desktop-1440-runoff-comparison.png",
+        "desktop-1440-cohorts.png",
+        "desktop-1440-cohort-chart.png",
+        "desktop-1440-staged-stress.png",
+        "desktop-1440-stress-chart.png",
+        "desktop-1440-higher-defaults.png",
+        "desktop-1440-invalid-input.png",
+        "desktop-1440-methodology.png"
+      ],
+      "operations": [
+        {
+          "name": "Initial candidate render",
+          "seconds": 2.867466960999991
+        },
+        {
+          "name": "Navigate to Policies",
+          "seconds": 0.5385833910000031
+        },
+        {
+          "name": "Navigate to Cohorts",
+          "seconds": 0.391102171
+        },
+        {
+          "name": "Navigate to Funding & stress",
+          "seconds": 0.5459583339999909
+        },
+        {
+          "name": "Navigate to Methodology",
+          "seconds": 0.70473474100001
+        }
+      ],
+      "status": "passed",
+      "console": [],
+      "failed_requests": [],
+      "websockets": [
+        "ws://127.0.0.1:48447/_stcore/stream"
+      ]
+    },
+    {
+      "name": "desktop-1280",
+      "viewport": [
+        1280,
+        800
+      ],
+      "checks": [
+        {
+          "name": "First-screen reflow",
+          "details": {
+            "viewport": 1280,
+            "mainWidth": 980,
+            "scrollWidth": 980,
+            "clientWidth": 980,
+            "overflow": [],
+            "tableVisible": false,
+            "cardsVisible": false
+          }
+        },
+        {
+          "name": "Supporting text rendered with at least 4.5:1 contrast",
+          "details": {
+            "minimum_ratio": 5.403835126809919,
+            "samples": [
+              {
+                "text": "Edit inputs, then Run scenario. Results stay on applied assumptions.",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(237, 242, 246)",
+                "opacity": 1,
+                "ratio": 5.403835126809919
+              },
+              {
+                "text": "",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(237, 242, 246)",
+                "opacity": 1,
+                "ratio": 5.403835126809919
+              },
+              {
+                "text": "",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(237, 242, 246)",
+                "opacity": 1,
+                "ratio": 5.403835126809919
+              },
+              {
+                "text": "",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(237, 242, 246)",
+                "opacity": 1,
+                "ratio": 5.403835126809919
+              },
+              {
+                "text": "Compare lending policies under cash and credit limits. Synthetic, illustrative, uncalibrat",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              },
+              {
+                "text": "Highest projected full-runoff profit within the cash and loss limits.",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              },
+              {
+                "text": "39 months through Dec 2029 \u00b7 Includes repayment and recovery runoff.",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              },
+              {
+                "text": "Minimum cash: $147,450 \u00b7 Floor: $50,000 \u00b7 Sep 2027.",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              },
+              {
+                "text": "Net principal loss: 0.84% \u00b7 Cap: 5.00%.",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              },
+              {
+                "text": "USD, rounded \u00b7 pp = percentage points. Status uses unrounded values. Charts and downloads ",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              },
+              {
+                "text": "Funded principal",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              },
+              {
+                "text": "Approval rate",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              },
+              {
+                "text": "Contribution / funded loan",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              },
+              {
+                "text": "First 24 months operating result: $98,960 \u00b7 Expected funded loans: 4,500.0. Contribution e",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              },
+              {
+                "text": "Profit includes noncash charge-offs. Cash includes original loan advances, expected collec",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              },
+              {
+                "text": "",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              }
+            ]
+          }
+        },
+        {
+          "name": "Analysis navigation is visible in the initial viewport",
+          "details": {
+            "x": 535,
+            "y": 289.6875,
+            "width": 145,
+            "height": 32
+          }
+        },
+        {
+          "name": "Policies reflow and visible controls",
+          "details": {
+            "viewport": 1280,
+            "mainWidth": 980,
+            "scrollWidth": 980,
+            "clientWidth": 980,
+            "overflow": [],
+            "tableVisible": true,
+            "cardsVisible": false
+          }
+        },
+        {
+          "name": "Cohorts reflow and visible controls",
+          "details": {
+            "viewport": 1280,
+            "mainWidth": 980,
+            "scrollWidth": 980,
+            "clientWidth": 980,
+            "overflow": [],
+            "tableVisible": false,
+            "cardsVisible": false
+          }
+        },
+        {
+          "name": "Funding & stress reflow and visible controls",
+          "details": {
+            "viewport": 1280,
+            "mainWidth": 980,
+            "scrollWidth": 980,
+            "clientWidth": 980,
+            "overflow": [],
+            "tableVisible": false,
+            "cardsVisible": false
+          }
+        },
+        {
+          "name": "Methodology reflow and visible controls",
+          "details": {
+            "viewport": 1280,
+            "mainWidth": 980,
+            "scrollWidth": 980,
+            "clientWidth": 980,
+            "overflow": [],
+            "tableVisible": false,
+            "cardsVisible": false
+          }
+        },
+        {
+          "name": "No unexpected browser errors or failed requests; Streamlit WebSocket connected",
+          "details": null
+        }
+      ],
+      "captures": [
+        "desktop-1280-overview.png",
+        "desktop-1280-policy-comparison.png",
+        "desktop-1280-chart-policies.png",
+        "desktop-1280-policies.png",
+        "desktop-1280-chart-cohorts.png",
+        "desktop-1280-cohorts.png",
+        "desktop-1280-chart-funding-stress.png",
+        "desktop-1280-funding-stress.png",
+        "desktop-1280-methodology.png"
+      ],
+      "operations": [
+        {
+          "name": "Initial candidate render",
+          "seconds": 2.2562827179999942
+        },
+        {
+          "name": "Navigate to Policies",
+          "seconds": 0.5783406810000002
+        },
+        {
+          "name": "Navigate to Cohorts",
+          "seconds": 0.5986460759999943
+        },
+        {
+          "name": "Navigate to Funding & stress",
+          "seconds": 0.5031874379999977
+        },
+        {
+          "name": "Navigate to Methodology",
+          "seconds": 0.5536387940000083
+        }
+      ],
+      "status": "passed",
+      "console": [],
+      "failed_requests": [],
+      "websockets": [
+        "ws://127.0.0.1:48447/_stcore/stream"
+      ]
+    },
+    {
+      "name": "downloads",
+      "viewport": [
+        1440,
+        900
+      ],
+      "checks": [
+        {
+          "name": "Export opens without triggering a browser download",
+          "details": null
+        },
+        {
+          "name": "Actual Decision brief transport and captured run identity",
+          "details": {
+            "file": "lending-decision-5a88f7bef3fa93d4.md",
+            "bytes": 4427
+          }
+        },
+        {
+          "name": "Actual Audit workbook transport and captured run identity",
+          "details": {
+            "file": "lending-5a88f7bef3fa93d4.xlsx",
+            "bytes": 71330
+          }
+        },
+        {
+          "name": "Actual CSV results + manifest transport and captured run identity",
+          "details": {
+            "file": "lending-5a88f7bef3fa93d4.zip",
+            "bytes": 52477
+          }
+        },
+        {
+          "name": "Policy switch requests a newly identified export",
+          "details": null
+        },
+        {
+          "name": "No unexpected browser errors or failed requests; Streamlit WebSocket connected",
+          "details": null
+        }
+      ],
+      "captures": [
+        "downloads-export-preview.png"
+      ],
+      "operations": [
+        {
+          "name": "Initial candidate render",
+          "seconds": 2.2559362030000045
+        }
+      ],
+      "status": "passed",
+      "console": [],
+      "failed_requests": [],
+      "websockets": [
+        "ws://127.0.0.1:48447/_stcore/stream"
+      ]
+    },
+    {
+      "name": "phone-390",
+      "viewport": [
+        390,
+        844
+      ],
+      "checks": [
+        {
+          "name": "First-screen reflow",
+          "details": {
+            "viewport": 390,
+            "mainWidth": 390,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "overflow": [],
+            "tableVisible": false,
+            "cardsVisible": false
+          }
+        },
+        {
+          "name": "Supporting text rendered with at least 4.5:1 contrast",
+          "details": {
+            "minimum_ratio": 5.403835126809919,
+            "samples": [
+              {
+                "text": "Edit inputs, then Run scenario. Results stay on applied assumptions.",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(237, 242, 246)",
+                "opacity": 1,
+                "ratio": 5.403835126809919
+              },
+              {
+                "text": "",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(237, 242, 246)",
+                "opacity": 1,
+                "ratio": 5.403835126809919
+              },
+              {
+                "text": "",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(237, 242, 246)",
+                "opacity": 1,
+                "ratio": 5.403835126809919
+              },
+              {
+                "text": "",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(237, 242, 246)",
+                "opacity": 1,
+                "ratio": 5.403835126809919
+              },
+              {
+                "text": "Compare lending policies under cash and credit limits. Synthetic, illustrative, uncalibrat",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              },
+              {
+                "text": "Highest projected full-runoff profit within the cash and loss limits.",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              },
+              {
+                "text": "39 months through Dec 2029 \u00b7 Includes repayment and recovery runoff.",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              },
+              {
+                "text": "Minimum cash: $147,450 \u00b7 Floor: $50,000 \u00b7 Sep 2027.",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              },
+              {
+                "text": "Net principal loss: 0.84% \u00b7 Cap: 5.00%.",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              },
+              {
+                "text": "USD, rounded \u00b7 pp = percentage points. Status uses unrounded values. Charts and downloads ",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              },
+              {
+                "text": "Funded principal",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              },
+              {
+                "text": "Approval rate",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              },
+              {
+                "text": "Contribution / funded loan",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              },
+              {
+                "text": "First 24 months operating result: $98,960 \u00b7 Expected funded loans: 4,500.0. Contribution e",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              },
+              {
+                "text": "Profit includes noncash charge-offs. Cash includes original loan advances, expected collec",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              },
+              {
+                "text": "",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              }
+            ]
+          }
+        },
+        {
+          "name": "Analysis navigation is visible in the initial viewport",
+          "details": {
+            "x": 142.328125,
+            "y": 367.375,
+            "width": 116.34375,
+            "height": 32
+          }
+        },
+        {
+          "name": "Policies reflow and visible controls",
+          "details": {
+            "viewport": 390,
+            "mainWidth": 390,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "overflow": [],
+            "tableVisible": false,
+            "cardsVisible": true
+          }
+        },
+        {
+          "name": "Cohorts reflow and visible controls",
+          "details": {
+            "viewport": 390,
+            "mainWidth": 390,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "overflow": [],
+            "tableVisible": false,
+            "cardsVisible": false
+          }
+        },
+        {
+          "name": "Funding & stress reflow and visible controls",
+          "details": {
+            "viewport": 390,
+            "mainWidth": 390,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "overflow": [],
+            "tableVisible": false,
+            "cardsVisible": false
+          }
+        },
+        {
+          "name": "Methodology reflow and visible controls",
+          "details": {
+            "viewport": 390,
+            "mainWidth": 390,
+            "scrollWidth": 390,
+            "clientWidth": 390,
+            "overflow": [],
+            "tableVisible": false,
+            "cardsVisible": false
+          }
+        },
+        {
+          "name": "Phone sidebar opens, reaches Run, returns to analysis and opens exports",
+          "details": null
+        },
+        {
+          "name": "No unexpected browser errors or failed requests; Streamlit WebSocket connected",
+          "details": null
+        }
+      ],
+      "captures": [
+        "phone-390-overview.png",
+        "phone-390-policy-comparison.png",
+        "phone-390-chart-policies.png",
+        "phone-390-policies.png",
+        "phone-390-chart-cohorts.png",
+        "phone-390-cohorts.png",
+        "phone-390-chart-funding-stress.png",
+        "phone-390-funding-stress.png",
+        "phone-390-methodology.png",
+        "phone-390-sidebar-run.png",
+        "phone-390-reachable-export.png"
+      ],
+      "operations": [
+        {
+          "name": "Initial candidate render",
+          "seconds": 2.3662306899999948
+        },
+        {
+          "name": "Navigate to Policies",
+          "seconds": 0.5791693510000044
+        },
+        {
+          "name": "Navigate to Cohorts",
+          "seconds": 0.5053409599999981
+        },
+        {
+          "name": "Navigate to Funding & stress",
+          "seconds": 0.48785456500000635
+        },
+        {
+          "name": "Navigate to Methodology",
+          "seconds": 0.6262097200000056
+        },
+        {
+          "name": "Navigate to Policies",
+          "seconds": 0.519572280999995
+        }
+      ],
+      "status": "passed",
+      "console": [],
+      "failed_requests": [],
+      "websockets": [
+        "ws://127.0.0.1:48447/_stcore/stream"
+      ]
+    },
+    {
+      "name": "reflow-320",
+      "viewport": [
+        320,
+        800
+      ],
+      "checks": [
+        {
+          "name": "First-screen reflow",
+          "details": {
+            "viewport": 320,
+            "mainWidth": 320,
+            "scrollWidth": 320,
+            "clientWidth": 320,
+            "overflow": [],
+            "tableVisible": false,
+            "cardsVisible": false
+          }
+        },
+        {
+          "name": "Supporting text rendered with at least 4.5:1 contrast",
+          "details": {
+            "minimum_ratio": 5.403835126809919,
+            "samples": [
+              {
+                "text": "Edit inputs, then Run scenario. Results stay on applied assumptions.",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(237, 242, 246)",
+                "opacity": 1,
+                "ratio": 5.403835126809919
+              },
+              {
+                "text": "",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(237, 242, 246)",
+                "opacity": 1,
+                "ratio": 5.403835126809919
+              },
+              {
+                "text": "",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(237, 242, 246)",
+                "opacity": 1,
+                "ratio": 5.403835126809919
+              },
+              {
+                "text": "",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(237, 242, 246)",
+                "opacity": 1,
+                "ratio": 5.403835126809919
+              },
+              {
+                "text": "Compare lending policies under cash and credit limits. Synthetic, illustrative, uncalibrat",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              },
+              {
+                "text": "Highest projected full-runoff profit within the cash and loss limits.",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              },
+              {
+                "text": "39 months through Dec 2029 \u00b7 Includes repayment and recovery runoff.",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              },
+              {
+                "text": "Minimum cash: $147,450 \u00b7 Floor: $50,000 \u00b7 Sep 2027.",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              },
+              {
+                "text": "Net principal loss: 0.84% \u00b7 Cap: 5.00%.",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              },
+              {
+                "text": "USD, rounded \u00b7 pp = percentage points. Status uses unrounded values. Charts and downloads ",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              },
+              {
+                "text": "Funded principal",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              },
+              {
+                "text": "Approval rate",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              },
+              {
+                "text": "Contribution / funded loan",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              },
+              {
+                "text": "First 24 months operating result: $98,960 \u00b7 Expected funded loans: 4,500.0. Contribution e",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              },
+              {
+                "text": "Profit includes noncash charge-offs. Cash includes original loan advances, expected collec",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              },
+              {
+                "text": "",
+                "foreground": "rgb(82, 100, 119)",
+                "background": "rgb(245, 247, 250)",
+                "opacity": 1,
+                "ratio": 5.674919910863465
+              }
+            ]
+          }
+        },
+        {
+          "name": "Analysis navigation is visible in the initial viewport",
+          "details": {
+            "x": 119,
+            "y": 389.0625,
+            "width": 93,
+            "height": 32
+          }
+        },
+        {
+          "name": "Policies reflow and visible controls",
+          "details": {
+            "viewport": 320,
+            "mainWidth": 320,
+            "scrollWidth": 320,
+            "clientWidth": 320,
+            "overflow": [],
+            "tableVisible": false,
+            "cardsVisible": true
+          }
+        },
+        {
+          "name": "Cohorts reflow and visible controls",
+          "details": {
+            "viewport": 320,
+            "mainWidth": 320,
+            "scrollWidth": 320,
+            "clientWidth": 320,
+            "overflow": [],
+            "tableVisible": false,
+            "cardsVisible": false
+          }
+        },
+        {
+          "name": "Funding & stress reflow and visible controls",
+          "details": {
+            "viewport": 320,
+            "mainWidth": 320,
+            "scrollWidth": 320,
+            "clientWidth": 320,
+            "overflow": [],
+            "tableVisible": false,
+            "cardsVisible": false
+          }
+        },
+        {
+          "name": "Methodology reflow and visible controls",
+          "details": {
+            "viewport": 320,
+            "mainWidth": 320,
+            "scrollWidth": 320,
+            "clientWidth": 320,
+            "overflow": [],
+            "tableVisible": false,
+            "cardsVisible": false
+          }
+        },
+        {
+          "name": "Phone sidebar opens, reaches Run, returns to analysis and opens exports",
+          "details": null
+        },
+        {
+          "name": "No unexpected browser errors or failed requests; Streamlit WebSocket connected",
+          "details": null
+        }
+      ],
+      "captures": [
+        "reflow-320-overview.png",
+        "reflow-320-policy-comparison.png",
+        "reflow-320-chart-policies.png",
+        "reflow-320-policies.png",
+        "reflow-320-chart-cohorts.png",
+        "reflow-320-cohorts.png",
+        "reflow-320-chart-funding-stress.png",
+        "reflow-320-funding-stress.png",
+        "reflow-320-methodology.png",
+        "reflow-320-sidebar-run.png",
+        "reflow-320-reachable-export.png"
+      ],
+      "operations": [
+        {
+          "name": "Initial candidate render",
+          "seconds": 2.2532434640000076
+        },
+        {
+          "name": "Navigate to Policies",
+          "seconds": 0.5596501990000036
+        },
+        {
+          "name": "Navigate to Cohorts",
+          "seconds": 0.506256312000005
+        },
+        {
+          "name": "Navigate to Funding & stress",
+          "seconds": 0.5413172860000088
+        },
+        {
+          "name": "Navigate to Methodology",
+          "seconds": 0.5912046339999932
+        },
+        {
+          "name": "Navigate to Policies",
+          "seconds": 0.4986882059999971
+        }
+      ],
+      "status": "passed",
+      "console": [],
+      "failed_requests": [],
+      "websockets": [
+        "ws://127.0.0.1:48447/_stcore/stream"
+      ]
+    },
+    {
+      "name": "keyboard",
+      "viewport": [
+        1280,
+        800
+      ],
+      "checks": [
+        {
+          "name": "Normal Tab order reaches scenario Run, policy selector and analysis",
+          "details": [
+            {
+              "tag": "SUMMARY",
+              "role": null,
+              "label": "keyboard_arrow_right\n\nOne-click examples",
+              "type": null
+            },
+            {
+              "tag": "BUTTON",
+              "role": null,
+              "label": "Help for Monthly application growth (%)",
+              "type": "button"
+            },
+            {
+              "tag": "INPUT",
+              "role": null,
+              "label": "Monthly application growth (%)",
+              "type": "range"
+            },
+            {
+              "tag": "INPUT",
+              "role": null,
+              "label": "Lifetime default stress (\u00d7)",
+              "type": "range"
+            },
+            {
+              "tag": "INPUT",
+              "role": null,
+              "label": "Annual funding rate (%)",
+              "type": "range"
+            },
+            {
+              "tag": "INPUT",
+              "role": null,
+              "label": "Starting equity cash ($)",
+              "type": "number"
+            },
+            {
+              "tag": "SUMMARY",
+              "role": null,
+              "label": "keyboard_arrow_right\n\nCapital & funding",
+              "type": null
+            },
+            {
+              "tag": "SUMMARY",
+              "role": null,
+              "label": "keyboard_arrow_right\n\nCredit assumptions",
+              "type": null
+            },
+            {
+              "tag": "SUMMARY",
+              "role": null,
+              "label": "keyboard_arrow_right\n\nCredit and cash limits",
+              "type": null
+            },
+            {
+              "tag": "SUMMARY",
+              "role": null,
+              "label": "keyboard_arrow_right\n\nAdvanced economics",
+              "type": null
+            },
+            {
+              "tag": "BUTTON",
+              "role": null,
+              "label": "Run scenario",
+              "type": null
+            },
+            {
+              "tag": "BUTTON",
+              "role": null,
+              "label": "Reset to base",
+              "type": null
+            },
+            {
+              "tag": "SECTION",
+              "role": null,
+              "label": "Lending workbench\n\nCompare lending policies under cash and credit limits. Synthetic, illustrative, u",
+              "type": null
+            },
+            {
+              "tag": "A",
+              "role": null,
+              "label": "Link to heading",
+              "type": null
+            },
+            {
+              "tag": "INPUT",
+              "role": "combobox",
+              "label": "Viewed policy",
+              "type": "text"
+            },
+            {
+              "tag": "BUTTON",
+              "role": null,
+              "label": "Applied inputs\n\nexpand_more",
+              "type": null
+            },
+            {
+              "tag": "BUTTON",
+              "role": null,
+              "label": "Export\n\nexpand_more",
+              "type": null
+            },
+            {
+              "tag": "BUTTON",
+              "role": "radio",
+              "label": "Overview",
+              "type": "button"
+            }
+          ]
+        },
+        {
+          "name": "Keyboard navigation activates selected view and preserves focus",
+          "details": null
+        },
+        {
+          "name": "Applied-input popover opens and returns focus using keyboard",
+          "details": null
+        },
+        {
+          "name": "Visible focused control and reduced-motion media",
+          "details": {
+            "focus": {
+              "outline": "rgb(24, 44, 62) none 0px",
+              "boxShadow": "rgba(20, 91, 114, 0.5) 0px 0px 0px 3.2px",
+              "focused": true,
+              "visible": true
+            },
+            "reduced_motion": true
+          }
+        },
+        {
+          "name": "No unexpected browser errors or failed requests; Streamlit WebSocket connected",
+          "details": null
+        }
+      ],
+      "captures": [
+        "keyboard-keyboard-focus.png"
+      ],
+      "operations": [
+        {
+          "name": "Initial candidate render",
+          "seconds": 2.2684962430000013
+        }
+      ],
+      "status": "passed",
+      "console": [],
+      "failed_requests": [],
+      "websockets": [
+        "ws://127.0.0.1:48447/_stcore/stream"
+      ]
+    },
+    {
+      "name": "download-switch",
+      "viewport": [
+        1440,
+        900
+      ],
+      "checks": [
+        {
+          "name": "Requested CSV retains original filename and manifest across a policy switch",
+          "details": {
+            "requested_run": "5a88f7bef3fa93d4",
+            "now_viewed_run": "a2feec5a72facbc3",
+            "file": "lending-5a88f7bef3fa93d4.zip",
+            "scope": "Actual download requested before switch, saved after switch. Loopback transfer may complete before selection; generation capture has separate unit coverage."
+          }
+        },
+        {
+          "name": "No unexpected browser errors or failed requests; Streamlit WebSocket connected",
+          "details": null
+        }
+      ],
+      "captures": [
+        "download-switch-completed.png"
+      ],
+      "operations": [
+        {
+          "name": "Initial candidate render",
+          "seconds": 2.3802428749999933
+        }
+      ],
+      "status": "passed",
+      "console": [],
+      "failed_requests": [],
+      "websockets": [
+        "ws://127.0.0.1:48447/_stcore/stream"
+      ]
+    },
+    {
+      "name": "empty-portfolio",
+      "viewport": [
+        1440,
+        900
+      ],
+      "checks": [
+        {
+          "name": "Empty portfolio distinguishes unavailable ratios from zero",
+          "details": null
+        },
+        {
+          "name": "Empty-portfolio stress inspection renders unavailable net loss without exception",
+          "details": null
+        },
+        {
+          "name": "No unexpected browser errors or failed requests; Streamlit WebSocket connected",
+          "details": null
+        }
+      ],
+      "captures": [
+        "empty-portfolio-cohorts.png",
+        "empty-portfolio-stress.png"
+      ],
+      "operations": [
+        {
+          "name": "Initial candidate render",
+          "seconds": 2.616414911000007
+        },
+        {
+          "name": "Navigate to Cohorts",
+          "seconds": 0.507693696000004
+        },
+        {
+          "name": "Navigate to Funding & stress",
+          "seconds": 0.31797414700000104
+        }
+      ],
+      "status": "passed",
+      "console": [],
+      "failed_requests": [],
+      "websockets": [
+        "ws://127.0.0.1:52603/_stcore/stream"
+      ]
+    },
+    {
+      "name": "download-retry",
+      "viewport": [
+        1440,
+        900
+      ],
+      "checks": [
+        {
+          "name": "Canceled download preserves scenario and retries with the same captured identity",
+          "details": {
+            "failure": "canceled",
+            "retried_file": "retried-lending-5a88f7bef3fa93d4.zip",
+            "run_id": "5a88f7bef3fa93d4",
+            "scope": "Chromium temporarily denies this isolated context's download, then permits retry; no financial output is mocked. Server generation failures are outside this check."
+          }
+        },
+        {
+          "name": "No unexpected browser errors or failed requests; Streamlit WebSocket connected",
+          "details": null
+        }
+      ],
+      "captures": [],
+      "operations": [
+        {
+          "name": "Initial candidate render",
+          "seconds": 2.3602822779999997
+        }
+      ],
+      "intentional_failed_requests": [],
+      "status": "passed",
+      "console": [],
+      "failed_requests": [],
+      "websockets": [
+        "ws://127.0.0.1:48447/_stcore/stream"
+      ]
+    }
+  ],
+  "empty_dataset_case": {
+    "source": "Separate copy of unchanged app/code/config with a valid zero-row Dataset and manifest.",
+    "manifest": {
+      "dataset_version": "synthetic-applications-v1",
+      "seed": 2262026,
+      "dataset_hash": "5a9e158ed6d9807ffbc93bb960f6ddfc4b80fd0d8e86f76a067fbf2c021d26f3",
+      "rows": 0,
+      "classification": "synthetic",
+      "grain": "one fictional application",
+      "primary_key": "application_id",
+      "currency": "USD",
+      "start_month": "2026-10",
+      "origination_months": 24,
+      "risk_counts": {
+        "low": 0,
+        "medium": 0,
+        "high": 0
+      },
+      "generator": "Python 3.12 random.Random; fixed band counts shuffled; shuffled month allocation; inclusive uniform integer cents $500-$2500",
+      "growth_weight": "(1 + monthly_demand_growth) ** month; same rows for all policies"
+    }
+  },
+  "browser": "145.0.7632.6"
+}

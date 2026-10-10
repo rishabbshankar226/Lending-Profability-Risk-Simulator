@@ -4,7 +4,9 @@
 
 This Python/SQL project compares three approval policies over 10,000 seeded fictional applications. A Streamlit dashboard connects loan repayments, defaults, recoveries, funding and operating costs over 24 origination months and a common 39-month runoff horizon. Data and risk inputs are synthetic and uncalibrated.
 
-[Open the dashboard](https://rishabb-lending-simulator.streamlit.app/) · [Review the source on main](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/tree/main) · [Read the business memo](business-memo.md)
+[Open the earlier hosted dashboard](https://rishabb-lending-simulator.streamlit.app/) · [Review this candidate's source](../app.py) · [Read the business memo](business-memo.md)
+
+The owner approved integrating the workbench redesign into `main` on October 10, 2026 (UTC); [PR #4](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/pull/4) records the integration. All 118 automated checks pass. 14 real-browser journeys pass in isolated CI Chromium, including controlled slow generation and export failure/retry, with [actual before/after captures](workbench-browser-validation.md). The hosted app and tour below show the earlier build. See [workbench scope and release checks](ui-workbench-review.md) before evaluating public-release readiness.
 
 For a quick visual introduction, [watch the 90-second captioned screenshot tour](tour/lending-simulator-tour.mp4) or [read its transcript](tour/transcript.md). It uses six actual dashboard captures and has no audio or continuous interaction recording.
 
@@ -12,11 +14,13 @@ For a quick visual introduction, [watch the 90-second captioned screenshot tour]
 
 | Action | Look for | What it demonstrates |
 | --- | --- | --- |
-| Click **Base case**, then **Strategy comparison** | Conservative earns $48,133 and retains $147,450 minimum cash. Aggressive earns $396,446 but reaches −$1,485,855 cash. | Profit ranking alone cannot determine feasible growth. |
+| Click **Base case**, then **Policies** (earlier host: **Strategy comparison**) | Conservative earns $48,133 and retains $147,450 minimum cash. Aggressive earns $396,446 but reaches −$1,485,855 cash. | Profit ranking alone cannot determine feasible growth. |
 | Click **More capital · $1.25m** | Balanced becomes recommended: $294,468 profit and $53,857 minimum cash. | Equity changes liquidity feasibility; this model does not charge a cost of equity. |
 | Click **Higher defaults · 2×** | No profitable eligible policy; Conservative earns −$11,563. | The recommendation can be empty when the economics do not support lending. |
 
 These are rounded, conditional modeled outcomes. The examples replace all inputs and run immediately. Custom sidebar edits apply after **Run scenario**. The displayed portfolio is a separate selection from the recommendation across all three policies.
+
+In the candidate, use **Restore applied inputs** to discard a draft, **Pin applied scenario** under Policies to compare a subsequent run, and **Stage case as draft** after generating a selected-policy stress grid. Each action preserves the distinction between applied results and edits. Open **Export** for the applied brief, workbook and CSV package.
 
 ## Choose a review path
 
@@ -30,6 +34,6 @@ Download **Decision brief** for the current recommendation, all policy tradeoffs
 
 ## Scope of the evidence
 
-The implementation passes 83 automated checks. The new decision panel has automated coverage; its browser rendering remains unverified because the local preview was unreachable from the cloud browser. Earlier hosted desktop scenarios and downloaded briefs were verified; the [browser record](browser-validation.md) identifies tested commits, run IDs and file hashes. PR #1 is merged into `main`, and the merge passed GitHub checks. The hosted app retains `feature/lending-simulator` and does not yet include the decision-panel upgrade. Isolated anonymous access, mobile layout, full accessibility, hosting load measurements and a continuous interactive walkthrough remain pending.
+The candidate passes 118 automated checks, compilation, CLI regeneration and 14 browser journeys with 94 named checks, including native 200%/400% Chrome zoom and scoped AX/HTML readability. Draft/view actions do not rerun projections; opening Export prepares no file; three reference briefs match exactly. The [candidate review](ui-workbench-review.md) and [browser record](workbench-browser-validation.md) retain scoped rendered layout, keyboard/focus and actual download evidence. Earlier hosted desktop scenarios and downloads were verified; the [browser record](browser-validation.md) identifies their tested commits and files. The hosted app retains `feature/lending-simulator` and does not include this redesign. Public-host anonymous access, physical-device behavior, full accessibility and hosting load measurements remain pending.
 
 This is a management scenario simulator. It does not demonstrate borrower prediction accuracy, causal approval benefits, production underwriting, or real business savings.

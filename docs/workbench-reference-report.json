@@ -1,0 +1,37 @@
+{
+  "created_at": "2026-10-10T03:40:46.277781+00:00",
+  "source_commit": "baeda884355734f534babd2bc73ab7018742569f",
+  "source_sha256": {
+    "app.py": "2164ba5540d8f5c4340a844386db23a44cbe2b82b5cde6bd043177faf0d4ad9d",
+    ".streamlit/config.toml": "b6269632ad18db1e2756bd9126c38ca5b9278a97630a55f02823e35b04e6af11",
+    "lending_simulator/__init__.py": "71ad9eb7834657f3a8310aac3557e20880263fc2b0337e07c3a428984cc374cb",
+    "lending_simulator/analytics.py": "3d528f2e834e636c72528e2e2735c33539546350a5442094f6d70f4226311f14",
+    "lending_simulator/cli.py": "2a45676271549e11e8a99a1c06cfb67adb63c99824f78d33b9ac362f48b5333d",
+    "lending_simulator/data.py": "768a1ac361d8637e850d8685d606a8c1faa54506f9b0d4c2b3f5f12e2bd388cd",
+    "lending_simulator/decisions.py": "7fcb1aa40923f6062445c98dca75a73500a6a519c0089962c5dfd74e4bb5c06b",
+    "lending_simulator/exports.py": "65b7d784a449cfd309a9897535eac4908e92a722fa81f4ff206e966b84362fd3",
+    "lending_simulator/model.py": "9026427315341708280a186d582cfe5323121462df5772108ecc06feabcac651",
+    "lending_simulator/presentation.py": "7fa4d390b808e7c5141e382b77bd1d5359dd2352e1c2157e87694977e0a82f83",
+    "lending_simulator/types.py": "86ce808a76c6964224a83487dd76603be4cf2188afa02e8ac2abfb30017a9cdc"
+  },
+  "scope": "Unmodified pre-redesign application in the same CI browser and dependency environment; first-screen reference captures only.",
+  "captures": [
+    {
+      "file": "reference-desktop-1440.png",
+      "viewport": [
+        1440,
+        900
+      ],
+      "status": "passed"
+    },
+    {
+      "file": "reference-phone-390.png",
+      "viewport": [
+        390,
+        844
+      ],
+      "status": "passed"
+    }
+  ],
+  "browser": "145.0.7632.6"
+}

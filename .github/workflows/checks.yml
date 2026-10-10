@@ -22,3 +22,36 @@ jobs:
         with:
           name: base-case-financial-exports
           path: artifacts/base-case/
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Check out the pre-redesign reference
+        uses: actions/checkout@v7
+        with:
+          ref: baeda884355734f534babd2bc73ab7018742569f
+          path: .browser-reference
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: python -m pip install -r requirements-browser.txt
+      - run: python -m playwright install --with-deps chromium
+      - name: Exercise the real candidate in isolated Chromium
+        run: python -m scripts.browser_acceptance --output artifacts/browser-acceptance
+      - name: Capture the exact pre-redesign reference
+        run: python -m scripts.capture_workbench_reference --source .browser-reference --output artifacts/browser-acceptance
+      - name: Verify slow export generation and server failure recovery
+        run: python -m scripts.browser_export_resilience --output artifacts/browser-acceptance/export-resilience
+      - name: Inspect native accessibility and browser zoom
+        run: python -m scripts.browser_accessibility --output artifacts/browser-acceptance/accessibility
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: workbench-browser-acceptance
+          path: artifacts/browser-acceptance/
+          if-no-files-found: error
+          retention-days: 14
