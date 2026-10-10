@@ -1,18 +1,18 @@
 {
-  "created_at": "2026-10-09T23:04:42.573932+00:00",
-  "source_commit": "c0d6f393c25d0ceaa51152066a03251c45adc5e2",
+  "created_at": "2026-10-10T03:39:45.554416+00:00",
+  "source_commit": "ba68ea38b4b09f38e6e0824906c2bc0de84efc19",
   "source_sha256": {
-    "app.py": "787550c6cd6bf477bd7f3d1b0e2cbcec11f20b4bfe317e8a7b9f67abf3d3eb95",
-    ".streamlit/config.toml": "5c79ac18477326bc32f3ec56e518ddabedb4e210e971873e36328fa188cc2869",
+    "app.py": "e333ec1f22b2c22fb9e4f9babd2749bfb12a864086fae18823dbc1e282fb4086",
+    ".streamlit/config.toml": "52cdda4a8cec15437ed0af5a6c2dabcebbb8c04003b3c714a5e8cb37c9d2d563",
     "lending_simulator/ui/__init__.py": "17173c061b07cb9362a2b4ca3c8ab3a5b87aaad4a27323d49846e1dc7149bb4f",
     "lending_simulator/ui/charts.py": "ff105d833e6f298473f9d8e2634b4f6684c35ce50df9e7be156ce06841666471",
-    "lending_simulator/ui/components.py": "81da10eb83ec9a91f8e34574e328ebb24227b969f6b6b6871846e9009b96ea9c",
+    "lending_simulator/ui/components.py": "edd55a014881f029b7700dd3a21551d8f9578afd72ee32c82ff0b0a13461c48b",
     "lending_simulator/ui/data.py": "560b1b4160d705a113a2ba441cec7d5b659d83b3b63994a7704424aa22bb3db9",
     "lending_simulator/ui/downloads.py": "197a8e923d0804806425e8d9c45884519b6b3b0167a546c624d298d92a41f74a",
     "lending_simulator/ui/formatting.py": "77e61912042213a5d1d51d8485c8e24f50093bc36aa6819518e2e32b94dc8e24",
     "lending_simulator/ui/state.py": "71a92b6521bbb68fab5a5dffd187897cded823158e92be6e4f7ae9c54f217bfe",
     "lending_simulator/ui/theme.py": "990b6704da4860a7026b082d61acada200f3a218e494a56fd7c074b6a499e379",
-    "lending_simulator/ui/views.py": "0924762665860d45e224a8ccf7acc2fbf7fa6a7bb7f7a90425b8d1591ac69811"
+    "lending_simulator/ui/views.py": "8c50bff2bd1554c3603c1f916c315ba3f4137600c592fc337108dc776946ad7e"
   },
   "scope": "Isolated headless Chromium against unchanged app.py on loopback; synthetic dataset. Mobile sizes are emulation, not physical-device or intended-host measurements.",
   "cases": [
@@ -633,30 +633,30 @@
       "operations": [
         {
           "name": "Initial candidate render",
-          "seconds": 4.873961872999999
+          "seconds": 2.867466960999991
         },
         {
           "name": "Navigate to Policies",
-          "seconds": 0.7040318680000013
+          "seconds": 0.5385833910000031
         },
         {
           "name": "Navigate to Cohorts",
-          "seconds": 0.9297952340000109
+          "seconds": 0.391102171
         },
         {
           "name": "Navigate to Funding & stress",
-          "seconds": 0.5342666789999981
+          "seconds": 0.5459583339999909
         },
         {
           "name": "Navigate to Methodology",
-          "seconds": 1.2102930099999867
+          "seconds": 0.70473474100001
         }
       ],
       "status": "passed",
       "console": [],
       "failed_requests": [],
       "websockets": [
-        "ws://127.0.0.1:40919/_stcore/stream"
+        "ws://127.0.0.1:48447/_stcore/stream"
       ]
     },
     {
@@ -874,30 +874,30 @@
       "operations": [
         {
           "name": "Initial candidate render",
-          "seconds": 3.983841990000002
+          "seconds": 2.2562827179999942
         },
         {
           "name": "Navigate to Policies",
-          "seconds": 0.5309312689999928
+          "seconds": 0.5783406810000002
         },
         {
           "name": "Navigate to Cohorts",
-          "seconds": 0.7287603300000001
+          "seconds": 0.5986460759999943
         },
         {
           "name": "Navigate to Funding & stress",
-          "seconds": 0.6489420679999967
+          "seconds": 0.5031874379999977
         },
         {
           "name": "Navigate to Methodology",
-          "seconds": 1.0982010459999998
+          "seconds": 0.5536387940000083
         }
       ],
       "status": "passed",
       "console": [],
       "failed_requests": [],
       "websockets": [
-        "ws://127.0.0.1:40919/_stcore/stream"
+        "ws://127.0.0.1:48447/_stcore/stream"
       ]
     },
     {
@@ -922,7 +922,7 @@
           "name": "Actual Audit workbook transport and captured run identity",
           "details": {
             "file": "lending-5a88f7bef3fa93d4.xlsx",
-            "bytes": 71331
+            "bytes": 71330
           }
         },
         {
@@ -947,14 +947,14 @@
       "operations": [
         {
           "name": "Initial candidate render",
-          "seconds": 4.0003949879999965
+          "seconds": 2.2559362030000045
         }
       ],
       "status": "passed",
       "console": [],
       "failed_requests": [],
       "websockets": [
-        "ws://127.0.0.1:40919/_stcore/stream"
+        "ws://127.0.0.1:48447/_stcore/stream"
       ]
     },
     {
@@ -1178,34 +1178,34 @@
       "operations": [
         {
           "name": "Initial candidate render",
-          "seconds": 3.1158256280000103
+          "seconds": 2.3662306899999948
         },
         {
           "name": "Navigate to Policies",
-          "seconds": 0.5739017669999953
+          "seconds": 0.5791693510000044
         },
         {
           "name": "Navigate to Cohorts",
-          "seconds": 0.6781711490000077
+          "seconds": 0.5053409599999981
         },
         {
           "name": "Navigate to Funding & stress",
-          "seconds": 0.42565628700000957
+          "seconds": 0.48785456500000635
         },
         {
           "name": "Navigate to Methodology",
-          "seconds": 1.127528796000007
+          "seconds": 0.6262097200000056
         },
         {
           "name": "Navigate to Policies",
-          "seconds": 0.5368016850000004
+          "seconds": 0.519572280999995
         }
       ],
       "status": "passed",
       "console": [],
       "failed_requests": [],
       "websockets": [
-        "ws://127.0.0.1:40919/_stcore/stream"
+        "ws://127.0.0.1:48447/_stcore/stream"
       ]
     },
     {
@@ -1429,34 +1429,34 @@
       "operations": [
         {
           "name": "Initial candidate render",
-          "seconds": 3.034919868000003
+          "seconds": 2.2532434640000076
         },
         {
           "name": "Navigate to Policies",
-          "seconds": 0.6224462070000101
+          "seconds": 0.5596501990000036
         },
         {
           "name": "Navigate to Cohorts",
-          "seconds": 0.6569265450000046
+          "seconds": 0.506256312000005
         },
         {
           "name": "Navigate to Funding & stress",
-          "seconds": 0.583565206000003
+          "seconds": 0.5413172860000088
         },
         {
           "name": "Navigate to Methodology",
-          "seconds": 1.0997033909999914
+          "seconds": 0.5912046339999932
         },
         {
           "name": "Navigate to Policies",
-          "seconds": 0.6555768839999985
+          "seconds": 0.4986882059999971
         }
       ],
       "status": "passed",
       "console": [],
       "failed_requests": [],
       "websockets": [
-        "ws://127.0.0.1:40919/_stcore/stream"
+        "ws://127.0.0.1:48447/_stcore/stream"
       ]
     },
     {
@@ -1610,14 +1610,14 @@
       "operations": [
         {
           "name": "Initial candidate render",
-          "seconds": 3.0870101859999863
+          "seconds": 2.2684962430000013
         }
       ],
       "status": "passed",
       "console": [],
       "failed_requests": [],
       "websockets": [
-        "ws://127.0.0.1:40919/_stcore/stream"
+        "ws://127.0.0.1:48447/_stcore/stream"
       ]
     },
     {
@@ -1647,14 +1647,14 @@
       "operations": [
         {
           "name": "Initial candidate render",
-          "seconds": 3.1943723889999944
+          "seconds": 2.3802428749999933
         }
       ],
       "status": "passed",
       "console": [],
       "failed_requests": [],
       "websockets": [
-        "ws://127.0.0.1:40919/_stcore/stream"
+        "ws://127.0.0.1:48447/_stcore/stream"
       ]
     },
     {
@@ -1684,22 +1684,22 @@
       "operations": [
         {
           "name": "Initial candidate render",
-          "seconds": 4.452797468
+          "seconds": 2.616414911000007
         },
         {
           "name": "Navigate to Cohorts",
-          "seconds": 0.5611284299999966
+          "seconds": 0.507693696000004
         },
         {
           "name": "Navigate to Funding & stress",
-          "seconds": 0.4691311500000097
+          "seconds": 0.31797414700000104
         }
       ],
       "status": "passed",
       "console": [],
       "failed_requests": [],
       "websockets": [
-        "ws://127.0.0.1:36685/_stcore/stream"
+        "ws://127.0.0.1:52603/_stcore/stream"
       ]
     },
     {
@@ -1727,7 +1727,7 @@
       "operations": [
         {
           "name": "Initial candidate render",
-          "seconds": 3.2205095150000034
+          "seconds": 2.3602822779999997
         }
       ],
       "intentional_failed_requests": [],
@@ -1735,7 +1735,7 @@
       "console": [],
       "failed_requests": [],
       "websockets": [
-        "ws://127.0.0.1:40919/_stcore/stream"
+        "ws://127.0.0.1:48447/_stcore/stream"
       ]
     }
   ],

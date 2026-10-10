@@ -1,6 +1,6 @@
 # Finance workbench candidate review
 
-**Status: automated candidate browser checks passed; ready for human design review.** The candidate is on `feat/finance-workbench-ui`, based on `baeda884355734f534babd2bc73ab7018742569f`. The tested application implementation is **`c0d6f393c25d0ceaa51152066a03251c45adc5e2`**. Browser and performance reports retain hashes of every application/UI/config source; later capture-only/documentation commits retain that application. [Rendered evidence and before/after captures](workbench-browser-validation.md) are available.
+**Status: automated candidate browser checks passed; ready for human design review.** The candidate is on `feat/finance-workbench-ui`, based on `baeda884355734f534babd2bc73ab7018742569f`. The tested application implementation is **`ba68ea38b4b09f38e6e0824906c2bc0de84efc19`**. Current browser reports retain every application/UI/config source hash; later evidence/documentation commits retain that application. The separate local operation report remains explicitly pinned to the earlier `c0d6f3` implementation. [Rendered evidence and before/after captures](workbench-browser-validation.md) are available.
 
 The approved direction is a restrained finance workbench. The candidate replaces the dashboard's five eagerly built tabs with a compact decision summary, three primary decision metrics, a stable toolbar, and one selected analytical view. It retains Python/Streamlit 1.65, the synthetic dataset, and the existing financial model and export formats.
 
@@ -9,7 +9,7 @@ The approved direction is a restrained finance workbench. The candidate replaces
 | Area | Candidate behavior |
 | --- | --- |
 | Hierarchy | One title, recommendation separate from viewed policy, profit/cash/loss margins first, secondary measures below. |
-| Visual system | Light slate surfaces, dark ink, teal actions, consistent Source Sans typography, compact headings, modest borders, common chart tokens. Only owned markup receives custom CSS. |
+| Visual system | Light slate surfaces, dark ink, teal actions, consistent Source Sans typography, compact headings, modest borders, common chart tokens. Owned markup and public Pandas Styler table customization receive CSS; native widgets use supported theme options. |
 | Navigation | Wrapping Overview, Policies, Cohorts, Funding & stress, and Methodology controls precede the decision summary and are visible at the tested phone widths. Hidden analytical views are not executed. |
 | Assumptions | Committed edits produce an Unapplied notice and an input review with units and decimal precision. Applied results stay intact until Run. Restore changes inputs without projecting again. |
 | Policy selection | Viewing another policy updates its applied results immediately. The recommendation still compares the complete three-policy bundle. |
@@ -23,7 +23,7 @@ The approved direction is a restrained finance workbench. The candidate replaces
 | Credit controls | Draft effective lifetime PD is calculated without projections and labels the 100% cap. Applied PD remains available in Methodology. |
 | Exports | Each format has a deferred callable and its own cache. Opening Export generates no file; preview generates only the brief. Captured run identity, inputs, dataset, and filename stay tied to the requested result. |
 | Financial wording | Small nonzero amounts retain their signs, undefined values read Unavailable, and percentages differ from percentage-point margins. Unrounded model values determine all status. |
-| Methodology | Financial timing, definitions, checks, applied assumptions, source limitations, SQL and exact manifest remain discoverable. |
+| Methodology | Financial timing, definitions, checks, applied assumptions, source limitations, wrapped readable SQL and exact copyable manifests remain discoverable. |
 
 ## Interaction contract
 
@@ -63,7 +63,7 @@ AppTest confirms every view executes, not browser appearance or focus. AppTest l
 
 ## Local operation measurements
 
-Reproduce with `python -m scripts.measure_workbench --output artifacts/workbench-performance.json`. The saved [operation report](workbench-performance.json) contains three samples for each of 23 separately named operations, source hashes, medians, maxima and measurement scope. These are local server-code/AppTest timings with already imported Python libraries. They exclude browser rendering, network, hosting and multi-user effects. No p95 is inferred from three samples.
+Reproduce with `python -m scripts.measure_workbench --output artifacts/workbench-performance.json`. The earlier saved [operation report](workbench-performance.json), at `c0d6f393c25d0ceaa51152066a03251c45adc5e2`, predates the later table/Methodology/readability changes. It contains three samples for each of 23 separately named operations, source hashes, medians, maxima and measurement scope. These are local server-code/AppTest timings with already imported Python libraries. They exclude browser rendering, network, hosting and multi-user effects. No p95 is inferred from three samples.
 
 | Operation | Median local seconds |
 | --- | ---: |
@@ -91,17 +91,17 @@ These are sRGB relative-luminance calculations for chosen color pairs, not a ren
 | Good / warning / error status text on its surface | 6.39 / 6.22 / 6.37:1 |
 | Policy markers on table header | 6.73:1 |
 
-Labels, line patterns, limit references, and numeric alternatives supplement color. Rendered owned supporting text measures at least 5.40:1; keyboard focus and 390/320-pixel reflow passed the scoped browser checks. Full native-widget contrast, zoom and screen-reader output remain unverified.
+Labels, line patterns, limit references, and numeric alternatives supplement color. The expanded-view HTML sample measures a minimum 5.40:1 computed contrast; native sidebar error text measures 5.45:1. Native 200%/400% Chrome zoom, exposed control names, main headings, scoped keyboard focus and 390/320-pixel reflow pass. Screen-reader output, SVG/canvas contrast and complete native interaction/focus states remain separate checks.
 
 ## Browser gate and plan deviation
 
 The cloud browser initially could not reach the workspace candidate. The first-screen visual gate could not precede broad implementation; state/framework work proceeded in a draft candidate. This deviation remains part of the record.
 
-The authorized automated-software route subsequently exercised the unchanged app in isolated Chromium on a GitHub Actions runner. **Eleven browser journeys (69 checks) and two exact pre-redesign reference captures passed**, alongside all 118 tests, compilation and CLI generation. Nine journeys run the normal app; two wrap only the CSV generation boundary to exercise slow generation and server failure recovery with fresh caches. The [browser record](workbench-browser-validation.md) identifies exact sources, rendered fixes, raw reports, capture hashes and bounded remaining checks. The native caption-opacity, phone-navigation, stress-axis-label and immediate-edit findings were corrected before acceptance.
+The authorized automated-software route subsequently exercised the unchanged app in isolated Chromium on a GitHub Actions runner. **14 browser journeys (94 checks) and two exact pre-redesign reference captures passed**, alongside all 118 tests, compilation and CLI generation. Nine journeys run the normal app; two wrap only the CSV generation boundary to exercise slow generation and server failure recovery with fresh caches; three inspect native semantics/HTML readability and actual 200%/400% Chrome zoom. Every normal, controlled export and new audit report was refreshed on the same final application checkout. The [browser record](workbench-browser-validation.md) identifies exact sources, rendered fixes, raw reports, capture hashes and bounded remaining checks. The native caption-opacity, phone-navigation, stress-axis-label and immediate-edit findings were corrected before acceptance. The expanded follow-up corrects table headers, warning/error colors and SQL/manifest readability, with reference-content checks and 27 raw screenshots.
 
-Human design review, physical devices, browser zoom, full screen-reader/native-widget accessibility and intended-host behavior remain separate release checks. The source-URL interception experiment did not delay the actual browser download; it is not used as in-flight transport evidence. Native cancellation/retry, actual captured-file identity, controlled slow server generation and uncached generation failure/retry are verified. The test fixture does not establish hosted failures or slow network transfer behavior.
+Human design review, physical devices, actual screen-reader output, full native-widget accessibility across states/browsers and intended-host behavior remain separate release checks. Native 200%/400% Chrome zoom passes the scoped journeys. The source-URL interception experiment did not delay the actual browser download; it is not used as in-flight transport evidence. Native cancellation/retry, actual captured-file identity, controlled slow server generation and uncached generation failure/retry are verified. The test fixture does not establish hosted failures or slow network transfer behavior.
 
-Merge and public rollout are separate release actions. The current public app uses the older `feature/lending-simulator` source. Its existing media is distinct from the candidate captures.
+Merge and public rollout are separate release actions. The previously verified public build uses the older `feature/lending-simulator` source. Its existing media is distinct from the candidate captures; this PR has not changed hosting.
 
 ## Review and rollback
 

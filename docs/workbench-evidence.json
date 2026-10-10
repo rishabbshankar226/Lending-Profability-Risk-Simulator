@@ -1,28 +1,28 @@
 {
-  "application_commit": "c0d6f393c25d0ceaa51152066a03251c45adc5e2",
+  "application_commit": "ba68ea38b4b09f38e6e0824906c2bc0de84efc19",
   "reference_commit": "baeda884355734f534babd2bc73ab7018742569f",
-  "ci_run": 38002523325,
-  "ci_url": "https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/actions/runs/38002523325",
+  "ci_run": 38021305993,
+  "ci_url": "https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/actions/runs/38021305993",
   "financial_tests": {
     "passed": 118,
     "skipped": 0,
-    "seconds": 19.31
+    "seconds": 22.28
   },
-  "browser_journeys": 9,
-  "browser_checks": 59,
+  "browser_journeys": 14,
+  "browser_checks": 94,
   "browser": "145.0.7632.6",
   "source_sha256": {
-    "app.py": "787550c6cd6bf477bd7f3d1b0e2cbcec11f20b4bfe317e8a7b9f67abf3d3eb95",
-    ".streamlit/config.toml": "5c79ac18477326bc32f3ec56e518ddabedb4e210e971873e36328fa188cc2869",
+    "app.py": "e333ec1f22b2c22fb9e4f9babd2749bfb12a864086fae18823dbc1e282fb4086",
+    ".streamlit/config.toml": "52cdda4a8cec15437ed0af5a6c2dabcebbb8c04003b3c714a5e8cb37c9d2d563",
     "lending_simulator/ui/__init__.py": "17173c061b07cb9362a2b4ca3c8ab3a5b87aaad4a27323d49846e1dc7149bb4f",
     "lending_simulator/ui/charts.py": "ff105d833e6f298473f9d8e2634b4f6684c35ce50df9e7be156ce06841666471",
-    "lending_simulator/ui/components.py": "81da10eb83ec9a91f8e34574e328ebb24227b969f6b6b6871846e9009b96ea9c",
+    "lending_simulator/ui/components.py": "edd55a014881f029b7700dd3a21551d8f9578afd72ee32c82ff0b0a13461c48b",
     "lending_simulator/ui/data.py": "560b1b4160d705a113a2ba441cec7d5b659d83b3b63994a7704424aa22bb3db9",
     "lending_simulator/ui/downloads.py": "197a8e923d0804806425e8d9c45884519b6b3b0167a546c624d298d92a41f74a",
     "lending_simulator/ui/formatting.py": "77e61912042213a5d1d51d8485c8e24f50093bc36aa6819518e2e32b94dc8e24",
     "lending_simulator/ui/state.py": "71a92b6521bbb68fab5a5dffd187897cded823158e92be6e4f7ae9c54f217bfe",
     "lending_simulator/ui/theme.py": "990b6704da4860a7026b082d61acada200f3a218e494a56fd7c074b6a499e379",
-    "lending_simulator/ui/views.py": "0924762665860d45e224a8ccf7acc2fbf7fa6a7bb7f7a90425b8d1591ac69811"
+    "lending_simulator/ui/views.py": "8c50bff2bd1554c3603c1f916c315ba3f4137600c592fc337108dc776946ad7e"
   },
   "protected_source_paths_unchanged": [
     "lending_simulator/model.py",
@@ -58,88 +58,120 @@
     }
   ],
   "reports": {
-    "workbench-browser-report.json": "4f17c2b60f82b437b6e5e14b0aba9b8ccdc0caeb3813bace19c42d9aaf74f030",
-    "workbench-reference-report.json": "d32720455c26fdd17721599a22dc418c0abc5bec7ba9f78b565d5f20560789c5",
-    "workbench-performance.json": "bae954b3bd31caf8199943efee9af17ee1c29e808b61120df8046b682182927e",
-    "workbench-export-resilience-report.json": "7fc30eb01e32d9f53a618b705276f62f72230e5b930d82cf0b2abf028d592e6b"
+    "workbench-browser-report.json": "8e7595fbaf21f5b5795af1db549c1d609b1f02dd508e3ca6f6deb85b9dcb37ab",
+    "workbench-export-resilience-report.json": "edaba37a5b58151c8da40114dbe930a734414af36ea8cbbe09ed5fd4e0cddb21",
+    "workbench-accessibility-report.json": "dbe79ffd9735d43755a4dcec690ede80cd0b3882ad2cfa50e19ac994bc0b7cf0",
+    "workbench-reference-report.json": "55e24ca5fef1ec33d4139dda7d488560f5e836466970877df600d32d254754ca",
+    "workbench-performance.json": "bae954b3bd31caf8199943efee9af17ee1c29e808b61120df8046b682182927e"
   },
   "captures": [
     {
+      "path": "docs/screenshots/workbench/accessibility-invalid-input-alert.png",
+      "sha256": "d4f2a2ad2d60406786eb098447b195165c8bb634141e17891b28676f8e89538b",
+      "bytes": 135834,
+      "source_commit": "ba68ea38b4b09f38e6e0824906c2bc0de84efc19"
+    },
+    {
+      "path": "docs/screenshots/workbench/accessibility-methodology-manifest.png",
+      "sha256": "46069fa14cdc6bbede614b2951d601d7dd7f28d30edcadf7a22b0980cec7fd5e",
+      "bytes": 107715,
+      "source_commit": "ba68ea38b4b09f38e6e0824906c2bc0de84efc19"
+    },
+    {
+      "path": "docs/screenshots/workbench/accessibility-methodology-sql.png",
+      "sha256": "a1269e4fc0d3ca402c436125c3e9431947df56f89e2ce7486ee9738e19ae48e5",
+      "bytes": 134599,
+      "source_commit": "ba68ea38b4b09f38e6e0824906c2bc0de84efc19"
+    },
+    {
+      "path": "docs/screenshots/workbench/accessibility-profit-table.png",
+      "sha256": "c15f83cfea566df386eaf9866d4795665cf5138a7be698d368a5e4f6e2d49d1a",
+      "bytes": 82960,
+      "source_commit": "ba68ea38b4b09f38e6e0824906c2bc0de84efc19"
+    },
+    {
       "path": "docs/screenshots/workbench/desktop-1440-cohort-chart.png",
-      "sha256": "ae41ef963cc73107a5f55165f0de78e0a3ea95eb7fd7a3bfd99e425133c0877d",
+      "sha256": "3446509186dae1d9f85b493f339f301c60fc814bb64a9625471ebc7f06891553",
       "bytes": 97036,
-      "source_commit": "c0d6f393c25d0ceaa51152066a03251c45adc5e2"
+      "source_commit": "ba68ea38b4b09f38e6e0824906c2bc0de84efc19"
     },
     {
       "path": "docs/screenshots/workbench/desktop-1440-higher-defaults.png",
-      "sha256": "ac23296cc41b5bd186e8bfb4bba3863a5fcaf087df75b3e3b6fd3d8e0d00e977",
-      "bytes": 110576,
-      "source_commit": "c0d6f393c25d0ceaa51152066a03251c45adc5e2"
+      "sha256": "fd8be4928e55ac775888bed8decb8f9951f88dac7422f396f2bd9b8495e12107",
+      "bytes": 110614,
+      "source_commit": "ba68ea38b4b09f38e6e0824906c2bc0de84efc19"
     },
     {
       "path": "docs/screenshots/workbench/desktop-1440-invalid-input.png",
-      "sha256": "fa560b4aed2ddb67ac56d3e2a024ce7f618f73b57e9bc89e8708c08e071c047d",
-      "bytes": 114078,
-      "source_commit": "c0d6f393c25d0ceaa51152066a03251c45adc5e2"
+      "sha256": "989098d6b648abc3879eb7e8c3d0626ace014074fcd3e5b4f3aa8c1dc19ea2ca",
+      "bytes": 114157,
+      "source_commit": "ba68ea38b4b09f38e6e0824906c2bc0de84efc19"
     },
     {
       "path": "docs/screenshots/workbench/desktop-1440-overview-charts.png",
-      "sha256": "0e0cb0b73083a28f705510a13eb5b8552d3e6a6e7ac6bb16da85bfa5d2c30384",
-      "bytes": 100486,
-      "source_commit": "c0d6f393c25d0ceaa51152066a03251c45adc5e2"
+      "sha256": "219afb5468f848a3297d82a6e81d293d590cef67e2f374c6a232f8927c4819af",
+      "bytes": 100310,
+      "source_commit": "ba68ea38b4b09f38e6e0824906c2bc0de84efc19"
     },
     {
       "path": "docs/screenshots/workbench/desktop-1440-overview.png",
       "sha256": "81352f89d1a08333488e055ce936efaca06fcbe87058a9dcf51c67c8cf638990",
       "bytes": 110760,
-      "source_commit": "c0d6f393c25d0ceaa51152066a03251c45adc5e2"
+      "source_commit": "ba68ea38b4b09f38e6e0824906c2bc0de84efc19"
     },
     {
       "path": "docs/screenshots/workbench/desktop-1440-policy-table.png",
-      "sha256": "a395cf7c56f83e523630b233addb4ca29b64664521d27779695f6493cc772a21",
-      "bytes": 112468,
-      "source_commit": "c0d6f393c25d0ceaa51152066a03251c45adc5e2"
+      "sha256": "ca032386eb6a36eb8395d0979b98a50fd3257a073796e51df87955cea9d5a91f",
+      "bytes": 112459,
+      "source_commit": "ba68ea38b4b09f38e6e0824906c2bc0de84efc19"
     },
     {
       "path": "docs/screenshots/workbench/desktop-1440-profit-bridge-chart.png",
-      "sha256": "04d7e8f29e380e432fcb36f8d409c95c5a160bbc43821ef386fbb3a8cf253eb0",
-      "bytes": 89244,
-      "source_commit": "c0d6f393c25d0ceaa51152066a03251c45adc5e2"
+      "sha256": "c408e8b9adb6421b7f39435247a6468dd1b9fc9f9f6281bdb66ac6d8d5e5c417",
+      "bytes": 86959,
+      "source_commit": "ba68ea38b4b09f38e6e0824906c2bc0de84efc19"
     },
     {
       "path": "docs/screenshots/workbench/desktop-1440-runoff-comparison.png",
-      "sha256": "1623d698e274ca7141766100ce271c1771fbd436e1386477d82fbd13f84c7f23",
-      "bytes": 124352,
-      "source_commit": "c0d6f393c25d0ceaa51152066a03251c45adc5e2"
+      "sha256": "e0e3ea857bbdef32dc0519389a93adb9ddbf9556afe5f83965d29a5e2aed15b5",
+      "bytes": 126031,
+      "source_commit": "ba68ea38b4b09f38e6e0824906c2bc0de84efc19"
     },
     {
       "path": "docs/screenshots/workbench/desktop-1440-stress-chart.png",
       "sha256": "fa21d9c9a5ff8a014fafc86c2ef6bc20fa64040c4dc9feacaed88e3020877a35",
       "bytes": 107698,
-      "source_commit": "c0d6f393c25d0ceaa51152066a03251c45adc5e2"
+      "source_commit": "ba68ea38b4b09f38e6e0824906c2bc0de84efc19"
     },
     {
       "path": "docs/screenshots/workbench/empty-portfolio-stress.png",
-      "sha256": "3c3a65930460fe022e93d0a313546ef1006dde01f9c081f29d8fbf6d486e488d",
-      "bytes": 88376,
-      "source_commit": "c0d6f393c25d0ceaa51152066a03251c45adc5e2"
+      "sha256": "9d528df3b81895e9cc69489350f06f5c12d3f32bcd0df353337fe96456038112",
+      "bytes": 88407,
+      "source_commit": "ba68ea38b4b09f38e6e0824906c2bc0de84efc19"
+    },
+    {
+      "path": "docs/screenshots/workbench/generation-retry-generation-error.png",
+      "sha256": "8e823c23634741d03edffc8cd705a977f6a82e75076322fcd7d25ba886dfd1a6",
+      "bytes": 110555,
+      "source_commit": "ba68ea38b4b09f38e6e0824906c2bc0de84efc19",
+      "fixture": "generation-retry"
     },
     {
       "path": "docs/screenshots/workbench/phone-390-overview.png",
       "sha256": "c1bdebf4c9fb929bbe38e9496a3cadd8108b5cf7cab19cb4ad23693f7b4a4be1",
       "bytes": 38107,
-      "source_commit": "c0d6f393c25d0ceaa51152066a03251c45adc5e2"
+      "source_commit": "ba68ea38b4b09f38e6e0824906c2bc0de84efc19"
     },
     {
       "path": "docs/screenshots/workbench/phone-390-policy-comparison.png",
       "sha256": "3fe4699f2bef43365b00ba927d16e331996da1baf727217600ce9c58cf24374e",
       "bytes": 42035,
-      "source_commit": "c0d6f393c25d0ceaa51152066a03251c45adc5e2"
+      "source_commit": "ba68ea38b4b09f38e6e0824906c2bc0de84efc19"
     },
     {
       "path": "docs/screenshots/workbench/reference-desktop-1440.png",
-      "sha256": "9d2434c053eac53c24a6c9f5dadcb204976344d039b15ec0bdb7e32269a1e01b",
-      "bytes": 112634,
+      "sha256": "803bdd3dbeb9e3be984f8c4583fdd457dd6d4a13a64ad6353fb6338960694a7f",
+      "bytes": 112643,
       "source_commit": "baeda884355734f534babd2bc73ab7018742569f"
     },
     {
@@ -149,61 +181,280 @@
       "source_commit": "baeda884355734f534babd2bc73ab7018742569f"
     },
     {
-      "path": "docs/screenshots/workbench/slow-generation-generating.png",
-      "sha256": "5497f79be0ecb561a8b93a3d05230f864f4f1c5f56d7ca3b69879006ccae5c22",
-      "bytes": 108216,
-      "source_commit": "f2e69fa06a33bab87b5e4a65406d881c1e6566db",
-      "fixture": "slow-generation"
-    },
-    {
       "path": "docs/screenshots/workbench/slow-generation-changed-policy-while-generating.png",
-      "sha256": "bdc5afec07c6d979a775ab4d1e56f7ae76ce07232759b0002d94d517df38a932",
-      "bytes": 109229,
-      "source_commit": "f2e69fa06a33bab87b5e4a65406d881c1e6566db",
+      "sha256": "ef2c540934cd3ec6f8aebaf6fa60e252b6735bda8e46be2eec294730e3301828",
+      "bytes": 109259,
+      "source_commit": "ba68ea38b4b09f38e6e0824906c2bc0de84efc19",
       "fixture": "slow-generation"
     },
     {
-      "path": "docs/screenshots/workbench/generation-retry-generation-error.png",
-      "sha256": "998b361a7513b0f7dc20ec507b494d001332e4129f73af584d9c50a9044bd89b",
-      "bytes": 110486,
-      "source_commit": "f2e69fa06a33bab87b5e4a65406d881c1e6566db",
-      "fixture": "generation-retry"
+      "path": "docs/screenshots/workbench/slow-generation-generating.png",
+      "sha256": "e07c897fc7a989d585891c335ce4b3f0e43d7ffd5f656226ed1cf83922dae49f",
+      "bytes": 108222,
+      "source_commit": "ba68ea38b4b09f38e6e0824906c2bc0de84efc19",
+      "fixture": "slow-generation"
+    },
+    {
+      "path": "docs/screenshots/workbench/zoom-200-export.png",
+      "sha256": "33866afd8724f3abfe0d8096dbb042cc08720aa86a5031f5af479477d074b0ef",
+      "bytes": 57931,
+      "source_commit": "ba68ea38b4b09f38e6e0824906c2bc0de84efc19",
+      "fixture": "native-zoom"
+    },
+    {
+      "path": "docs/screenshots/workbench/zoom-200-overview.png",
+      "sha256": "c5297abe9fdb9c7f7d6bbcbb144126b5c9734f5d9ea737073edf0e51fe3cbf18",
+      "bytes": 53489,
+      "source_commit": "ba68ea38b4b09f38e6e0824906c2bc0de84efc19",
+      "fixture": "native-zoom"
+    },
+    {
+      "path": "docs/screenshots/workbench/zoom-200-policies.png",
+      "sha256": "feb9015b9447ae7b394b70ca9749335bc6b8b40b89d0f13a3f98884331e44fd9",
+      "bytes": 56840,
+      "source_commit": "ba68ea38b4b09f38e6e0824906c2bc0de84efc19",
+      "fixture": "native-zoom"
+    },
+    {
+      "path": "docs/screenshots/workbench/zoom-400-export.png",
+      "sha256": "ab6e0bb820669a3fdb9a24dd145b49988789a6c9fcdd7f1be79ab1416d11ff21",
+      "bytes": 64084,
+      "source_commit": "ba68ea38b4b09f38e6e0824906c2bc0de84efc19",
+      "fixture": "native-zoom"
+    },
+    {
+      "path": "docs/screenshots/workbench/zoom-400-overview.png",
+      "sha256": "dbfa729fc828a7fd02a358509d318d1356db23380a74c827ff89bc3e853ee664",
+      "bytes": 34678,
+      "source_commit": "ba68ea38b4b09f38e6e0824906c2bc0de84efc19",
+      "fixture": "native-zoom"
+    },
+    {
+      "path": "docs/screenshots/workbench/zoom-400-policies.png",
+      "sha256": "486e5a2c4032bd57156bb1059f485aa3ba6280d920339658cfe929bef4bb8f1e",
+      "bytes": 37309,
+      "source_commit": "ba68ea38b4b09f38e6e0824906c2bc0de84efc19",
+      "fixture": "native-zoom"
     }
   ],
   "actions_artifact": {
-    "id": 11649828952,
-    "sha256": "4cbad66204678cd856fbe4a8e8802badf4405051b797155295448ef015d3b7c3",
-    "expires_at": "2026-10-23T23:06:17Z",
-    "scope": "Full traces, logs, downloads and all viewport captures retained in Actions; selected raw images/reports retained in this repository."
+    "id": 11658606771,
+    "sha256": "435f3ba99acf433726960db6e2816e8ee4a7f930f2c0bc377e0292d7fb739692",
+    "expires_at": "2026-10-24T03:41:40Z",
+    "scope": "Full traces, AX/HTML samples, logs, actual downloads and all viewport captures retained in Actions; selected raw images/reports retained in this repository."
   },
   "limitations": [
     "Chromium mobile emulation; no physical-device/iOS or hardware numeric-keyboard pass.",
-    "Scoped keyboard/owned-caption checks; no full screen-reader/native-widget/zoom audit.",
+    "Scoped native AX/main-heading, HTML contrast, keyboard and 200%/400% Chrome zoom checks; no screen-reader/full WCAG certification, complete SVG/canvas/interaction-state contrast or cross-browser audit.",
     "Loopback timings; no public-host access, latency, wake or multi-user claim.",
-    "Controlled CSV builder hold/failure with original successful files; no throttled network transfer or hosted export-failure claim."
+    "Controlled CSV builder hold/failure with original successful files; no throttled network transfer or hosted export-failure claim.",
+    "Local operation measurements remain from c0d6f393c25d0ceaa51152066a03251c45adc5e2, before the later table/Methodology/readability changes."
   ],
   "accepted_browser_totals": {
-    "journeys": 11,
-    "checks": 69
+    "journeys": 14,
+    "checks": 94
   },
   "export_resilience": {
-    "tested_checkout": "f2e69fa06a33bab87b5e4a65406d881c1e6566db",
-    "ci_run": 38004218065,
-    "ci_url": "https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/actions/runs/38004218065",
+    "tested_checkout": "ba68ea38b4b09f38e6e0824906c2bc0de84efc19",
+    "ci_run": 38021305993,
+    "ci_url": "https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/actions/runs/38021305993",
     "journeys": 2,
     "checks": 10,
     "report": "workbench-export-resilience-report.json",
-    "application_hashes_match_original_acceptance": true,
-    "financial_tests": {
-      "passed": 118,
-      "skipped": 0,
-      "seconds": 31.92
-    },
+    "application_hashes_match_current_acceptance": true,
     "fixture": "Test-only wrapper holds or fails one CSV builder call inside the real cached_export. Each case has a fresh server/cache. Original builder produces every successful file. Unchanged app.py, model, dataset and UI. No deployment or state injection.",
     "actions_artifact": {
-      "id": 11650347809,
-      "sha256": "b05f044629f437bd3a0df8e891d04c0eebda2ba207bdc151b1f53fa5fac85c1d",
-      "expires_at": "2026-10-23T23:26:36Z"
+      "id": 11658606771,
+      "sha256": "435f3ba99acf433726960db6e2816e8ee4a7f930f2c0bc377e0292d7fb739692",
+      "expires_at": "2026-10-24T03:41:40Z",
+      "scope": "Full traces, AX/HTML samples, logs, actual downloads and all viewport captures retained in Actions; selected raw images/reports retained in this repository."
     }
+  },
+  "accessibility_and_zoom": {
+    "tested_checkout": "ba68ea38b4b09f38e6e0824906c2bc0de84efc19",
+    "ci_run": 38021305993,
+    "journeys": 3,
+    "checks": 25,
+    "report": "workbench-accessibility-report.json",
+    "view_text_samples": 443,
+    "minimum_view_text_ratio": 5.403835126809919,
+    "expanded_input_samples": 211,
+    "expanded_input_minimum_ratio": 5.403835126809919,
+    "invalid_state_samples": 221,
+    "invalid_state_minimum_ratio": 5.403835126809919,
+    "native_error_sample": {
+      "text": "Scenario could not run: Minimum month-end cash cannot be negative. Showing the last successful result.",
+      "tag": "P",
+      "foreground": "rgb(148, 61, 52)",
+      "opacity": 1,
+      "fontSize": 16,
+      "fontWeight": 400,
+      "background": [
+        238.8,
+        222.10000000000002,
+        225.70000000000002
+      ],
+      "ratio": 5.448854653389501,
+      "required_ratio": 4.5
+    },
+    "native_zoom": [
+      {
+        "requested": 2,
+        "chrome_reported": 2.0,
+        "before": {
+          "width": 1280,
+          "height": 813,
+          "dpr": 1,
+          "visualScale": 1,
+          "outerWidth": 1280,
+          "outerHeight": 813
+        },
+        "after": {
+          "width": 640,
+          "height": 406,
+          "dpr": 2,
+          "visualScale": 1,
+          "outerWidth": 1280,
+          "outerHeight": 900
+        },
+        "mechanism": "Chrome automatic per-tab zoom; no CSS scaling, pinch zoom or viewport override."
+      },
+      {
+        "requested": 4,
+        "chrome_reported": 3.9999999999999996,
+        "before": {
+          "width": 1280,
+          "height": 813,
+          "dpr": 1,
+          "visualScale": 1,
+          "outerWidth": 1280,
+          "outerHeight": 813
+        },
+        "after": {
+          "width": 320,
+          "height": 203,
+          "dpr": 4,
+          "visualScale": 1,
+          "outerWidth": 1280,
+          "outerHeight": 900
+        },
+        "mechanism": "Chrome automatic per-tab zoom; no CSS scaling, pinch zoom or viewport override."
+      }
+    ],
+    "native_capture_dimensions": [
+      {
+        "file": "zoom-200-overview.png",
+        "width": 1280,
+        "height": 813,
+        "css_viewport": {
+          "width": 640,
+          "height": 406,
+          "dpr": 2,
+          "visualScale": 1,
+          "outerWidth": 1280,
+          "outerHeight": 900
+        },
+        "mechanism": "Native Page.captureScreenshot compositor surface, no clip or image alteration."
+      },
+      {
+        "file": "zoom-200-policies.png",
+        "width": 1280,
+        "height": 813,
+        "css_viewport": {
+          "width": 640,
+          "height": 406,
+          "dpr": 2,
+          "visualScale": 1,
+          "outerWidth": 1280,
+          "outerHeight": 900
+        },
+        "mechanism": "Native Page.captureScreenshot compositor surface, no clip or image alteration."
+      },
+      {
+        "file": "zoom-200-export.png",
+        "width": 1280,
+        "height": 813,
+        "css_viewport": {
+          "width": 640,
+          "height": 406,
+          "dpr": 2,
+          "visualScale": 1,
+          "outerWidth": 1280,
+          "outerHeight": 900
+        },
+        "mechanism": "Native Page.captureScreenshot compositor surface, no clip or image alteration."
+      },
+      {
+        "file": "zoom-400-overview.png",
+        "width": 1280,
+        "height": 813,
+        "css_viewport": {
+          "width": 320,
+          "height": 203,
+          "dpr": 4,
+          "visualScale": 1,
+          "outerWidth": 1280,
+          "outerHeight": 900
+        },
+        "mechanism": "Native Page.captureScreenshot compositor surface, no clip or image alteration."
+      },
+      {
+        "file": "zoom-400-policies.png",
+        "width": 1280,
+        "height": 813,
+        "css_viewport": {
+          "width": 320,
+          "height": 203,
+          "dpr": 4,
+          "visualScale": 1,
+          "outerWidth": 1280,
+          "outerHeight": 900
+        },
+        "mechanism": "Native Page.captureScreenshot compositor surface, no clip or image alteration."
+      },
+      {
+        "file": "zoom-400-export.png",
+        "width": 1280,
+        "height": 813,
+        "css_viewport": {
+          "width": 320,
+          "height": 203,
+          "dpr": 4,
+          "visualScale": 1,
+          "outerWidth": 1280,
+          "outerHeight": 900
+        },
+        "mechanism": "Native Page.captureScreenshot compositor surface, no clip or image alteration."
+      }
+    ],
+    "scope": "Read-only browser AX/HTML audits and native 200%/400% Chrome zoom through a local-only test extension, using the normal app.py entrypoint. No accounts/hosting or app DOM/state injection. Not physical-device or full screen-reader/accessibility certification.",
+    "diagnostic_runs": [
+      {
+        "run": 38008994593,
+        "checkout": "36d9e242d02361626ad82f8838535adb7c647772",
+        "result": "Contrast findings plus false failures from closed chart controls and floating-point native zoom comparison."
+      },
+      {
+        "run": 38020087487,
+        "checkout": "0e9fc11d442c699b2a49b856ab81fa6eee8b059f",
+        "result": "Expanded details reproduce table/warning/SQL/JSON contrast failures; both native zoom cases pass."
+      },
+      {
+        "run": 38021043378,
+        "checkout": "e0940473209cab485b0e8a6f6b3f9c1f42cfad3f",
+        "result": "Full compositor captures replace clipped CSS-sized zoom screenshots; later pixel cross-check identifies sidebar error background omitted by the contrast probe."
+      }
+    ],
+    "test_corrections": [
+      "Closed details and opacity-zero content excluded; view details explicitly opened for contrast/AX inspection.",
+      "Text-position background sampling excludes the slider thumb behind labels positioned above it; all enclosing scroll-surface backgrounds retained for offscreen text.",
+      "Native zoom compared numerically with tolerance; settled chart layouts and hovered toolbar bounds checked.",
+      "Native zoom screenshots captured directly from the compositor without a clip and checked against CSS viewport \u00d7 DPR; no image alteration."
+    ],
+    "fixes": [
+      "Native static table headers receive opaque muted color and medium weight via public Pandas Styler; draft review included.",
+      "Supported theme yellow/red text colors darken warnings and validation/generation errors.",
+      "Wrapped plain monospace SQL and JSON manifests preserve original query text and complete reference values."
+    ]
   }
 }

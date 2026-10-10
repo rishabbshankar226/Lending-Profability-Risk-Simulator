@@ -1,0 +1,2834 @@
+{
+  "created_at": "2026-10-10T03:41:04.918066+00:00",
+  "source_commit": "ba68ea38b4b09f38e6e0824906c2bc0de84efc19",
+  "source_sha256": {
+    "app.py": "e333ec1f22b2c22fb9e4f9babd2749bfb12a864086fae18823dbc1e282fb4086",
+    ".streamlit/config.toml": "52cdda4a8cec15437ed0af5a6c2dabcebbb8c04003b3c714a5e8cb37c9d2d563",
+    "lending_simulator/ui/__init__.py": "17173c061b07cb9362a2b4ca3c8ab3a5b87aaad4a27323d49846e1dc7149bb4f",
+    "lending_simulator/ui/charts.py": "ff105d833e6f298473f9d8e2634b4f6684c35ce50df9e7be156ce06841666471",
+    "lending_simulator/ui/components.py": "edd55a014881f029b7700dd3a21551d8f9578afd72ee32c82ff0b0a13461c48b",
+    "lending_simulator/ui/data.py": "560b1b4160d705a113a2ba441cec7d5b659d83b3b63994a7704424aa22bb3db9",
+    "lending_simulator/ui/downloads.py": "197a8e923d0804806425e8d9c45884519b6b3b0167a546c624d298d92a41f74a",
+    "lending_simulator/ui/formatting.py": "77e61912042213a5d1d51d8485c8e24f50093bc36aa6819518e2e32b94dc8e24",
+    "lending_simulator/ui/state.py": "71a92b6521bbb68fab5a5dffd187897cded823158e92be6e4f7ae9c54f217bfe",
+    "lending_simulator/ui/theme.py": "990b6704da4860a7026b082d61acada200f3a218e494a56fd7c074b6a499e379",
+    "lending_simulator/ui/views.py": "8c50bff2bd1554c3603c1f916c315ba3f4137600c592fc337108dc776946ad7e"
+  },
+  "scope": "Read-only browser AX/HTML audits and native 200%/400% Chrome zoom through a local-only test extension, using the normal app.py entrypoint. No accounts/hosting or app DOM/state injection. Not physical-device or full screen-reader/accessibility certification.",
+  "cases": [
+    {
+      "name": "accessibility",
+      "checks": [
+        {
+          "name": "Five views expose named native controls and a continuous main heading hierarchy",
+          "details": [
+            {
+              "view": "Overview",
+              "raw_snapshot": "accessibility-overview.json",
+              "headings": [
+                {
+                  "level": 1,
+                  "text": "Lending workbench"
+                },
+                {
+                  "level": 2,
+                  "text": "Recommended policy: Conservative"
+                },
+                {
+                  "level": 2,
+                  "text": "Overview"
+                },
+                {
+                  "level": 3,
+                  "text": "Operating profit over time"
+                },
+                {
+                  "level": 3,
+                  "text": "Liquidity over time"
+                }
+              ],
+              "controls": 54,
+              "unnamed_controls": [],
+              "missing_controls": [],
+              "heading_errors": [],
+              "contrast_samples": 69,
+              "minimum_text_ratio": 5.403835126809919,
+              "contrast_failures": []
+            },
+            {
+              "view": "Policies",
+              "raw_snapshot": "accessibility-policies.json",
+              "headings": [
+                {
+                  "level": 1,
+                  "text": "Lending workbench"
+                },
+                {
+                  "level": 2,
+                  "text": "Recommended policy: Conservative"
+                },
+                {
+                  "level": 2,
+                  "text": "Policies"
+                },
+                {
+                  "level": 3,
+                  "text": "Full-runoff operating profit"
+                },
+                {
+                  "level": 3,
+                  "text": "Cash margin to the selected floor"
+                }
+              ],
+              "controls": 50,
+              "unnamed_controls": [],
+              "missing_controls": [],
+              "heading_errors": [],
+              "contrast_samples": 79,
+              "minimum_text_ratio": 5.403835126809919,
+              "contrast_failures": []
+            },
+            {
+              "view": "Cohorts",
+              "raw_snapshot": "accessibility-cohorts.json",
+              "headings": [
+                {
+                  "level": 1,
+                  "text": "Lending workbench"
+                },
+                {
+                  "level": 2,
+                  "text": "Recommended policy: Conservative"
+                },
+                {
+                  "level": 2,
+                  "text": "Cohorts"
+                },
+                {
+                  "level": 3,
+                  "text": "Risk-band repayment and net loss"
+                }
+              ],
+              "controls": 59,
+              "unnamed_controls": [],
+              "missing_controls": [],
+              "heading_errors": [],
+              "contrast_samples": 50,
+              "minimum_text_ratio": 5.403835126809919,
+              "contrast_failures": []
+            },
+            {
+              "view": "Funding & stress",
+              "raw_snapshot": "accessibility-funding-stress.json",
+              "headings": [
+                {
+                  "level": 1,
+                  "text": "Lending workbench"
+                },
+                {
+                  "level": 2,
+                  "text": "Recommended policy: Conservative"
+                },
+                {
+                  "level": 2,
+                  "text": "Funding & stress"
+                },
+                {
+                  "level": 3,
+                  "text": "Default and funding stress"
+                }
+              ],
+              "controls": 38,
+              "unnamed_controls": [],
+              "missing_controls": [],
+              "heading_errors": [],
+              "contrast_samples": 50,
+              "minimum_text_ratio": 5.403835126809919,
+              "contrast_failures": []
+            },
+            {
+              "view": "Methodology",
+              "raw_snapshot": "accessibility-methodology.json",
+              "headings": [
+                {
+                  "level": 1,
+                  "text": "Lending workbench"
+                },
+                {
+                  "level": 2,
+                  "text": "Recommended policy: Conservative"
+                },
+                {
+                  "level": 2,
+                  "text": "Methodology"
+                }
+              ],
+              "controls": 35,
+              "unnamed_controls": [],
+              "missing_controls": [],
+              "heading_errors": [],
+              "contrast_samples": 195,
+              "minimum_text_ratio": 5.403835126809919,
+              "contrast_failures": []
+            }
+          ]
+        },
+        {
+          "name": "Sampled visible HTML text and input values meet their normal/large text thresholds",
+          "details": {
+            "samples": 443,
+            "minimum_ratio": 5.403835126809919,
+            "scope": "Visible HTML text/input values with view expanders explicitly opened, including offscreen scroll content. Closed details, SVG/chart/canvas, hidden/decorative material icons and disabled controls excluded. Backgrounds sampled at text bounds (scroll-container backgrounds retained), with computed alpha and inherited opacity; not a complete accessibility audit."
+          }
+        },
+        {
+          "name": "Readable manifests and SQL retain the complete reference values and source query text",
+          "details": {
+            "run_id": "5a88f7bef3fa93d4",
+            "dataset_hash": "ae93b99dafe7655cc435e73a892a3a34e0a24378de890580f06dfb57fc60a67f",
+            "code_block_sha256": [
+              "6625b75e2a47eed774bd44d16773c639cba2ffe737219db0811e3bf2ce356461",
+              "1a144d3c1f4a28399b983d566f2eab49f1aa73145a9f3be17f837a6d3a1353a3",
+              "e94e945a52d159fe06ed5c9b2e4bc456f86ae2d33040b4ff9dc6523d1db2d89c",
+              "cd08d6c747cd10a40d027e36cf0ba803eb090e4bb8e5a6517862259c437235ef"
+            ]
+          }
+        },
+        {
+          "name": "All 18 financial inputs have accessible names when their editors are open",
+          "details": [
+            {
+              "role": "spinbutton",
+              "name": "Starting equity cash ($)",
+              "backend_node": 405,
+              "properties": [
+                {
+                  "name": "invalid",
+                  "value": {
+                    "type": "token",
+                    "value": "false"
+                  }
+                },
+                {
+                  "name": "focusable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "editable",
+                  "value": {
+                    "type": "token",
+                    "value": "plaintext"
+                  }
+                },
+                {
+                  "name": "settable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "required",
+                  "value": {
+                    "type": "boolean",
+                    "value": false
+                  }
+                },
+                {
+                  "name": "valuemin",
+                  "value": {
+                    "type": "number",
+                    "value": 0
+                  }
+                },
+                {
+                  "name": "valuemax",
+                  "value": {
+                    "type": "number",
+                    "value": 0
+                  }
+                },
+                {
+                  "name": "valuetext",
+                  "value": {
+                    "type": "string",
+                    "value": "500000.00"
+                  }
+                }
+              ]
+            },
+            {
+              "role": "spinbutton",
+              "name": "Facility limit ($)",
+              "backend_node": 440,
+              "properties": [
+                {
+                  "name": "invalid",
+                  "value": {
+                    "type": "token",
+                    "value": "false"
+                  }
+                },
+                {
+                  "name": "focusable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "editable",
+                  "value": {
+                    "type": "token",
+                    "value": "plaintext"
+                  }
+                },
+                {
+                  "name": "settable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "required",
+                  "value": {
+                    "type": "boolean",
+                    "value": false
+                  }
+                },
+                {
+                  "name": "valuemin",
+                  "value": {
+                    "type": "number",
+                    "value": 0
+                  }
+                },
+                {
+                  "name": "valuemax",
+                  "value": {
+                    "type": "number",
+                    "value": 0
+                  }
+                },
+                {
+                  "name": "valuetext",
+                  "value": {
+                    "type": "string",
+                    "value": "2000000.00"
+                  }
+                }
+              ]
+            },
+            {
+              "role": "spinbutton",
+              "name": "Collateral advance rate (%)",
+              "backend_node": 461,
+              "properties": [
+                {
+                  "name": "invalid",
+                  "value": {
+                    "type": "token",
+                    "value": "false"
+                  }
+                },
+                {
+                  "name": "focusable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "editable",
+                  "value": {
+                    "type": "token",
+                    "value": "plaintext"
+                  }
+                },
+                {
+                  "name": "settable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "required",
+                  "value": {
+                    "type": "boolean",
+                    "value": false
+                  }
+                },
+                {
+                  "name": "valuemin",
+                  "value": {
+                    "type": "number",
+                    "value": 0
+                  }
+                },
+                {
+                  "name": "valuemax",
+                  "value": {
+                    "type": "number",
+                    "value": 0
+                  }
+                },
+                {
+                  "name": "valuetext",
+                  "value": {
+                    "type": "string",
+                    "value": "80.00"
+                  }
+                }
+              ]
+            },
+            {
+              "role": "spinbutton",
+              "name": "Low-band lifetime PD (%)",
+              "backend_node": 496,
+              "properties": [
+                {
+                  "name": "invalid",
+                  "value": {
+                    "type": "token",
+                    "value": "false"
+                  }
+                },
+                {
+                  "name": "focusable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "editable",
+                  "value": {
+                    "type": "token",
+                    "value": "plaintext"
+                  }
+                },
+                {
+                  "name": "settable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "required",
+                  "value": {
+                    "type": "boolean",
+                    "value": false
+                  }
+                },
+                {
+                  "name": "valuemin",
+                  "value": {
+                    "type": "number",
+                    "value": 0
+                  }
+                },
+                {
+                  "name": "valuemax",
+                  "value": {
+                    "type": "number",
+                    "value": 0
+                  }
+                },
+                {
+                  "name": "valuetext",
+                  "value": {
+                    "type": "string",
+                    "value": "2.00"
+                  }
+                }
+              ]
+            },
+            {
+              "role": "spinbutton",
+              "name": "Medium-band lifetime PD (%)",
+              "backend_node": 517,
+              "properties": [
+                {
+                  "name": "invalid",
+                  "value": {
+                    "type": "token",
+                    "value": "false"
+                  }
+                },
+                {
+                  "name": "focusable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "editable",
+                  "value": {
+                    "type": "token",
+                    "value": "plaintext"
+                  }
+                },
+                {
+                  "name": "settable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "required",
+                  "value": {
+                    "type": "boolean",
+                    "value": false
+                  }
+                },
+                {
+                  "name": "valuemin",
+                  "value": {
+                    "type": "number",
+                    "value": 0
+                  }
+                },
+                {
+                  "name": "valuemax",
+                  "value": {
+                    "type": "number",
+                    "value": 0
+                  }
+                },
+                {
+                  "name": "valuetext",
+                  "value": {
+                    "type": "string",
+                    "value": "6.00"
+                  }
+                }
+              ]
+            },
+            {
+              "role": "spinbutton",
+              "name": "High-band lifetime PD (%)",
+              "backend_node": 538,
+              "properties": [
+                {
+                  "name": "invalid",
+                  "value": {
+                    "type": "token",
+                    "value": "false"
+                  }
+                },
+                {
+                  "name": "focusable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "editable",
+                  "value": {
+                    "type": "token",
+                    "value": "plaintext"
+                  }
+                },
+                {
+                  "name": "settable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "required",
+                  "value": {
+                    "type": "boolean",
+                    "value": false
+                  }
+                },
+                {
+                  "name": "valuemin",
+                  "value": {
+                    "type": "number",
+                    "value": 0
+                  }
+                },
+                {
+                  "name": "valuemax",
+                  "value": {
+                    "type": "number",
+                    "value": 0
+                  }
+                },
+                {
+                  "name": "valuetext",
+                  "value": {
+                    "type": "string",
+                    "value": "12.00"
+                  }
+                }
+              ]
+            },
+            {
+              "role": "spinbutton",
+              "name": "Recovery of charged-off principal (%)",
+              "backend_node": 559,
+              "properties": [
+                {
+                  "name": "invalid",
+                  "value": {
+                    "type": "token",
+                    "value": "false"
+                  }
+                },
+                {
+                  "name": "focusable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "editable",
+                  "value": {
+                    "type": "token",
+                    "value": "plaintext"
+                  }
+                },
+                {
+                  "name": "settable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "required",
+                  "value": {
+                    "type": "boolean",
+                    "value": false
+                  }
+                },
+                {
+                  "name": "valuemin",
+                  "value": {
+                    "type": "number",
+                    "value": 0
+                  }
+                },
+                {
+                  "name": "valuemax",
+                  "value": {
+                    "type": "number",
+                    "value": 0
+                  }
+                },
+                {
+                  "name": "valuetext",
+                  "value": {
+                    "type": "string",
+                    "value": "25.00"
+                  }
+                }
+              ]
+            },
+            {
+              "role": "spinbutton",
+              "name": "Recovery lag (months)",
+              "backend_node": 580,
+              "properties": [
+                {
+                  "name": "invalid",
+                  "value": {
+                    "type": "token",
+                    "value": "false"
+                  }
+                },
+                {
+                  "name": "focusable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "editable",
+                  "value": {
+                    "type": "token",
+                    "value": "plaintext"
+                  }
+                },
+                {
+                  "name": "settable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "required",
+                  "value": {
+                    "type": "boolean",
+                    "value": false
+                  }
+                },
+                {
+                  "name": "valuemin",
+                  "value": {
+                    "type": "number",
+                    "value": -9007199254740992
+                  }
+                },
+                {
+                  "name": "valuemax",
+                  "value": {
+                    "type": "number",
+                    "value": 9007199254740992
+                  }
+                },
+                {
+                  "name": "valuetext",
+                  "value": {
+                    "type": "string",
+                    "value": "3"
+                  }
+                }
+              ]
+            },
+            {
+              "role": "spinbutton",
+              "name": "Net principal loss cap (%)",
+              "backend_node": 618,
+              "properties": [
+                {
+                  "name": "invalid",
+                  "value": {
+                    "type": "token",
+                    "value": "false"
+                  }
+                },
+                {
+                  "name": "focusable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "editable",
+                  "value": {
+                    "type": "token",
+                    "value": "plaintext"
+                  }
+                },
+                {
+                  "name": "settable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "required",
+                  "value": {
+                    "type": "boolean",
+                    "value": false
+                  }
+                },
+                {
+                  "name": "valuemin",
+                  "value": {
+                    "type": "number",
+                    "value": 0
+                  }
+                },
+                {
+                  "name": "valuemax",
+                  "value": {
+                    "type": "number",
+                    "value": 0
+                  }
+                },
+                {
+                  "name": "valuetext",
+                  "value": {
+                    "type": "string",
+                    "value": "5.00"
+                  }
+                }
+              ]
+            },
+            {
+              "role": "spinbutton",
+              "name": "Minimum month-end cash ($)",
+              "backend_node": 639,
+              "properties": [
+                {
+                  "name": "invalid",
+                  "value": {
+                    "type": "token",
+                    "value": "false"
+                  }
+                },
+                {
+                  "name": "focusable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "editable",
+                  "value": {
+                    "type": "token",
+                    "value": "plaintext"
+                  }
+                },
+                {
+                  "name": "settable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "required",
+                  "value": {
+                    "type": "boolean",
+                    "value": false
+                  }
+                },
+                {
+                  "name": "valuemin",
+                  "value": {
+                    "type": "number",
+                    "value": 0
+                  }
+                },
+                {
+                  "name": "valuemax",
+                  "value": {
+                    "type": "number",
+                    "value": 0
+                  }
+                },
+                {
+                  "name": "valuetext",
+                  "value": {
+                    "type": "string",
+                    "value": "50000.00"
+                  }
+                }
+              ]
+            },
+            {
+              "role": "spinbutton",
+              "name": "Annual nominal borrower rate (%)",
+              "backend_node": 677,
+              "properties": [
+                {
+                  "name": "invalid",
+                  "value": {
+                    "type": "token",
+                    "value": "false"
+                  }
+                },
+                {
+                  "name": "focusable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "editable",
+                  "value": {
+                    "type": "token",
+                    "value": "plaintext"
+                  }
+                },
+                {
+                  "name": "settable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "required",
+                  "value": {
+                    "type": "boolean",
+                    "value": false
+                  }
+                },
+                {
+                  "name": "valuemin",
+                  "value": {
+                    "type": "number",
+                    "value": 0
+                  }
+                },
+                {
+                  "name": "valuemax",
+                  "value": {
+                    "type": "number",
+                    "value": 0
+                  }
+                },
+                {
+                  "name": "valuetext",
+                  "value": {
+                    "type": "string",
+                    "value": "18.00"
+                  }
+                }
+              ]
+            },
+            {
+              "role": "spinbutton",
+              "name": "Merchant fee (%)",
+              "backend_node": 698,
+              "properties": [
+                {
+                  "name": "invalid",
+                  "value": {
+                    "type": "token",
+                    "value": "false"
+                  }
+                },
+                {
+                  "name": "focusable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "editable",
+                  "value": {
+                    "type": "token",
+                    "value": "plaintext"
+                  }
+                },
+                {
+                  "name": "settable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "required",
+                  "value": {
+                    "type": "boolean",
+                    "value": false
+                  }
+                },
+                {
+                  "name": "valuemin",
+                  "value": {
+                    "type": "number",
+                    "value": 0
+                  }
+                },
+                {
+                  "name": "valuemax",
+                  "value": {
+                    "type": "number",
+                    "value": 0
+                  }
+                },
+                {
+                  "name": "valuetext",
+                  "value": {
+                    "type": "string",
+                    "value": "2.00"
+                  }
+                }
+              ]
+            },
+            {
+              "role": "spinbutton",
+              "name": "Acquisition cost / funded loan ($)",
+              "backend_node": 719,
+              "properties": [
+                {
+                  "name": "invalid",
+                  "value": {
+                    "type": "token",
+                    "value": "false"
+                  }
+                },
+                {
+                  "name": "focusable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "editable",
+                  "value": {
+                    "type": "token",
+                    "value": "plaintext"
+                  }
+                },
+                {
+                  "name": "settable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "required",
+                  "value": {
+                    "type": "boolean",
+                    "value": false
+                  }
+                },
+                {
+                  "name": "valuemin",
+                  "value": {
+                    "type": "number",
+                    "value": 0
+                  }
+                },
+                {
+                  "name": "valuemax",
+                  "value": {
+                    "type": "number",
+                    "value": 0
+                  }
+                },
+                {
+                  "name": "valuetext",
+                  "value": {
+                    "type": "string",
+                    "value": "25.00"
+                  }
+                }
+              ]
+            },
+            {
+              "role": "spinbutton",
+              "name": "Servicing cost / surviving loan / month ($)",
+              "backend_node": 740,
+              "properties": [
+                {
+                  "name": "invalid",
+                  "value": {
+                    "type": "token",
+                    "value": "false"
+                  }
+                },
+                {
+                  "name": "focusable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "editable",
+                  "value": {
+                    "type": "token",
+                    "value": "plaintext"
+                  }
+                },
+                {
+                  "name": "settable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "required",
+                  "value": {
+                    "type": "boolean",
+                    "value": false
+                  }
+                },
+                {
+                  "name": "valuemin",
+                  "value": {
+                    "type": "number",
+                    "value": 0
+                  }
+                },
+                {
+                  "name": "valuemax",
+                  "value": {
+                    "type": "number",
+                    "value": 0
+                  }
+                },
+                {
+                  "name": "valuetext",
+                  "value": {
+                    "type": "string",
+                    "value": "1.00"
+                  }
+                }
+              ]
+            },
+            {
+              "role": "spinbutton",
+              "name": "Platform operating expense / month ($)",
+              "backend_node": 761,
+              "properties": [
+                {
+                  "name": "invalid",
+                  "value": {
+                    "type": "token",
+                    "value": "false"
+                  }
+                },
+                {
+                  "name": "focusable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "editable",
+                  "value": {
+                    "type": "token",
+                    "value": "plaintext"
+                  }
+                },
+                {
+                  "name": "settable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "required",
+                  "value": {
+                    "type": "boolean",
+                    "value": false
+                  }
+                },
+                {
+                  "name": "valuemin",
+                  "value": {
+                    "type": "number",
+                    "value": 0
+                  }
+                },
+                {
+                  "name": "valuemax",
+                  "value": {
+                    "type": "number",
+                    "value": 0
+                  }
+                },
+                {
+                  "name": "valuetext",
+                  "value": {
+                    "type": "string",
+                    "value": "7500.00"
+                  }
+                }
+              ]
+            },
+            {
+              "role": "slider",
+              "name": "Monthly application growth (%) Monthly application growth (%)",
+              "backend_node": 340,
+              "properties": [
+                {
+                  "name": "invalid",
+                  "value": {
+                    "type": "token",
+                    "value": "false"
+                  }
+                },
+                {
+                  "name": "focusable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "settable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "orientation",
+                  "value": {
+                    "type": "token",
+                    "value": "horizontal"
+                  }
+                },
+                {
+                  "name": "valuemin",
+                  "value": {
+                    "type": "number",
+                    "value": -10
+                  }
+                },
+                {
+                  "name": "valuemax",
+                  "value": {
+                    "type": "number",
+                    "value": 10
+                  }
+                },
+                {
+                  "name": "valuetext",
+                  "value": {
+                    "type": "string",
+                    "value": "0.00"
+                  }
+                },
+                {
+                  "name": "labelledby",
+                  "value": {
+                    "type": "nodeList",
+                    "relatedNodes": [
+                      {
+                        "backendDOMNodeId": 340,
+                        "idref": "react-aria1014717021-:re:-0",
+                        "text": "Monthly application growth (%)"
+                      },
+                      {
+                        "backendDOMNodeId": 335,
+                        "idref": "react-aria1014717021-:re:",
+                        "text": "Monthly application growth (%)"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "role": "slider",
+              "name": "Lifetime default stress (\u00d7) Lifetime default stress (\u00d7)",
+              "backend_node": 363,
+              "properties": [
+                {
+                  "name": "invalid",
+                  "value": {
+                    "type": "token",
+                    "value": "false"
+                  }
+                },
+                {
+                  "name": "focusable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "settable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "orientation",
+                  "value": {
+                    "type": "token",
+                    "value": "horizontal"
+                  }
+                },
+                {
+                  "name": "valuemin",
+                  "value": {
+                    "type": "number",
+                    "value": 0
+                  }
+                },
+                {
+                  "name": "valuemax",
+                  "value": {
+                    "type": "number",
+                    "value": 5
+                  }
+                },
+                {
+                  "name": "valuetext",
+                  "value": {
+                    "type": "string",
+                    "value": "1.00"
+                  }
+                },
+                {
+                  "name": "labelledby",
+                  "value": {
+                    "type": "nodeList",
+                    "relatedNodes": [
+                      {
+                        "backendDOMNodeId": 363,
+                        "idref": "react-aria1014717021-:rk:-0",
+                        "text": "Lifetime default stress (\u00d7)"
+                      },
+                      {
+                        "backendDOMNodeId": 358,
+                        "idref": "react-aria1014717021-:rk:",
+                        "text": "Lifetime default stress (\u00d7)"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "role": "slider",
+              "name": "Annual funding rate (%) Annual funding rate (%)",
+              "backend_node": 386,
+              "properties": [
+                {
+                  "name": "invalid",
+                  "value": {
+                    "type": "token",
+                    "value": "false"
+                  }
+                },
+                {
+                  "name": "focusable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "settable",
+                  "value": {
+                    "type": "booleanOrUndefined",
+                    "value": true
+                  }
+                },
+                {
+                  "name": "orientation",
+                  "value": {
+                    "type": "token",
+                    "value": "horizontal"
+                  }
+                },
+                {
+                  "name": "valuemin",
+                  "value": {
+                    "type": "number",
+                    "value": 0
+                  }
+                },
+                {
+                  "name": "valuemax",
+                  "value": {
+                    "type": "number",
+                    "value": 30
+                  }
+                },
+                {
+                  "name": "valuetext",
+                  "value": {
+                    "type": "string",
+                    "value": "8.00"
+                  }
+                },
+                {
+                  "name": "labelledby",
+                  "value": {
+                    "type": "nodeList",
+                    "relatedNodes": [
+                      {
+                        "backendDOMNodeId": 386,
+                        "idref": "react-aria1014717021-:rq:-0",
+                        "text": "Annual funding rate (%)"
+                      },
+                      {
+                        "backendDOMNodeId": 381,
+                        "idref": "react-aria1014717021-:rq:",
+                        "text": "Annual funding rate (%)"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Expanded input labels and values meet sampled text contrast thresholds",
+          "details": {
+            "samples": 211,
+            "minimum_ratio": 5.403835126809919
+          }
+        },
+        {
+          "name": "Invalid Run exposes a readable accessibility alert and retains the previous scenario",
+          "details": {
+            "alerts": [
+              "     Scenario could not run: Minimum month-end cash cannot be negative. Showing the last successful result. Scenario could not run:   Minimum month-end cash   cannot be negative. Showing   the last successful result. ",
+              "     Retain the approved 12-month illustrative product. No matched historical outcome dataset was accepted for calibration or backtesting. Retain the approved 12-month illustrative product. No matched historical outcome dataset was accepted for calibration or   backtesting. "
+            ],
+            "metrics": [
+              "$48,133",
+              "$97,450",
+              "4.16 pp"
+            ],
+            "minimum_text_ratio": 5.403835126809919
+          }
+        },
+        {
+          "name": "No browser warnings/errors or failed requests; WebSocket connected",
+          "details": null
+        }
+      ],
+      "captures": [
+        "accessibility-profit-table.png",
+        "accessibility-methodology-manifest.png",
+        "accessibility-methodology-sql.png",
+        "accessibility-invalid-input-alert.png"
+      ],
+      "operations": [
+        {
+          "name": "Navigate to Overview",
+          "seconds": 0.11366567199999622
+        },
+        {
+          "name": "Navigate to Policies",
+          "seconds": 0.6231155810000075
+        },
+        {
+          "name": "Navigate to Cohorts",
+          "seconds": 0.5649369189999902
+        },
+        {
+          "name": "Navigate to Funding & stress",
+          "seconds": 0.35546284200000855
+        },
+        {
+          "name": "Navigate to Methodology",
+          "seconds": 0.5586174859999744
+        }
+      ],
+      "browser": {
+        "protocolVersion": "1.3",
+        "product": "HeadlessChrome/145.0.7632.6",
+        "revision": "@47e20adcc15fc15f01825aa17e570c8f5492ac0f",
+        "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.7632.6 Safari/537.36",
+        "jsVersion": "14.5.201.2"
+      },
+      "initial_viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 1,
+        "visualScale": 1,
+        "outerWidth": 1440,
+        "outerHeight": 900
+      },
+      "view_audits": [
+        {
+          "view": "Overview",
+          "raw_snapshot": "accessibility-overview.json",
+          "headings": [
+            {
+              "level": 1,
+              "text": "Lending workbench"
+            },
+            {
+              "level": 2,
+              "text": "Recommended policy: Conservative"
+            },
+            {
+              "level": 2,
+              "text": "Overview"
+            },
+            {
+              "level": 3,
+              "text": "Operating profit over time"
+            },
+            {
+              "level": 3,
+              "text": "Liquidity over time"
+            }
+          ],
+          "controls": 54,
+          "unnamed_controls": [],
+          "missing_controls": [],
+          "heading_errors": [],
+          "contrast_samples": 69,
+          "minimum_text_ratio": 5.403835126809919,
+          "contrast_failures": []
+        },
+        {
+          "view": "Policies",
+          "raw_snapshot": "accessibility-policies.json",
+          "headings": [
+            {
+              "level": 1,
+              "text": "Lending workbench"
+            },
+            {
+              "level": 2,
+              "text": "Recommended policy: Conservative"
+            },
+            {
+              "level": 2,
+              "text": "Policies"
+            },
+            {
+              "level": 3,
+              "text": "Full-runoff operating profit"
+            },
+            {
+              "level": 3,
+              "text": "Cash margin to the selected floor"
+            }
+          ],
+          "controls": 50,
+          "unnamed_controls": [],
+          "missing_controls": [],
+          "heading_errors": [],
+          "contrast_samples": 79,
+          "minimum_text_ratio": 5.403835126809919,
+          "contrast_failures": []
+        },
+        {
+          "view": "Cohorts",
+          "raw_snapshot": "accessibility-cohorts.json",
+          "headings": [
+            {
+              "level": 1,
+              "text": "Lending workbench"
+            },
+            {
+              "level": 2,
+              "text": "Recommended policy: Conservative"
+            },
+            {
+              "level": 2,
+              "text": "Cohorts"
+            },
+            {
+              "level": 3,
+              "text": "Risk-band repayment and net loss"
+            }
+          ],
+          "controls": 59,
+          "unnamed_controls": [],
+          "missing_controls": [],
+          "heading_errors": [],
+          "contrast_samples": 50,
+          "minimum_text_ratio": 5.403835126809919,
+          "contrast_failures": []
+        },
+        {
+          "view": "Funding & stress",
+          "raw_snapshot": "accessibility-funding-stress.json",
+          "headings": [
+            {
+              "level": 1,
+              "text": "Lending workbench"
+            },
+            {
+              "level": 2,
+              "text": "Recommended policy: Conservative"
+            },
+            {
+              "level": 2,
+              "text": "Funding & stress"
+            },
+            {
+              "level": 3,
+              "text": "Default and funding stress"
+            }
+          ],
+          "controls": 38,
+          "unnamed_controls": [],
+          "missing_controls": [],
+          "heading_errors": [],
+          "contrast_samples": 50,
+          "minimum_text_ratio": 5.403835126809919,
+          "contrast_failures": []
+        },
+        {
+          "view": "Methodology",
+          "raw_snapshot": "accessibility-methodology.json",
+          "headings": [
+            {
+              "level": 1,
+              "text": "Lending workbench"
+            },
+            {
+              "level": 2,
+              "text": "Recommended policy: Conservative"
+            },
+            {
+              "level": 2,
+              "text": "Methodology"
+            }
+          ],
+          "controls": 35,
+          "unnamed_controls": [],
+          "missing_controls": [],
+          "heading_errors": [],
+          "contrast_samples": 195,
+          "minimum_text_ratio": 5.403835126809919,
+          "contrast_failures": []
+        }
+      ],
+      "status": "passed",
+      "console": [],
+      "failed_requests": [],
+      "websockets": [
+        "ws://127.0.0.1:58825/_stcore/stream"
+      ]
+    },
+    {
+      "name": "zoom-200",
+      "checks": [
+        {
+          "name": "Chrome reports the requested native zoom and the CSS viewport shrinks accordingly",
+          "details": {
+            "requested": 2,
+            "chrome_reported": 2.0,
+            "before": {
+              "width": 1280,
+              "height": 813,
+              "dpr": 1,
+              "visualScale": 1,
+              "outerWidth": 1280,
+              "outerHeight": 813
+            },
+            "after": {
+              "width": 640,
+              "height": 406,
+              "dpr": 2,
+              "visualScale": 1,
+              "outerWidth": 1280,
+              "outerHeight": 900
+            },
+            "mechanism": "Chrome automatic per-tab zoom; no CSS scaling, pinch zoom or viewport override."
+          }
+        },
+        {
+          "name": "Overview reflows without measured main-area horizontal overflow",
+          "details": {
+            "viewport": 640,
+            "mainWidth": 640,
+            "scrollWidth": 640,
+            "clientWidth": 640,
+            "overflow": [],
+            "tableVisible": false,
+            "cardsVisible": false,
+            "hovered_chart_toolbars": [
+              {
+                "chart": {
+                  "left": 16,
+                  "right": 624,
+                  "width": 608
+                },
+                "buttons": [
+                  {
+                    "name": "Download plot as a PNG",
+                    "left": 406,
+                    "right": 430
+                  },
+                  {
+                    "name": "Zoom",
+                    "left": 438,
+                    "right": 462
+                  },
+                  {
+                    "name": "Pan",
+                    "left": 462,
+                    "right": 486
+                  },
+                  {
+                    "name": "Zoom in",
+                    "left": 494,
+                    "right": 518
+                  },
+                  {
+                    "name": "Zoom out",
+                    "left": 518,
+                    "right": 542
+                  },
+                  {
+                    "name": "Autoscale",
+                    "left": 542,
+                    "right": 566
+                  },
+                  {
+                    "name": "Reset axes",
+                    "left": 566,
+                    "right": 590
+                  },
+                  {
+                    "name": "Fullscreen",
+                    "left": 598,
+                    "right": 622
+                  }
+                ]
+              },
+              {
+                "chart": {
+                  "left": 16,
+                  "right": 624,
+                  "width": 608
+                },
+                "buttons": [
+                  {
+                    "name": "Download plot as a PNG",
+                    "left": 406,
+                    "right": 430
+                  },
+                  {
+                    "name": "Zoom",
+                    "left": 438,
+                    "right": 462
+                  },
+                  {
+                    "name": "Pan",
+                    "left": 462,
+                    "right": 486
+                  },
+                  {
+                    "name": "Zoom in",
+                    "left": 494,
+                    "right": 518
+                  },
+                  {
+                    "name": "Zoom out",
+                    "left": 518,
+                    "right": 542
+                  },
+                  {
+                    "name": "Autoscale",
+                    "left": 542,
+                    "right": 566
+                  },
+                  {
+                    "name": "Reset axes",
+                    "left": 566,
+                    "right": 590
+                  },
+                  {
+                    "name": "Fullscreen",
+                    "left": 598,
+                    "right": 622
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "Policies reflows without measured main-area horizontal overflow",
+          "details": {
+            "viewport": 640,
+            "mainWidth": 640,
+            "scrollWidth": 640,
+            "clientWidth": 640,
+            "overflow": [],
+            "tableVisible": false,
+            "cardsVisible": true,
+            "hovered_chart_toolbars": [
+              {
+                "chart": {
+                  "left": 16,
+                  "right": 624,
+                  "width": 608
+                },
+                "buttons": [
+                  {
+                    "name": "Download plot as a PNG",
+                    "left": 406,
+                    "right": 430
+                  },
+                  {
+                    "name": "Zoom",
+                    "left": 438,
+                    "right": 462
+                  },
+                  {
+                    "name": "Pan",
+                    "left": 462,
+                    "right": 486
+                  },
+                  {
+                    "name": "Zoom in",
+                    "left": 494,
+                    "right": 518
+                  },
+                  {
+                    "name": "Zoom out",
+                    "left": 518,
+                    "right": 542
+                  },
+                  {
+                    "name": "Autoscale",
+                    "left": 542,
+                    "right": 566
+                  },
+                  {
+                    "name": "Reset axes",
+                    "left": 566,
+                    "right": 590
+                  },
+                  {
+                    "name": "Fullscreen",
+                    "left": 598,
+                    "right": 622
+                  }
+                ]
+              },
+              {
+                "chart": {
+                  "left": 16,
+                  "right": 624,
+                  "width": 608
+                },
+                "buttons": [
+                  {
+                    "name": "Download plot as a PNG",
+                    "left": 406,
+                    "right": 430
+                  },
+                  {
+                    "name": "Zoom",
+                    "left": 438,
+                    "right": 462
+                  },
+                  {
+                    "name": "Pan",
+                    "left": 462,
+                    "right": 486
+                  },
+                  {
+                    "name": "Zoom in",
+                    "left": 494,
+                    "right": 518
+                  },
+                  {
+                    "name": "Zoom out",
+                    "left": 518,
+                    "right": 542
+                  },
+                  {
+                    "name": "Autoscale",
+                    "left": 542,
+                    "right": 566
+                  },
+                  {
+                    "name": "Reset axes",
+                    "left": 566,
+                    "right": 590
+                  },
+                  {
+                    "name": "Fullscreen",
+                    "left": 598,
+                    "right": 622
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "Cohorts reflows without measured main-area horizontal overflow",
+          "details": {
+            "viewport": 640,
+            "mainWidth": 640,
+            "scrollWidth": 640,
+            "clientWidth": 640,
+            "overflow": [],
+            "tableVisible": false,
+            "cardsVisible": false,
+            "hovered_chart_toolbars": [
+              {
+                "chart": {
+                  "left": 16,
+                  "right": 624,
+                  "width": 608
+                },
+                "buttons": [
+                  {
+                    "name": "Download plot as a PNG",
+                    "left": 406,
+                    "right": 430
+                  },
+                  {
+                    "name": "Zoom",
+                    "left": 438,
+                    "right": 462
+                  },
+                  {
+                    "name": "Pan",
+                    "left": 462,
+                    "right": 486
+                  },
+                  {
+                    "name": "Zoom in",
+                    "left": 494,
+                    "right": 518
+                  },
+                  {
+                    "name": "Zoom out",
+                    "left": 518,
+                    "right": 542
+                  },
+                  {
+                    "name": "Autoscale",
+                    "left": 542,
+                    "right": 566
+                  },
+                  {
+                    "name": "Reset axes",
+                    "left": 566,
+                    "right": 590
+                  },
+                  {
+                    "name": "Fullscreen",
+                    "left": 598,
+                    "right": 622
+                  }
+                ]
+              },
+              {
+                "chart": {
+                  "left": 16,
+                  "right": 624,
+                  "width": 608
+                },
+                "buttons": [
+                  {
+                    "name": "Download plot as a PNG",
+                    "left": 406,
+                    "right": 430
+                  },
+                  {
+                    "name": "Zoom",
+                    "left": 438,
+                    "right": 462
+                  },
+                  {
+                    "name": "Pan",
+                    "left": 462,
+                    "right": 486
+                  },
+                  {
+                    "name": "Zoom in",
+                    "left": 494,
+                    "right": 518
+                  },
+                  {
+                    "name": "Zoom out",
+                    "left": 518,
+                    "right": 542
+                  },
+                  {
+                    "name": "Autoscale",
+                    "left": 542,
+                    "right": 566
+                  },
+                  {
+                    "name": "Reset axes",
+                    "left": 566,
+                    "right": 590
+                  },
+                  {
+                    "name": "Fullscreen",
+                    "left": 598,
+                    "right": 622
+                  }
+                ]
+              },
+              {
+                "chart": {
+                  "left": 16,
+                  "right": 624,
+                  "width": 608
+                },
+                "buttons": [
+                  {
+                    "name": "Download plot as a PNG",
+                    "left": 406,
+                    "right": 430
+                  },
+                  {
+                    "name": "Zoom",
+                    "left": 438,
+                    "right": 462
+                  },
+                  {
+                    "name": "Pan",
+                    "left": 462,
+                    "right": 486
+                  },
+                  {
+                    "name": "Zoom in",
+                    "left": 494,
+                    "right": 518
+                  },
+                  {
+                    "name": "Zoom out",
+                    "left": 518,
+                    "right": 542
+                  },
+                  {
+                    "name": "Autoscale",
+                    "left": 542,
+                    "right": 566
+                  },
+                  {
+                    "name": "Reset axes",
+                    "left": 566,
+                    "right": 590
+                  },
+                  {
+                    "name": "Fullscreen",
+                    "left": 598,
+                    "right": 622
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "Funding & stress reflows without measured main-area horizontal overflow",
+          "details": {
+            "viewport": 640,
+            "mainWidth": 640,
+            "scrollWidth": 640,
+            "clientWidth": 640,
+            "overflow": [],
+            "tableVisible": false,
+            "cardsVisible": false,
+            "hovered_chart_toolbars": [
+              {
+                "chart": {
+                  "left": 16,
+                  "right": 624,
+                  "width": 608
+                },
+                "buttons": [
+                  {
+                    "name": "Download plot as a PNG",
+                    "left": 406,
+                    "right": 430
+                  },
+                  {
+                    "name": "Zoom",
+                    "left": 438,
+                    "right": 462
+                  },
+                  {
+                    "name": "Pan",
+                    "left": 462,
+                    "right": 486
+                  },
+                  {
+                    "name": "Zoom in",
+                    "left": 494,
+                    "right": 518
+                  },
+                  {
+                    "name": "Zoom out",
+                    "left": 518,
+                    "right": 542
+                  },
+                  {
+                    "name": "Autoscale",
+                    "left": 542,
+                    "right": 566
+                  },
+                  {
+                    "name": "Reset axes",
+                    "left": 566,
+                    "right": 590
+                  },
+                  {
+                    "name": "Fullscreen",
+                    "left": 598,
+                    "right": 622
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "Methodology reflows without measured main-area horizontal overflow",
+          "details": {
+            "viewport": 640,
+            "mainWidth": 640,
+            "scrollWidth": 640,
+            "clientWidth": 640,
+            "overflow": [],
+            "tableVisible": false,
+            "cardsVisible": false,
+            "hovered_chart_toolbars": []
+          }
+        },
+        {
+          "name": "Scaled native inputs apply a scenario and policy selection keeps the correct identity",
+          "details": null
+        },
+        {
+          "name": "Export controls remain reachable and download the correct brief at native zoom",
+          "details": {
+            "file": "zoom-200-lending-decision-690e9fa563e2d475.md",
+            "bytes": 4329
+          }
+        },
+        {
+          "name": "No browser warnings/errors or failed requests; WebSocket connected",
+          "details": null
+        }
+      ],
+      "captures": [
+        "zoom-200-overview.png",
+        "zoom-200-policies.png",
+        "zoom-200-export.png"
+      ],
+      "operations": [
+        {
+          "name": "Navigate to Overview",
+          "seconds": 0.12254868700000543
+        },
+        {
+          "name": "Navigate to Policies",
+          "seconds": 0.5213886029999912
+        },
+        {
+          "name": "Navigate to Cohorts",
+          "seconds": 0.464478951000018
+        },
+        {
+          "name": "Navigate to Funding & stress",
+          "seconds": 0.37894873600001233
+        },
+        {
+          "name": "Navigate to Methodology",
+          "seconds": 0.6462812420000148
+        }
+      ],
+      "browser": {
+        "protocolVersion": "1.3",
+        "product": "Chrome/145.0.7632.6",
+        "revision": "@47e20adcc15fc15f01825aa17e570c8f5492ac0f",
+        "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.0.0 Safari/537.36",
+        "jsVersion": "14.5.201.2"
+      },
+      "initial_viewport": {
+        "width": 1280,
+        "height": 813,
+        "dpr": 1,
+        "visualScale": 1,
+        "outerWidth": 1280,
+        "outerHeight": 900
+      },
+      "native_zoom": {
+        "requested": 2,
+        "chrome_reported": 2.0,
+        "before": {
+          "width": 1280,
+          "height": 813,
+          "dpr": 1,
+          "visualScale": 1,
+          "outerWidth": 1280,
+          "outerHeight": 813
+        },
+        "after": {
+          "width": 640,
+          "height": 406,
+          "dpr": 2,
+          "visualScale": 1,
+          "outerWidth": 1280,
+          "outerHeight": 900
+        },
+        "mechanism": "Chrome automatic per-tab zoom; no CSS scaling, pinch zoom or viewport override."
+      },
+      "capture_dimensions": [
+        {
+          "file": "zoom-200-overview.png",
+          "width": 1280,
+          "height": 813,
+          "css_viewport": {
+            "width": 640,
+            "height": 406,
+            "dpr": 2,
+            "visualScale": 1,
+            "outerWidth": 1280,
+            "outerHeight": 900
+          },
+          "mechanism": "Native Page.captureScreenshot compositor surface, no clip or image alteration."
+        },
+        {
+          "file": "zoom-200-policies.png",
+          "width": 1280,
+          "height": 813,
+          "css_viewport": {
+            "width": 640,
+            "height": 406,
+            "dpr": 2,
+            "visualScale": 1,
+            "outerWidth": 1280,
+            "outerHeight": 900
+          },
+          "mechanism": "Native Page.captureScreenshot compositor surface, no clip or image alteration."
+        },
+        {
+          "file": "zoom-200-export.png",
+          "width": 1280,
+          "height": 813,
+          "css_viewport": {
+            "width": 640,
+            "height": 406,
+            "dpr": 2,
+            "visualScale": 1,
+            "outerWidth": 1280,
+            "outerHeight": 900
+          },
+          "mechanism": "Native Page.captureScreenshot compositor surface, no clip or image alteration."
+        }
+      ],
+      "status": "passed",
+      "console": [],
+      "failed_requests": [],
+      "websockets": [
+        "ws://127.0.0.1:58825/_stcore/stream"
+      ]
+    },
+    {
+      "name": "zoom-400",
+      "checks": [
+        {
+          "name": "Chrome reports the requested native zoom and the CSS viewport shrinks accordingly",
+          "details": {
+            "requested": 4,
+            "chrome_reported": 3.9999999999999996,
+            "before": {
+              "width": 1280,
+              "height": 813,
+              "dpr": 1,
+              "visualScale": 1,
+              "outerWidth": 1280,
+              "outerHeight": 813
+            },
+            "after": {
+              "width": 320,
+              "height": 203,
+              "dpr": 4,
+              "visualScale": 1,
+              "outerWidth": 1280,
+              "outerHeight": 900
+            },
+            "mechanism": "Chrome automatic per-tab zoom; no CSS scaling, pinch zoom or viewport override."
+          }
+        },
+        {
+          "name": "Overview reflows without measured main-area horizontal overflow",
+          "details": {
+            "viewport": 320,
+            "mainWidth": 320,
+            "scrollWidth": 320,
+            "clientWidth": 320,
+            "overflow": [],
+            "tableVisible": false,
+            "cardsVisible": false,
+            "hovered_chart_toolbars": [
+              {
+                "chart": {
+                  "left": 16,
+                  "right": 304,
+                  "width": 288
+                },
+                "buttons": [
+                  {
+                    "name": "Download plot as a PNG",
+                    "left": 86,
+                    "right": 110
+                  },
+                  {
+                    "name": "Zoom",
+                    "left": 118,
+                    "right": 142
+                  },
+                  {
+                    "name": "Pan",
+                    "left": 142,
+                    "right": 166
+                  },
+                  {
+                    "name": "Zoom in",
+                    "left": 174,
+                    "right": 198
+                  },
+                  {
+                    "name": "Zoom out",
+                    "left": 198,
+                    "right": 222
+                  },
+                  {
+                    "name": "Autoscale",
+                    "left": 222,
+                    "right": 246
+                  },
+                  {
+                    "name": "Reset axes",
+                    "left": 246,
+                    "right": 270
+                  },
+                  {
+                    "name": "Fullscreen",
+                    "left": 278,
+                    "right": 302
+                  }
+                ]
+              },
+              {
+                "chart": {
+                  "left": 16,
+                  "right": 304,
+                  "width": 288
+                },
+                "buttons": [
+                  {
+                    "name": "Download plot as a PNG",
+                    "left": 86,
+                    "right": 110
+                  },
+                  {
+                    "name": "Zoom",
+                    "left": 118,
+                    "right": 142
+                  },
+                  {
+                    "name": "Pan",
+                    "left": 142,
+                    "right": 166
+                  },
+                  {
+                    "name": "Zoom in",
+                    "left": 174,
+                    "right": 198
+                  },
+                  {
+                    "name": "Zoom out",
+                    "left": 198,
+                    "right": 222
+                  },
+                  {
+                    "name": "Autoscale",
+                    "left": 222,
+                    "right": 246
+                  },
+                  {
+                    "name": "Reset axes",
+                    "left": 246,
+                    "right": 270
+                  },
+                  {
+                    "name": "Fullscreen",
+                    "left": 278,
+                    "right": 302
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "Policies reflows without measured main-area horizontal overflow",
+          "details": {
+            "viewport": 320,
+            "mainWidth": 320,
+            "scrollWidth": 320,
+            "clientWidth": 320,
+            "overflow": [],
+            "tableVisible": false,
+            "cardsVisible": true,
+            "hovered_chart_toolbars": [
+              {
+                "chart": {
+                  "left": 16,
+                  "right": 304,
+                  "width": 288
+                },
+                "buttons": [
+                  {
+                    "name": "Download plot as a PNG",
+                    "left": 86,
+                    "right": 110
+                  },
+                  {
+                    "name": "Zoom",
+                    "left": 118,
+                    "right": 142
+                  },
+                  {
+                    "name": "Pan",
+                    "left": 142,
+                    "right": 166
+                  },
+                  {
+                    "name": "Zoom in",
+                    "left": 174,
+                    "right": 198
+                  },
+                  {
+                    "name": "Zoom out",
+                    "left": 198,
+                    "right": 222
+                  },
+                  {
+                    "name": "Autoscale",
+                    "left": 222,
+                    "right": 246
+                  },
+                  {
+                    "name": "Reset axes",
+                    "left": 246,
+                    "right": 270
+                  },
+                  {
+                    "name": "Fullscreen",
+                    "left": 278,
+                    "right": 302
+                  }
+                ]
+              },
+              {
+                "chart": {
+                  "left": 16,
+                  "right": 304,
+                  "width": 288
+                },
+                "buttons": [
+                  {
+                    "name": "Download plot as a PNG",
+                    "left": 86,
+                    "right": 110
+                  },
+                  {
+                    "name": "Zoom",
+                    "left": 118,
+                    "right": 142
+                  },
+                  {
+                    "name": "Pan",
+                    "left": 142,
+                    "right": 166
+                  },
+                  {
+                    "name": "Zoom in",
+                    "left": 174,
+                    "right": 198
+                  },
+                  {
+                    "name": "Zoom out",
+                    "left": 198,
+                    "right": 222
+                  },
+                  {
+                    "name": "Autoscale",
+                    "left": 222,
+                    "right": 246
+                  },
+                  {
+                    "name": "Reset axes",
+                    "left": 246,
+                    "right": 270
+                  },
+                  {
+                    "name": "Fullscreen",
+                    "left": 278,
+                    "right": 302
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "Cohorts reflows without measured main-area horizontal overflow",
+          "details": {
+            "viewport": 320,
+            "mainWidth": 320,
+            "scrollWidth": 320,
+            "clientWidth": 320,
+            "overflow": [],
+            "tableVisible": false,
+            "cardsVisible": false,
+            "hovered_chart_toolbars": [
+              {
+                "chart": {
+                  "left": 16,
+                  "right": 304,
+                  "width": 288
+                },
+                "buttons": [
+                  {
+                    "name": "Download plot as a PNG",
+                    "left": 86,
+                    "right": 110
+                  },
+                  {
+                    "name": "Zoom",
+                    "left": 118,
+                    "right": 142
+                  },
+                  {
+                    "name": "Pan",
+                    "left": 142,
+                    "right": 166
+                  },
+                  {
+                    "name": "Zoom in",
+                    "left": 174,
+                    "right": 198
+                  },
+                  {
+                    "name": "Zoom out",
+                    "left": 198,
+                    "right": 222
+                  },
+                  {
+                    "name": "Autoscale",
+                    "left": 222,
+                    "right": 246
+                  },
+                  {
+                    "name": "Reset axes",
+                    "left": 246,
+                    "right": 270
+                  },
+                  {
+                    "name": "Fullscreen",
+                    "left": 278,
+                    "right": 302
+                  }
+                ]
+              },
+              {
+                "chart": {
+                  "left": 16,
+                  "right": 304,
+                  "width": 288
+                },
+                "buttons": [
+                  {
+                    "name": "Download plot as a PNG",
+                    "left": 86,
+                    "right": 110
+                  },
+                  {
+                    "name": "Zoom",
+                    "left": 118,
+                    "right": 142
+                  },
+                  {
+                    "name": "Pan",
+                    "left": 142,
+                    "right": 166
+                  },
+                  {
+                    "name": "Zoom in",
+                    "left": 174,
+                    "right": 198
+                  },
+                  {
+                    "name": "Zoom out",
+                    "left": 198,
+                    "right": 222
+                  },
+                  {
+                    "name": "Autoscale",
+                    "left": 222,
+                    "right": 246
+                  },
+                  {
+                    "name": "Reset axes",
+                    "left": 246,
+                    "right": 270
+                  },
+                  {
+                    "name": "Fullscreen",
+                    "left": 278,
+                    "right": 302
+                  }
+                ]
+              },
+              {
+                "chart": {
+                  "left": 16,
+                  "right": 304,
+                  "width": 288
+                },
+                "buttons": [
+                  {
+                    "name": "Download plot as a PNG",
+                    "left": 86,
+                    "right": 110
+                  },
+                  {
+                    "name": "Zoom",
+                    "left": 118,
+                    "right": 142
+                  },
+                  {
+                    "name": "Pan",
+                    "left": 142,
+                    "right": 166
+                  },
+                  {
+                    "name": "Zoom in",
+                    "left": 174,
+                    "right": 198
+                  },
+                  {
+                    "name": "Zoom out",
+                    "left": 198,
+                    "right": 222
+                  },
+                  {
+                    "name": "Autoscale",
+                    "left": 222,
+                    "right": 246
+                  },
+                  {
+                    "name": "Reset axes",
+                    "left": 246,
+                    "right": 270
+                  },
+                  {
+                    "name": "Fullscreen",
+                    "left": 278,
+                    "right": 302
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "Funding & stress reflows without measured main-area horizontal overflow",
+          "details": {
+            "viewport": 320,
+            "mainWidth": 320,
+            "scrollWidth": 320,
+            "clientWidth": 320,
+            "overflow": [],
+            "tableVisible": false,
+            "cardsVisible": false,
+            "hovered_chart_toolbars": [
+              {
+                "chart": {
+                  "left": 16,
+                  "right": 304,
+                  "width": 288
+                },
+                "buttons": [
+                  {
+                    "name": "Download plot as a PNG",
+                    "left": 86,
+                    "right": 110
+                  },
+                  {
+                    "name": "Zoom",
+                    "left": 118,
+                    "right": 142
+                  },
+                  {
+                    "name": "Pan",
+                    "left": 142,
+                    "right": 166
+                  },
+                  {
+                    "name": "Zoom in",
+                    "left": 174,
+                    "right": 198
+                  },
+                  {
+                    "name": "Zoom out",
+                    "left": 198,
+                    "right": 222
+                  },
+                  {
+                    "name": "Autoscale",
+                    "left": 222,
+                    "right": 246
+                  },
+                  {
+                    "name": "Reset axes",
+                    "left": 246,
+                    "right": 270
+                  },
+                  {
+                    "name": "Fullscreen",
+                    "left": 278,
+                    "right": 302
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "Methodology reflows without measured main-area horizontal overflow",
+          "details": {
+            "viewport": 320,
+            "mainWidth": 320,
+            "scrollWidth": 320,
+            "clientWidth": 320,
+            "overflow": [],
+            "tableVisible": false,
+            "cardsVisible": false,
+            "hovered_chart_toolbars": []
+          }
+        },
+        {
+          "name": "Scaled native inputs apply a scenario and policy selection keeps the correct identity",
+          "details": null
+        },
+        {
+          "name": "Export controls remain reachable and download the correct brief at native zoom",
+          "details": {
+            "file": "zoom-400-lending-decision-690e9fa563e2d475.md",
+            "bytes": 4329
+          }
+        },
+        {
+          "name": "No browser warnings/errors or failed requests; WebSocket connected",
+          "details": null
+        }
+      ],
+      "captures": [
+        "zoom-400-overview.png",
+        "zoom-400-policies.png",
+        "zoom-400-export.png"
+      ],
+      "operations": [
+        {
+          "name": "Navigate to Overview",
+          "seconds": 0.13377333200000407
+        },
+        {
+          "name": "Navigate to Policies",
+          "seconds": 0.5134708479999972
+        },
+        {
+          "name": "Navigate to Cohorts",
+          "seconds": 0.49974855000002094
+        },
+        {
+          "name": "Navigate to Funding & stress",
+          "seconds": 0.4735643879999998
+        },
+        {
+          "name": "Navigate to Methodology",
+          "seconds": 0.5284423379999907
+        }
+      ],
+      "browser": {
+        "protocolVersion": "1.3",
+        "product": "Chrome/145.0.7632.6",
+        "revision": "@47e20adcc15fc15f01825aa17e570c8f5492ac0f",
+        "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/145.0.0.0 Safari/537.36",
+        "jsVersion": "14.5.201.2"
+      },
+      "initial_viewport": {
+        "width": 1280,
+        "height": 813,
+        "dpr": 1,
+        "visualScale": 1,
+        "outerWidth": 1280,
+        "outerHeight": 900
+      },
+      "native_zoom": {
+        "requested": 4,
+        "chrome_reported": 3.9999999999999996,
+        "before": {
+          "width": 1280,
+          "height": 813,
+          "dpr": 1,
+          "visualScale": 1,
+          "outerWidth": 1280,
+          "outerHeight": 813
+        },
+        "after": {
+          "width": 320,
+          "height": 203,
+          "dpr": 4,
+          "visualScale": 1,
+          "outerWidth": 1280,
+          "outerHeight": 900
+        },
+        "mechanism": "Chrome automatic per-tab zoom; no CSS scaling, pinch zoom or viewport override."
+      },
+      "capture_dimensions": [
+        {
+          "file": "zoom-400-overview.png",
+          "width": 1280,
+          "height": 813,
+          "css_viewport": {
+            "width": 320,
+            "height": 203,
+            "dpr": 4,
+            "visualScale": 1,
+            "outerWidth": 1280,
+            "outerHeight": 900
+          },
+          "mechanism": "Native Page.captureScreenshot compositor surface, no clip or image alteration."
+        },
+        {
+          "file": "zoom-400-policies.png",
+          "width": 1280,
+          "height": 813,
+          "css_viewport": {
+            "width": 320,
+            "height": 203,
+            "dpr": 4,
+            "visualScale": 1,
+            "outerWidth": 1280,
+            "outerHeight": 900
+          },
+          "mechanism": "Native Page.captureScreenshot compositor surface, no clip or image alteration."
+        },
+        {
+          "file": "zoom-400-export.png",
+          "width": 1280,
+          "height": 813,
+          "css_viewport": {
+            "width": 320,
+            "height": 203,
+            "dpr": 4,
+            "visualScale": 1,
+            "outerWidth": 1280,
+            "outerHeight": 900
+          },
+          "mechanism": "Native Page.captureScreenshot compositor surface, no clip or image alteration."
+        }
+      ],
+      "status": "passed",
+      "console": [],
+      "failed_requests": [],
+      "websockets": [
+        "ws://127.0.0.1:58825/_stcore/stream"
+      ]
+    }
+  ]
+}
