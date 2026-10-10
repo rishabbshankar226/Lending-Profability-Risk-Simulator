@@ -121,8 +121,16 @@ class Review:
         result = self.page.evaluate("""() => {
             const main = document.querySelector('[data-testid="stMain"]') || document.documentElement;
             const r = main.getBoundingClientRect();
+            const painted = e => {
+                for(let node=e;node;node=node.parentElement){
+                    const style=getComputedStyle(node);
+                    if(style.visibility!=='visible'||Number(style.opacity)===0)return false;
+                    if(node.tagName==='DETAILS'&&!node.open&&!node.querySelector('summary')?.contains(e))return false;
+                }
+                return true;
+            };
             const overflow = Array.from(main.querySelectorAll('h1,h2,h3,button,.workbench-status,.policy-mobile article'))
-              .filter(e => e.getClientRects().length && getComputedStyle(e).position !== 'fixed')
+              .filter(e => e.getClientRects().length && painted(e) && getComputedStyle(e).position !== 'fixed')
               .map(e => ({e, r:e.getBoundingClientRect()}))
               .filter(x => x.r.width && (x.r.left < r.left-2 || x.r.right > r.right+2))
               .map(x => ({tag:x.e.tagName,text:x.e.innerText.slice(0,120),left:x.r.left,right:x.r.right}));

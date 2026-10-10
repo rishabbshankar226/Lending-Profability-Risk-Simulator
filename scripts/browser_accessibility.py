@@ -31,15 +31,29 @@ def text_contrast(page):
     """Sample visible HTML text and input values; retain exclusions explicitly."""
     samples = page.evaluate("""() => {
         const items=[];
-        function sample(element,text){
+        function sample(element,text,textNode=null){
             const style=getComputedStyle(element);
             if(!element.getClientRects().length||style.visibility!=='visible'||
                element.closest('svg,script,style,[aria-hidden="true"],[disabled]')||
                /Material|icomoon/i.test(style.fontFamily))return;
+            for(let node=element;node;node=node.parentElement){
+                if(node.tagName==='DETAILS'&&!node.open&&!node.querySelector('summary')?.contains(element))return;
+            }
+            const range=textNode?document.createRange():null;
+            if(range)range.selectNodeContents(textNode);
+            const rect=range?Array.from(range.getClientRects()).find(r=>r.width&&r.height):element.getBoundingClientRect();
+            if(!rect)return;
+            const x=(rect.left+rect.right)/2,y=(rect.top+rect.bottom)/2;
             const backgrounds=[];let opacity=1;
             for(let node=element;node;node=node.parentElement){
                 const current=getComputedStyle(node);opacity*=Number(current.opacity);
-                backgrounds.push(current.backgroundColor);
+                const box=node.getBoundingClientRect();
+                const scrolls=/auto|scroll/.test(current.overflowY)&&node.scrollHeight>node.clientHeight;
+                // Absolutely positioned slider labels sit above their colored thumb.
+                // Only include backgrounds painted behind this text, while retaining
+                // scroll-container backgrounds for offscreen content inspected here.
+                if(x>=box.left&&x<=box.right&&(scrolls||(y>=box.top&&y<=box.bottom)))
+                    backgrounds.push(current.backgroundColor);
             }
             if(!opacity)return;
             items.push({text:text.trim().slice(0,110),tag:element.tagName,
@@ -50,7 +64,7 @@ def text_contrast(page):
             const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
             while(walker.nextNode()){
                 const node=walker.currentNode;
-                if(node.textContent.trim())sample(node.parentElement,node.textContent);
+                if(node.textContent.trim())sample(node.parentElement,node.textContent,node);
             }
             for(const input of root.querySelectorAll('input')){
                 if(input.value&&['number','text'].includes(input.type))sample(input,input.value);
@@ -85,7 +99,7 @@ def text_contrast(page):
     failures = [item for item in samples if item["ratio"] < item["required_ratio"]]
     return {"samples": samples, "failures": failures,
             "minimum_ratio": min(item["ratio"] for item in samples),
-            "scope": "Visible HTML text/input values, including offscreen scroll content. SVG/chart/canvas, hidden/decorative material icons and disabled controls excluded. Computed colors/background alpha and inherited opacity sampled; not a complete accessibility audit."}
+            "scope": "Visible HTML text/input values with view expanders explicitly opened, including offscreen scroll content. Closed details, SVG/chart/canvas, hidden/decorative material icons and disabled controls excluded. Backgrounds sampled at text bounds (scroll-container backgrounds retained), with computed alpha and inherited opacity; not a complete accessibility audit."}
 
 
 def ax_snapshot(page, session):
@@ -111,6 +125,10 @@ def accessibility(review, _):
     views, findings = [], []
     for view in VIEWS:
         review.navigate(view)
+        closed = page.get_by_test_id("stMain").locator("details:not([open]) > summary")
+        while closed.count():
+            closed.first.click()
+        review.ready()
         snapshot = ax_snapshot(page, session)
         contrast = text_contrast(page)
         path = review.output / ("accessibility-" + view.lower().replace(" & ", "-") + ".json")
@@ -202,7 +220,7 @@ def zoom(review, controls):
     helper.get_by_role("button", name="Set browser zoom", exact=True).click()
     helper.wait_for_function("document.querySelector('#result').textContent.length>0")
     measured = helper.locator("#result").inner_text()
-    assert measured == str(factor), measured
+    assert abs(float(measured) - factor) < 1e-6, measured
     page.bring_to_front()
     page.wait_for_function("expected=>Math.abs(devicePixelRatio-expected)<.02", arg=baseline["dpr"] * factor)
     enlarged = viewport(page)
@@ -214,7 +232,26 @@ def zoom(review, controls):
     review.check("Chrome reports the requested native zoom and the CSS viewport shrinks accordingly", review.report["native_zoom"])
     for view in VIEWS:
         review.navigate(view)
+        page.wait_for_function("""() => Array.from(document.querySelectorAll('[data-testid="stPlotlyChart"]'))
+            .filter(e=>e.getClientRects().length&&!e.closest('details:not([open])'))
+            .every(e=>{const plot=e.querySelector('.js-plotly-plot');
+                return plot?Math.abs(plot._fullLayout.width-plot.getBoundingClientRect().width)<2:true})""")
         geometry = review.geometry()
+        toolbars = []
+        for plot in page.locator(".js-plotly-plot").all():
+            if not plot.is_visible():
+                continue
+            plot.hover()
+            toolbar = plot.get_by_role("toolbar")
+            expect(toolbar).to_be_visible()
+            bounds = toolbar.evaluate("""bar=>{const chart=bar.closest('.js-plotly-plot').getBoundingClientRect();
+                return {chart:{left:chart.left,right:chart.right,width:chart.width},
+                    buttons:Array.from(bar.querySelectorAll('button')).map(b=>{
+                        const r=b.getBoundingClientRect();return {name:b.getAttribute('aria-label'),left:r.left,right:r.right}})}}""")
+            assert all(b["left"] >= bounds["chart"]["left"]-2 and b["right"] <= bounds["chart"]["right"]+2
+                       for b in bounds["buttons"]), bounds
+            toolbars.append(bounds)
+        geometry["hovered_chart_toolbars"] = toolbars
         assert page.get_by_role("radio", name=view, exact=True).is_checked()
         review.check(view + " reflows without measured main-area horizontal overflow", geometry)
         if view in ("Overview", "Policies"):
