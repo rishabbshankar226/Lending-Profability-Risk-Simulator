@@ -4,15 +4,15 @@ Compare how expanding loan approvals changes credit losses, profit, debt use, an
 
 The app models a hypothetical lender retaining 12-month merchant-financed installment loans. Its 10,000 applications and risk assumptions are **synthetic and illustrative**. Historical sources provide context only; this is an **uncalibrated expected-value simulator**.
 
-**Live dashboard:** [Open the dashboard](https://rishabb-lending-simulator.streamlit.app/) · **Source code:** [main](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/tree/main) · **Merge history:** [PR #1](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/pull/1)
+**Live dashboard:** [Open the dashboard](https://rishabb-lending-simulator.streamlit.app/) · **Source code:** [main](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/tree/main) · **Workbench integration:** [PR #4](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/pull/4)
 
-**UI workbench candidate:** this branch adds the redesigned interface. Read the [candidate review and acceptance gates](docs/ui-workbench-review.md). The public dashboard and existing media show the earlier `feature/lending-simulator` build; 14 real-browser journeys pass, with [before/after captures and scoped results](docs/workbench-browser-validation.md). Deployment remains pending.
+**UI workbench:** the owner approved merging the redesigned interface into `main` on October 10, 2026 (UTC). [PR #4](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/pull/4) records the integration. Read the [workbench review and release checks](docs/ui-workbench-review.md). The public dashboard and existing media show the earlier `feature/lending-simulator` build; 14 real-browser journeys pass, with [before/after captures and scoped results](docs/workbench-browser-validation.md). Deployment remains pending.
 
 **Start here:** [Two-minute reviewer guide](docs/reviewer-guide.md) · [Application and interview notes](docs/interview-notes.md)
 
 **Earlier hosted-build tour:** [90-second captioned screenshot video](docs/tour/lending-simulator-tour.mp4) · [Transcript and source captures](docs/tour/README.md). Six real dashboard screenshots, assembled with captions; no audio or continuous interaction recording.
 
-![Finance workbench candidate in actual Chromium](docs/screenshots/workbench/desktop-1440-overview.png)
+![Finance workbench in actual Chromium](docs/screenshots/workbench/desktop-1440-overview.png)
 
 ## The decision
 

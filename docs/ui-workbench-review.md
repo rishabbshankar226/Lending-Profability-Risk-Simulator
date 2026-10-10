@@ -1,6 +1,6 @@
-# Finance workbench candidate review
+# Finance workbench review
 
-**Status: automated candidate browser checks passed; ready for human design review.** The candidate is on `feat/finance-workbench-ui`, based on `baeda884355734f534babd2bc73ab7018742569f`. The tested application implementation is **`ba68ea38b4b09f38e6e0824906c2bc0de84efc19`**. Current browser reports retain every application/UI/config source hash; later evidence/documentation commits retain that application. The separate local operation report remains explicitly pinned to the earlier `c0d6f3` implementation. [Rendered evidence and before/after captures](workbench-browser-validation.md) are available.
+**Status: automated browser checks passed; owner approved integration into `main` on October 10, 2026 (UTC).** [PR #4](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/pull/4) records the merge from `feat/finance-workbench-ui`, based on `baeda884355734f534babd2bc73ab7018742569f`. The tested application implementation is **`ba68ea38b4b09f38e6e0824906c2bc0de84efc19`**. Current browser reports retain every application/UI/config source hash; later evidence/documentation commits retain that application. The separate local operation report remains explicitly pinned to the earlier `c0d6f3` implementation. [Rendered evidence and before/after captures](workbench-browser-validation.md) are available. Public rollout remains a separate release action.
 
 The approved direction is a restrained finance workbench. The candidate replaces the dashboard's five eagerly built tabs with a compact decision summary, three primary decision metrics, a stable toolbar, and one selected analytical view. It retains Python/Streamlit 1.65, the synthetic dataset, and the existing financial model and export formats.
 
@@ -101,7 +101,7 @@ The authorized automated-software route subsequently exercised the unchanged app
 
 Human design review, physical devices, actual screen-reader output, full native-widget accessibility across states/browsers and intended-host behavior remain separate release checks. Native 200%/400% Chrome zoom passes the scoped journeys. The source-URL interception experiment did not delay the actual browser download; it is not used as in-flight transport evidence. Native cancellation/retry, actual captured-file identity, controlled slow server generation and uncached generation failure/retry are verified. The test fixture does not establish hosted failures or slow network transfer behavior.
 
-Merge and public rollout are separate release actions. The previously verified public build uses the older `feature/lending-simulator` source. Its existing media is distinct from the candidate captures; this PR has not changed hosting.
+The owner authorized the source merge; public rollout remains separate. The previously verified public build uses the older `feature/lending-simulator` source. Its existing media is distinct from the workbench captures; this PR does not change hosting.
 
 ## Review and rollback
 

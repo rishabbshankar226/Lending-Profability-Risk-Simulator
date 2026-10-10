@@ -6,7 +6,7 @@ This Python/SQL project compares three approval policies over 10,000 seeded fict
 
 [Open the earlier hosted dashboard](https://rishabb-lending-simulator.streamlit.app/) · [Review this candidate's source](../app.py) · [Read the business memo](business-memo.md)
 
-The workbench redesign is a review candidate with 118 passing automated checks. 14 real-browser journeys pass in isolated CI Chromium, including controlled slow generation and export failure/retry, with [actual before/after captures](workbench-browser-validation.md). The hosted app and tour below show the earlier build. See [candidate scope and acceptance gates](ui-workbench-review.md) before evaluating visual readiness.
+The owner approved integrating the workbench redesign into `main` on October 10, 2026 (UTC); [PR #4](https://github.com/rishabbshankar226/Lending-Profability-Risk-Simulator/pull/4) records the integration. All 118 automated checks pass. 14 real-browser journeys pass in isolated CI Chromium, including controlled slow generation and export failure/retry, with [actual before/after captures](workbench-browser-validation.md). The hosted app and tour below show the earlier build. See [workbench scope and release checks](ui-workbench-review.md) before evaluating public-release readiness.
 
 For a quick visual introduction, [watch the 90-second captioned screenshot tour](tour/lending-simulator-tour.mp4) or [read its transcript](tour/transcript.md). It uses six actual dashboard captures and has no audio or continuous interaction recording.
 
