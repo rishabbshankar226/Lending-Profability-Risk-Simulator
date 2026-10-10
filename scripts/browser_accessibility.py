@@ -7,12 +7,14 @@ involved. These checks do not replace screen-reader or physical-device review.
 """
 
 import argparse
+from base64 import b64decode
 from datetime import datetime, timezone
 from hashlib import sha256
 import json
 from pathlib import Path
 import re
 import subprocess
+import struct
 import tempfile
 import traceback
 from urllib.parse import quote
@@ -242,6 +244,27 @@ def write_zoom_extension(directory):
 });\n""")
 
 
+def capture_zoom(review, suffix, target=None):
+    """Capture the native compositor viewport, without a CSS-sized page clip."""
+    review.ready()
+    if target is not None:
+        target.scroll_into_view_if_needed()
+    review.page.bring_to_front()
+    session = review.page.context.new_cdp_session(review.page)
+    data = b64decode(session.send("Page.captureScreenshot", {"format": "png", "fromSurface": True})["data"], validate=True)
+    session.detach()
+    assert data[:8] == b"\x89PNG\r\n\x1a\n"
+    width, height = struct.unpack(">II", data[16:24])
+    measured = viewport(review.page)
+    assert abs(width - measured["width"] * measured["dpr"]) <= measured["dpr"], (width, measured)
+    assert abs(height - measured["height"] * measured["dpr"]) <= measured["dpr"], (height, measured)
+    name = f"{review.name}-{suffix}.png"
+    (review.output / name).write_bytes(data)
+    review.report["captures"].append(name)
+    review.report.setdefault("capture_dimensions", []).append({"file": name, "width": width, "height": height,
+        "css_viewport": measured, "mechanism": "Native Page.captureScreenshot compositor surface, no clip or image alteration."})
+
+
 def zoom(review, controls):
     page, helper, factor = review.page, controls["page"], controls["factor"]
     baseline = viewport(page)
@@ -284,7 +307,7 @@ def zoom(review, controls):
         assert page.get_by_role("radio", name=view, exact=True).is_checked()
         review.check(view + " reflows without measured main-area horizontal overflow", geometry)
         if view in ("Overview", "Policies"):
-            review.capture(view.lower(), target=page.get_by_role("heading", name=view, exact=True))
+            capture_zoom(review, view.lower(), target=page.get_by_role("heading", name=view, exact=True))
     review.open_sidebar()
     equity = page.get_by_role("spinbutton", name="Starting equity cash ($)", exact=True)
     equity.fill("1250000")
@@ -302,7 +325,7 @@ def zoom(review, controls):
     path = review.output / (review.name + "-" + download.suggested_filename)
     download.save_as(path)
     assert "690e9fa563e2d475" in path.name and "690e9fa563e2d475" in path.read_text()
-    review.capture("export")
+    capture_zoom(review, "export")
     review.check("Export controls remain reachable and download the correct brief at native zoom", {"file": path.name, "bytes": path.stat().st_size})
 
 
