@@ -7,10 +7,18 @@ import streamlit as st
 from lending_simulator.decisions import evaluate_policy
 from lending_simulator.presentation import limit_margins, month_label
 from lending_simulator.ui.formatting import money, percent, points
+from lending_simulator.ui.theme import MUTED
 
 
 def caption(text):
     st.html(f'<p class="workbench-caption">{escape(text)}</p>')
+
+
+def readable_table(frame):
+    """Keep native table behavior with opaque, readable row/column headers."""
+    st.table(frame.style.set_table_styles([
+        {'selector': 'th', 'props': [('color', MUTED), ('font-weight', '600')]},
+    ]))
 
 
 def status(result):

@@ -151,12 +151,31 @@ def accessibility(review, _):
         views.append(item)
         if heading_errors or missing or snapshot["unnamed_controls"] or contrast["failures"]:
             findings.append(item)
+        if view == "Overview":
+            review.capture("profit-table", target=page.get_by_test_id("stTable").first)
     review.report["view_audits"] = views
     assert not findings, json.dumps(findings, indent=2)
     review.check("Five views expose named native controls and a continuous main heading hierarchy", views)
     review.check("Sampled visible HTML text and input values meet their normal/large text thresholds", {
         "samples": sum(v["contrast_samples"] for v in views),
         "minimum_ratio": min(v["minimum_text_ratio"] for v in views), "scope": contrast["scope"]})
+
+    blocks = page.get_by_test_id("stMain").get_by_test_id("stCode")
+    texts = blocks.locator("code").all_text_contents()
+    assert len(texts) == 4, texts
+    dataset_manifest = json.loads(texts[0])
+    run_manifest = json.loads(texts[3])
+    reference = json.loads((ROOT / "docs/base-case.json").read_text())
+    base_policy = next(p for p in reference["policies"] if p["policy"] == "conservative")
+    assert dataset_manifest == json.loads((ROOT / "data/manifest.json").read_text())
+    assert run_manifest == {k: v for k, v in base_policy.items() if k != "summary"}
+    for index, query in ((1, "policy_population"), (2, "cohort_inputs")):
+        assert texts[index].strip() == (ROOT / "lending_simulator/queries" / (query + ".sql")).read_text().strip()
+    review.capture("methodology-manifest", target=blocks.first)
+    review.capture("methodology-sql", target=blocks.nth(1))
+    review.check("Readable manifests and SQL retain the complete reference values and source query text", {
+        "run_id": run_manifest["run_id"], "dataset_hash": dataset_manifest["dataset_hash"],
+        "code_block_sha256": [sha256(t.encode()).hexdigest() for t in texts]})
 
     review.open_sidebar()
     for title in ("Capital & funding", "Credit assumptions", "Credit and cash limits", "Advanced economics"):
@@ -166,6 +185,11 @@ def accessibility(review, _):
     assert len(financial) == 18, financial
     assert all(c["name"].strip() for c in financial), financial
     review.check("All 18 financial inputs have accessible names when their editors are open", financial)
+    expanded_contrast = text_contrast(page)
+    assert not expanded_contrast["failures"], expanded_contrast["failures"]
+    (review.output / "accessibility-expanded-inputs-contrast.json").write_text(json.dumps(expanded_contrast, indent=2))
+    review.check("Expanded input labels and values meet sampled text contrast thresholds", {
+        "samples": len(expanded_contrast["samples"]), "minimum_ratio": expanded_contrast["minimum_ratio"]})
 
     metrics = review.metrics()
     page.get_by_role("spinbutton", name="Minimum month-end cash ($)", exact=True).fill("-100")
@@ -180,8 +204,12 @@ def accessibility(review, _):
         return node.get("name", {}).get("value", "") + " " + " ".join(content(nodes[c]) for c in node.get("childIds", []) if c in nodes)
     alerts = [content(node) for node in tree["nodes"] if not node.get("ignored") and node.get("role", {}).get("value") == "alert"]
     assert any("Scenario could not run:" in alert for alert in alerts), alerts
+    invalid_contrast = text_contrast(page)
+    assert not invalid_contrast["failures"], invalid_contrast["failures"]
+    (review.output / "accessibility-invalid-input-contrast.json").write_text(json.dumps(invalid_contrast, indent=2))
     review.capture("invalid-input-alert", target=error)
-    review.check("Invalid Run exposes an accessibility alert and retains the previous scenario", {"alerts": alerts, "metrics": metrics})
+    review.check("Invalid Run exposes a readable accessibility alert and retains the previous scenario", {
+        "alerts": alerts, "metrics": metrics, "minimum_text_ratio": invalid_contrast["minimum_ratio"]})
     page.get_by_role("button", name="Restore applied inputs", exact=True).click()
     review.ready()
     assert review.applied_run() == BASE_RUN

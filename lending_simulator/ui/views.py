@@ -2,6 +2,7 @@
 
 from dataclasses import asdict, dataclass
 from decimal import Decimal as D
+import json
 from typing import Callable, Mapping
 
 import pandas as pd
@@ -15,7 +16,7 @@ from lending_simulator.types import ModelResult
 from lending_simulator.presentation import (monthly_frame, comparison_frame, cohort_heatmap,
     band_curves, assumption_register, evidence_register, month_label, limit_margins)
 from lending_simulator.ui import charts
-from lending_simulator.ui.components import caption, policy_summary, status_chip
+from lending_simulator.ui.components import caption, policy_summary, readable_table, status_chip
 from lending_simulator.ui.data import ScenarioSnapshot, compare_snapshots, stress_frame, applied_case_index
 from lending_simulator.ui.formatting import money, percent, points, multiple, assumption_value
 from lending_simulator.ui.state import FIELDS, DraftChange, draft_changes
@@ -72,7 +73,7 @@ def render_overview(ctx):
         charts.show(charts.bridge_chart(r), f'bridge-{r.run_id}', 420)
         caption('Interest + merchant fees − funding, servicing, acquisition, net credit loss and platform expense. Principal advances and repayments are not revenue; net loss already includes recoveries.')
         from lending_simulator.ui.data import profit_bridge
-        st.table(pd.DataFrame([(name, money(value)) for name, value in profit_bridge(r)], columns=['Component', 'USD']))
+        readable_table(pd.DataFrame([(name, money(value)) for name, value in profit_bridge(r)], columns=['Component', 'USD']))
     with st.expander('Monthly values behind these charts'):
         st.dataframe(monthly_frame(r)[['period','operating_result','cumulative_operating_result','ending_cash']], hide_index=True, width='stretch')
 
@@ -101,14 +102,14 @@ def baseline_panel(ctx):
         changes = tuple(DraftChange(field, label, getattr(before, field), getattr(after, field))
                         for field, _, label, _ in FIELDS if getattr(before, field) != getattr(after, field))
         if changes:
-            st.table(pd.DataFrame([{'Changed assumption': c.label,
+            readable_table(pd.DataFrame([{'Changed assumption': c.label,
                 'Baseline': assumption_value(c.field,c.before),
                 'Current': assumption_value(c.field,c.after)} for c in changes]))
         else:
             caption('Both applied scenarios use the same assumptions.')
         if not comparison.same_horizon:
             st.info(f'Runoff differs: baseline {comparison.baseline_months} months, current {comparison.current_months} months. Compare the common first 24 months below; full-runoff totals include different lengths of platform expense.')
-            st.table(pd.DataFrame([{'Policy': before.policy.title(),
+            readable_table(pd.DataFrame([{'Policy': before.policy.title(),
                 f'Baseline profit ({len(before.monthly)}m)': money(before.summary.operating_result),
                 f'Current profit ({len(after.monthly)}m)': money(after.summary.operating_result)}
                 for before in old.results
@@ -119,7 +120,7 @@ def baseline_panel(ctx):
                 'Change in profit' if comparison.same_horizon else 'Change in first-24-month profit': money(d.profit if comparison.same_horizon else d.profit_24m),
                 'Change in minimum cash': money(d.cash), 'Change in equity gap': money(d.equity_gap),
                 'Change in net loss': points(d.loss_pp), 'Change in approval rate': points(d.approval_pp)})
-        st.table(pd.DataFrame(rows))
+        readable_table(pd.DataFrame(rows))
         caption('Same policy compared to itself. Parentheses / minus signs denote decreases. Higher cash and a smaller equity gap describe liquidity; starting equity has no modeled cost of equity. Multiple changed assumptions do not establish individual causal effects.')
 
 
@@ -198,7 +199,7 @@ def render_cohorts(ctx):
         display.index = [month_label(m) for m in display.index]
         st.dataframe(display, width='stretch')
         if not curves.empty:
-            st.table(curves.groupby('risk_band', sort=False).last()[['principal_repaid_ratio','net_loss_ratio']].map(percent))
+            readable_table(curves.groupby('risk_band', sort=False).last()[['principal_repaid_ratio','net_loss_ratio']].map(percent))
             st.dataframe(curves, hide_index=True, width='stretch')
 
 
@@ -289,7 +290,7 @@ def render_methodology(ctx):
         st.markdown('Principal repayments reduce the loan asset. A charge-off removes principal and future collections without creating another cash outflow. Net credit expense equals charge-offs less received recoveries; platform costs continue throughout runoff.')
         caption('Simplified management accounting; no taxes, prepayment, delinquency stages, price response, intramonth liquidity, rejected-applicant outcomes, or GAAP allowance/provision model.')
     with st.expander('Metric definitions'):
-        st.table(pd.DataFrame([
+        readable_table(pd.DataFrame([
             ('Operating profit','Revenue less credit loss, funding, servicing, acquisition and platform costs. Full runoff differs from the first 24 months.'),
             ('Cash margin','Minimum month-end cash less the selected floor; a negative margin is a shortfall.'),
             ('Equity requirement','Additional starting cash needed for the floor. No commitment or modeled cost of equity.'),
@@ -298,7 +299,7 @@ def render_methodology(ctx):
             ('Contribution / loan','Full-runoff contribution before platform costs / expected funded loans.'),
             ('Expected counts','Demand-weighted loan/application counts; they can be fractional.')],columns=['Metric','Definition']))
     with st.expander('Financial reconciliation detail'):
-        st.table(pd.DataFrame([(key.replace('_',' ').title(),str(value)) for key,value in asdict(ctx.selected.checks).items()],columns=['Check','Result']))
+        readable_table(pd.DataFrame([(key.replace('_',' ').title(),str(value)) for key,value in asdict(ctx.selected.checks).items()],columns=['Check','Result']))
     with st.expander('Applied assumptions and effective default probabilities'):
         st.dataframe(pd.DataFrame(assumption_register(ctx.selected.assumptions)),hide_index=True,width='stretch')
         a=ctx.selected.assumptions
@@ -310,12 +311,16 @@ def render_methodology(ctx):
             st.markdown(f'[{source["publisher"]}]({source["url"]}) — {source["suitability"]}')
         caption('No historical default forecast, held-out evaluation, or borrower-level calibration. Annualized loss and longer-term cumulative loss cannot be substituted for 12-month PD.')
     with st.expander('Dataset, SQL, and applied run manifest'):
-        st.json(ctx.dataset.manifest())
+        caption('Dataset manifest')
+        st.code(json.dumps(ctx.dataset.manifest(), indent=2), language=None, wrap_lines=True)
         st.dataframe(pd.DataFrame(policy_population(ctx.dataset)),hide_index=True,width='stretch')
         caption('SQL counts describe the unweighted base dataset; scenario counts include explicit growth weights.')
-        st.code(query_text('policy_population'),language='sql')
-        st.code(query_text('cohort_inputs'),language='sql')
-        st.json(ctx.selected.manifest())
+        caption('Policy population SQL')
+        st.code(query_text('policy_population'),language=None,wrap_lines=True)
+        caption('Cohort inputs SQL')
+        st.code(query_text('cohort_inputs'),language=None,wrap_lines=True)
+        caption('Applied run manifest')
+        st.code(json.dumps(ctx.selected.manifest(), indent=2), language=None, wrap_lines=True)
 
 
 def render(view,ctx):

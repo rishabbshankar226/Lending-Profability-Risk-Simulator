@@ -4,6 +4,7 @@ primaryColor = "#145b72"
 backgroundColor = "#f5f7fa"
 secondaryBackgroundColor = "#edf2f6"
 textColor = "#182c3e"
+yellowTextColor = "#805016"
 font = "sans serif"
 baseFontSize = 16
 metricValueFontSize = "2rem"
