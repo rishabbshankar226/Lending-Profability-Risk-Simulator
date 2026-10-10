@@ -77,7 +77,18 @@ class Review:
         self.report["operations"].append({"name": "Navigate to " + view, "seconds": time.monotonic() - start})
 
     def expand(self, title):
-        self.page.get_by_text(title, exact=True).click()
+        details = self.page.locator("details").filter(has=self.page.get_by_text(title, exact=True))
+        expect(details).to_have_count(1)
+        if details.get_attribute("open") is None:
+            details.locator(":scope > summary").click()
+        # Streamlit opens <details> before its reveal animation releases the
+        # inline height/overflow lock. Clicking a child then can scroll it into
+        # the still-clipped panel and miss the visible button (CI run 40 trace).
+        self.page.wait_for_function("""element => element.open &&
+            element.style.height === '' && element.style.overflow === '' &&
+            !element.getAnimations({subtree:true}).some(a => a.playState === 'running' || a.pending)
+        """, arg=details.element_handle())
+        self.ready()
 
     def policy(self, name):
         self.select("Viewed policy", name)
