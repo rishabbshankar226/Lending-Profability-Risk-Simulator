@@ -14,7 +14,7 @@ from lending_simulator.data import DEFAULT_SEED, load_dataset
 from lending_simulator.decisions import compare_policies, select_strategy, sensitivity
 from lending_simulator.presentation import assumption_register
 from lending_simulator.types import Assumptions, POLICIES
-from lending_simulator.ui.components import caption, decision_summary
+from lending_simulator.ui.components import caption, decision_summary, readable_table
 from lending_simulator.ui.data import ScenarioSnapshot
 from lending_simulator.ui.downloads import download_factory
 from lending_simulator.ui.formatting import money, percent, multiple, assumption_value
@@ -262,7 +262,7 @@ with st.sidebar:
         with draft_notice:
             st.info("Unapplied changes · Results use the last successful scenario.")
             with st.expander(f"Review {len(changes)} changed inputs"):
-                st.table(pd.DataFrame([{"Input":c.label,
+                readable_table(pd.DataFrame([{"Input":c.label,
                     "Applied":assumption_value(c.field,c.before),
                     "Draft":assumption_value(c.field,c.after)} for c in changes]))
     if s.get("scenario_error"):

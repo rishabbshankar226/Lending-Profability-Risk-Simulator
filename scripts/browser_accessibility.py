@@ -198,6 +198,7 @@ def accessibility(review, _):
     expect(error).to_be_visible()
     review.ready()
     assert review.metrics() == metrics
+    review.expand("Review 1 changed inputs")
     tree = session.send("Accessibility.getFullAXTree")
     nodes = {node["nodeId"]: node for node in tree["nodes"]}
     def content(node):
@@ -314,7 +315,7 @@ def main():
     report = {"created_at": datetime.now(timezone.utc).isoformat(),
         "source_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
         "source_sha256": {str(p.relative_to(ROOT)): sha256(p.read_bytes()).hexdigest() for p in sources},
-        "scope": "Read-only browser AX/HTML audits and native 200%/400% Chrome zoom through a local-only test extension, against unchanged app.py. No accounts/hosting or app DOM/state injection. Not physical-device or full screen-reader/accessibility certification.",
+        "scope": "Read-only browser AX/HTML audits and native 200%/400% Chrome zoom through a local-only test extension, using the normal app.py entrypoint. No accounts/hosting or app DOM/state injection. Not physical-device or full screen-reader/accessibility certification.",
         "cases": []}
     with live_server(ROOT, output / "streamlit.log") as address, sync_playwright() as engine, \
          tempfile.TemporaryDirectory(prefix="lending-native-zoom-") as directory:
