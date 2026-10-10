@@ -46,15 +46,16 @@ def text_contrast(page):
             const rect=range?Array.from(range.getClientRects()).find(r=>r.width&&r.height):element.getBoundingClientRect();
             if(!rect)return;
             const x=(rect.left+rect.right)/2,y=(rect.top+rect.bottom)/2;
-            const backgrounds=[];let opacity=1;
+            const backgrounds=[];let opacity=1,insideScroll=false;
             for(let node=element;node;node=node.parentElement){
                 const current=getComputedStyle(node);opacity*=Number(current.opacity);
                 const box=node.getBoundingClientRect();
                 const scrolls=/auto|scroll/.test(current.overflowY)&&node.scrollHeight>node.clientHeight;
+                insideScroll ||= scrolls;
                 // Absolutely positioned slider labels sit above their colored thumb.
                 // Only include backgrounds painted behind this text, while retaining
                 // scroll-container backgrounds for offscreen content inspected here.
-                if(x>=box.left&&x<=box.right&&(scrolls||(y>=box.top&&y<=box.bottom)))
+                if(x>=box.left&&x<=box.right&&(insideScroll||(y>=box.top&&y<=box.bottom)))
                     backgrounds.push(current.backgroundColor);
             }
             if(!opacity)return;
